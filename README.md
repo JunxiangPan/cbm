@@ -10,7 +10,7 @@ commit `4a437df`, SHA-256
 `a561f19e0a8e4dba92af82400b5696da18e000ba5362571cb0b40243b9a3afca`.
 CBM does not define a private variant of F1-F6.
 
-During CBM v0.1.0 the CBS repository advanced to `eeb3645` and added an
+During CBM v0.1.0 the CBS repository advanced past `eeb3645` and added an
 additive §11 (build-once profiles); F1-F6 and §5 are unchanged. CBM's artifact
 verifier accepts §11's basename `RELEASE_ASSETS.sha256` inventory and skips a
 self-listed manifest. The contract identity proposal in

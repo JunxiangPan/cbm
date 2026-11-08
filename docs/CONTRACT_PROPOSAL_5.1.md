@@ -6,7 +6,7 @@ Status: **proposal only**. The frozen v1.7 contract is
 This repository must not edit that file. This document is the change-control
 input for the CBS contract owner.
 
-Observed during CBM v0.1.0: the CBS working tree advanced to `eeb3645` and
+Observed during CBM v0.1.0: the CBS working tree advanced past `eeb3645` and
 added an additive §11 (build-once profiles). §5 and F1-F6 are unchanged. This
 proposal still targets §5.1 and still requires the change-control process.
 
