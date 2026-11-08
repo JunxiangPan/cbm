@@ -21,7 +21,7 @@ proposal still targets §5.1 and still requires the change-control process.
   `body_hash_scope`. CBM exits 2 `MISSING_RELEASE_BODY_HASH` or
   `MISSING_BODY_HASH_SCOPE`.
 - Until §5.1 and §5.2 are applied and CBE/CBP P0-06 is implemented, CBM only
-  accepts mock fixtures. Its 82 passing tests are static/offline evidence, not
+  accepts mock fixtures. Its 83 passing tests are static/offline evidence, not
   real-data E2E.
 
 ## Problem
@@ -113,6 +113,18 @@ artifact.
 Change control still applies: new contract version, `docs/v1.7/CHANGELOG.md`
 entry, updated E2E matrices, no retroactive change to already published
 evidence.
+
+## Required train semantics (not yet in CONTRACT.md)
+
+- CBE/CBP MUST run for the CBM subject and emit `package_id: "cbm"`. CBM MUST
+  NOT reuse the CBS reports (`package_id: "cbs"`); reuse is exit 3
+  `REPORT_IDENTITY_MISMATCH`. The current CBS mock reports use
+  `package_id: "cbe"` / `"cbs"`, so they are not CBM inputs.
+- If CBM evidence is completely absent, the CBS body generator MUST synthesize
+  `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT` (and the exact "declared as attached
+  but not uploaded" phrase when claimed). Current CBS
+  `tools/release_body_v17.py` renders `- none`; this is an open CBS dependency,
+  documented in `docs/CBS_BODY_REQUIREMENT.md`.
 
 ## CBM behaviour until this is applied
 

@@ -425,3 +425,17 @@ def test_cbp_body_hash_fields_are_recorded(tmp_path: Path) -> None:
     assert code == 0
     assert report["cbp_release_body_hash"] == "c" * 64
     assert report["cbp_body_hash_scope"] == "base"
+
+
+def test_cbs_report_is_not_reused(tmp_path: Path) -> None:
+    root, _, digest = make_artifact(tmp_path)
+    code, report, _, decision = _run(
+        tmp_path,
+        cbe=make_cbe(package_id="cbs"),
+        cbp=make_cbp(digest, package_id="cbs"),
+        artifact_root=root,
+    )
+    assert code == 3
+    assert decision["decision"] == "NO_UPLOAD"
+    assert report["cbm_gate_status"] == "FAIL"
+    assert report["reason"] == "REPORT_IDENTITY_MISMATCH"

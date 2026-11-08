@@ -126,10 +126,14 @@ def test_finalize_without_report_is_skipped_infra(tmp_path: Path) -> None:
     assert code == 0
     report = read_json(output)
     assert report["cbm_gate_status"] == "SKIPPED_INFRA"
-    assert report["reason"] == "WORKFLOW_FAILED_BEFORE_EVIDENCE"
+    assert report["reason"] == "EVIDENCE_ABSENT"
+    assert "WORKFLOW_FAILED_BEFORE_EVIDENCE" in report["reason_detail"]
     assert report["upload_status"] == "NOT_UPLOADED"
-    assert "## Infrastructure failures" in body_path.read_text(encoding="utf-8")
-    assert body.P2_04_PHRASE in body_path.read_text(encoding="utf-8")
+    text = body_path.read_text(encoding="utf-8")
+    assert "## Infrastructure failures" in text
+    assert "CBM: NOT_UPLOADED" in text
+    assert "EVIDENCE_ABSENT" in text
+    assert body.P2_04_PHRASE in text
 
 
 def test_finalize_after_failed_upload_rewrites_pending(tmp_path: Path) -> None:

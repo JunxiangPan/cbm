@@ -18,7 +18,7 @@ self-listed manifest. The contract identity proposal in
 
 ## Current status: two blocking upstream dependencies
 
-CBM v0.1.0 is a **skeleton**. It has **82 offline/static tests passing**. The
+CBM v0.1.0 is a **skeleton**. It has **83 offline/static tests passing**. The
 A-F live E2E matrix has **not** been executed (it needs a private test
 repository and scoped tokens); do not claim "CBM passed real upload E2E".
 
@@ -34,10 +34,27 @@ are not implemented:
    `release_body_hash` and `body_hash_scope: "base"`. Missing
    `release_body_hash` -> exit 2 `MISSING_RELEASE_BODY_HASH`; missing
    `body_hash_scope` -> exit 2 `MISSING_BODY_HASH_SCOPE`; `"full"` -> exit 2
-   `BODY_HASH_SCOPE_UNSUPPORTED`.
+   `BODY_HASH_SCOPE_UNSUPPORTED`. CBP's currently uploaded CI artifact is the
+   legacy `cbp-quality-manifest/v1`; P0-06 must emit the v1.7 manifest with both
+   fields before CBM can consume it.
+3. **CBM needs its own subject report.** CBM must consume CBE/CBP reports with
+   `package_id: "cbm"`, not the CBS reports with `package_id: "cbs"`. Reusing
+   the CBS report is a hard failure: exit 3 `REPORT_IDENTITY_MISMATCH`. The
+   v1.7 train must run CBE/CBP for the CBM subject (or emit a CBM-scoped
+   report); it cannot reuse the CBS report.
 
-Until both land, the 82 tests prove **logic on mock fixtures**, not real-data
-consumption. See `docs/CONTRACT_PROPOSAL_5.1.md`.
+Until all three land, the 83 tests prove **logic on mock fixtures**, not
+real-data consumption. See `docs/CONTRACT_PROPOSAL_5.1.md`.
+
+### Fail-silent risk: CBS body generator
+
+If CBM evidence is completely absent (workflow never ran, or checkout/API failed
+before any evidence), CBM cannot write the body. Current CBS
+`tools/release_body_v17.py` renders `- none` when `not_uploaded` is empty; it
+does not synthesize `CBM: NOT_UPLOADED` / `EVIDENCE_ABSENT`. Until the CBS thread
+adds that default, this case is **fail-silent**, not fail-closed. CBM's own
+no-report `finalize` path does write `CBM: NOT_UPLOADED` with `EVIDENCE_ABSENT`
+when it can run; see `docs/CBS_BODY_REQUIREMENT.md`.
 
 ## Non-goals
 
@@ -103,8 +120,20 @@ the release repository. Use a scoped GitHub App/PAT, not a broad personal token.
 GitHub artifact downloads are repository-bound. The v1.7 release train must
 upload the **CBM build-once artifact, CBE report and CBP manifest to the same
 `artifact_repository`**. If CBE/CBP upload in their own repositories, CBM cannot
-download them; this is a release-train orchestration requirement, not something
-CBM can fix alone. It should be added to CONTRACT.md §11.
+download them; `verify --fetch` will exit 2 with `MISSING_BUILD_ONCE_ARTIFACT`,
+`MISSING_CBE_REPORT` or `MISSING_CBP_REPORT`. This is a release-train
+orchestration requirement, not something CBM can fix alone. It should be added
+to CONTRACT.md §11.
+
+Audited on 2026-11-08: the checked-in CBS mock train
+(`reusable-v17-release.yml`) uploads only `v17-mock-artifact` in the CBS repo
+and has no CBM job; CBP `ci.yml` uploads `quality-manifest-${run_id}` in the
+**CBP** repo. The artifacts are not co-located, so the same-repo contract is
+**not implemented yet**. CBM v0.1.0 takes one `artifact_repository`; split
+repos need a copy step or a v0.2.0 input extension. Required names:
+`cbm-build-once`, `cbe-report`, `cbp-quality-manifest` (the actual CBP artifact
+may be `quality-manifest-<run_id>`; pass it as `cbp_report_artifact`). See
+`docs/INTEGRATION_REQUIREMENTS.md`.
 
 CBM 0.1.0 supports `artifact_type=wheel` only. A CBS `artifact_type=zip-bundle`
 requires CBM 0.2.0. CBM does not sign and does not consume CBS's
@@ -127,9 +156,13 @@ The reusable workflow is `.github/workflows/cbm-attach.yml`. It has three jobs:
   independently of verify's artifact, recovers every evidence artifact, and
   writes `cbm-evidence-out/cbm-report.json` plus
   `cbm-evidence-out/cbm-body.md` (a marker-delimited fragment). A checkout or
-  GitHub API outage can still prevent finalize from writing evidence; in that
-  case the CBS body generator's default `NOT_UPLOADED` / `EVIDENCE_ABSENT` path
-  applies.
+  GitHub API outage can still prevent finalize from writing evidence. In that
+  case **CBS body generator must supply** `CBM: NOT_UPLOADED` +
+  `EVIDENCE_ABSENT`; CBM cannot. Audited on 2026-11-08: CBS
+  `tools/release_body_v17.py` does **not** implement that default — it renders
+  `- none` when `not_uploaded` is empty, so a total CBM evidence absence is
+  currently fail-silent. This is an open CBS-thread dependency; see
+  `docs/CBS_BODY_REQUIREMENT.md`.
 
 The CBS body generator must consume the **finalized** `cbm-evidence-out`
 artifact, not the verify draft. The verify draft says `NOT_UPLOADED` because the
@@ -144,8 +177,8 @@ conflict, and never touch the body when the upload failed. `body.py` already
 provides `replace_marker_block` for that future path.
 
 If `finalize` finds no report at all, it writes
-`cbm_gate_status=SKIPPED_INFRA`, `reason=WORKFLOW_FAILED_BEFORE_EVIDENCE` and
-`upload_status=NOT_UPLOADED`; it never writes PASS. If the verify or upload job
+`cbm_gate_status=SKIPPED_INFRA`, `reason=EVIDENCE_ABSENT` (detail
+`WORKFLOW_FAILED_BEFORE_EVIDENCE`) and `upload_status=NOT_UPLOADED`; it never writes PASS. If the verify or upload job
 failed after writing `UPLOAD_PENDING`, `finalize` turns that stale pending
 report into `FAIL` / `UPLOAD_FAILED` (or `EVIDENCE_INVALID` for a
 PASS-without-upload contradiction).
@@ -163,7 +196,7 @@ the SHA-256 of the canonical JSON of the report without that field.
 python -m pytest
 ```
 
-**82 tests pass**: exit-code mapping, gate-before-upload (including a mock
+**83 tests pass**: exit-code mapping, gate-before-upload (including a mock
 uploader that records calls), NOT_UPLOADED body rendering, hashes, workflow
 static audit, schema/report lockstep, and a mock end-to-end
 verify/upload/finalize flow. These are offline/static tests, not real E2E.

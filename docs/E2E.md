@@ -6,7 +6,7 @@ Run everything with:
 python -m pytest
 ```
 
-**Status: 82 offline/static tests pass; A-F live E2E has not been executed.**
+**Status: 83 offline/static tests pass; A-F live E2E has not been executed.**
 The GitHub Actions workflow is statically audited, not executed; the live path
 (real `gh` artifact download, release upload, digest re-read) is the next
 acceptance step and must use a private test repository and a draft release,
@@ -50,6 +50,7 @@ and CBE/CBP P0-06 is implemented. Current real reports would exit 3
 | B-10 | Missing producer fields are tolerated | `test_exit_codes.py::test_missing_producer_id_is_allowed` |
 | B-11 | CBP top-level PASS contradicts a failed gate | `test_exit_codes.py::test_cbp_top_level_pass_with_failed_gate_exits_3` |
 | B-12 | CBP blocking gate SKIPPED | `test_exit_codes.py::test_cbp_blocking_gate_skipped_exits_3` |
+| B-13 | CBS report is not reused (`package_id: "cbs"`) | `test_exit_codes.py::test_cbs_report_is_not_reused` |
 
 ## C. Artifact / upload (exit 0/3)
 
@@ -79,7 +80,7 @@ and CBE/CBP P0-06 is implemented. Current real reports would exit 3
 | D-05 | Unverified upload is never PASS | `test_not_uploaded_body.py::test_unverified_upload_is_not_pass` |
 | D-06 | Marker replacement is idempotent | `test_not_uploaded_body.py::test_marker_block_replacement_is_idempotent` |
 | D-07 | Missing marker is not guessed | `test_not_uploaded_body.py::test_missing_marker_returns_none` |
-| D-08 | No report -> SKIPPED_INFRA / WORKFLOW_FAILED_BEFORE_EVIDENCE | `test_e2e_mock.py::test_finalize_without_report_is_skipped_infra` |
+| D-08 | No report -> SKIPPED_INFRA / EVIDENCE_ABSENT | `test_e2e_mock.py::test_finalize_without_report_is_skipped_infra` |
 | D-09 | Failed upload does not leave UPLOAD_PENDING | `test_e2e_mock.py::test_finalize_after_failed_upload_rewrites_pending` |
 | D-10 | PASS without upload is rejected | `test_e2e_mock.py::test_finalize_rejects_pass_without_upload` |
 | D-11 | GITHUB_OUTPUT fields are exported | `test_e2e_mock.py::test_finalize_exports_github_outputs` |

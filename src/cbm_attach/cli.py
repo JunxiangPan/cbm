@@ -694,8 +694,8 @@ def _finalize(args: argparse.Namespace) -> int:
     if chosen is None:
         report = _failure_report(
             ctx,
-            reason=Reason.WORKFLOW_FAILED_BEFORE_EVIDENCE,
-            detail="no CBM report was produced before finalization",
+            reason=Reason.EVIDENCE_ABSENT,
+            detail="no CBM report was produced before finalization; WORKFLOW_FAILED_BEFORE_EVIDENCE",
             status="SKIPPED_INFRA",
             exit_code=3,
         )
