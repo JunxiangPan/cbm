@@ -1,0 +1,289 @@
+name: cbm-attach
+
+# CBM is a sidecar attestation workflow.  It is NOT a CBP gate and it is NOT in
+# the CBS publish `needs` graph.  A CBM failure never blocks the CBS main
+# package; it only makes the optional CBM attachment unavailable.
+#
+# Every input is optional on purpose: a missing input must reach the CLI and be
+# reported as exit 2 with evidence, not be rejected by GitHub's required-input
+# validation (which would exit 1 without a report).
+
+on:
+  workflow_call:
+    secrets:
+      artifact_token:
+        required: false
+      release_token:
+        required: false
+    inputs:
+      cbm_version:
+        type: string
+        required: false
+      cbm_tag:
+        type: string
+        required: false
+      cbm_repository:
+        type: string
+        required: false
+      cbm_ref:
+        type: string
+        required: false
+      declared_attached:
+        type: string
+        required: false
+      build_once_run_id:
+        type: string
+        required: false
+      build_once_artifact:
+        type: string
+        required: false
+      cbe_run_id:
+        type: string
+        required: false
+      cbe_report_artifact:
+        type: string
+        required: false
+      cbp_run_id:
+        type: string
+        required: false
+      cbp_report_artifact:
+        type: string
+        required: false
+      release_tag:
+        type: string
+        required: false
+      upload_target:
+        type: string
+        required: false
+      repository:
+        type: string
+        required: false
+      artifact_repository:
+        type: string
+        required: false
+      ci_commit_sha:
+        type: string
+        required: false
+    outputs:
+      cbm_gate_status:
+        value: ${{ jobs.finalize.outputs.cbm_gate_status }}
+      upload_status:
+        value: ${{ jobs.finalize.outputs.upload_status }}
+      cbe_report_hash:
+        value: ${{ jobs.finalize.outputs.cbe_report_hash }}
+      cbp_report_hash:
+        value: ${{ jobs.finalize.outputs.cbp_report_hash }}
+      evidence_artifact:
+        value: cbm-evidence-out
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  PYTHONPATH: src
+  PYTHONIOENCODING: utf-8
+
+jobs:
+  verify:
+    name: cbm-verify
+    runs-on: ubuntu-latest
+    outputs:
+      decision: ${{ steps.verify.outputs.decision }}
+    steps:
+      - name: Checkout CBM tooling
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: ${{ inputs.cbm_repository || github.repository }}
+          ref: ${{ inputs.cbm_ref || github.sha }}
+          token: ${{ secrets.artifact_token || github.token }}
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+
+      - name: Consume CBE/CBP and decide
+        id: verify
+        env:
+          GH_TOKEN: ${{ secrets.artifact_token || github.token }}
+          CBM_VERSION: ${{ inputs.cbm_version }}
+          CBM_TAG: ${{ inputs.cbm_tag }}
+          DECLARED_ATTACHED: ${{ inputs.declared_attached }}
+          BUILD_ONCE_RUN_ID: ${{ inputs.build_once_run_id }}
+          BUILD_ONCE_ARTIFACT: ${{ inputs.build_once_artifact }}
+          CBE_RUN_ID: ${{ inputs.cbe_run_id }}
+          CBE_REPORT_ARTIFACT: ${{ inputs.cbe_report_artifact }}
+          CBP_RUN_ID: ${{ inputs.cbp_run_id }}
+          CBP_REPORT_ARTIFACT: ${{ inputs.cbp_report_artifact }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+          UPLOAD_TARGET: ${{ inputs.upload_target }}
+          REPOSITORY: ${{ inputs.repository }}
+          ARTIFACT_REPOSITORY: ${{ inputs.artifact_repository }}
+          CBM_REPOSITORY: ${{ inputs.cbm_repository || github.repository }}
+          CI_COMMIT_SHA: ${{ inputs.ci_commit_sha }}
+        run: |
+          set -euo pipefail
+          python -m cbm_attach verify --fetch \
+            --version "$CBM_VERSION" \
+            --tag "$CBM_TAG" \
+            --release-tag "$RELEASE_TAG" \
+            --declared-attached "$DECLARED_ATTACHED" \
+            --upload-target "$UPLOAD_TARGET" \
+            --repository "$REPOSITORY" \
+            --artifact-repository "$ARTIFACT_REPOSITORY" \
+            --cbm-repository "$CBM_REPOSITORY" \
+            --ci-commit-sha "$CI_COMMIT_SHA" \
+            --build-once-run-id "$BUILD_ONCE_RUN_ID" \
+            --build-once-artifact "$BUILD_ONCE_ARTIFACT" \
+            --cbe-run-id "$CBE_RUN_ID" \
+            --cbe-report-artifact "$CBE_REPORT_ARTIFACT" \
+            --cbp-run-id "$CBP_RUN_ID" \
+            --cbp-report-artifact "$CBP_REPORT_ARTIFACT" \
+            --output cbm-evidence/cbm-report.json \
+            --body cbm-evidence/cbm-body.md \
+            --decision cbm-evidence/cbm-decision.json
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from pathlib import Path
+
+          decision = json.loads(
+              Path("cbm-evidence/cbm-decision.json").read_text(encoding="utf-8")
+          )
+          print("decision=" + decision["decision"])
+          PY
+
+      - name: Retain evidence even when verify fails
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cbm-evidence
+          path: cbm-evidence/
+          if-no-files-found: error
+
+  upload:
+    name: cbm-upload
+    needs: verify
+    if: needs.verify.result == 'success' && needs.verify.outputs.decision == 'UPLOAD'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+      # upload_target=pypi: add id-token: write and use Trusted Publishing.
+    steps:
+      - name: Checkout CBM tooling
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: ${{ inputs.cbm_repository || github.repository }}
+          ref: ${{ inputs.cbm_ref || github.sha }}
+          token: ${{ secrets.artifact_token || github.token }}
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+
+      - name: Recover approved evidence
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: cbm-evidence
+          path: cbm-evidence
+
+      - name: Re-verify build-once asset, upload, verify digest
+        env:
+          GH_TOKEN: ${{ secrets.release_token || github.token }}
+          BUILD_ONCE_RUN_ID: ${{ inputs.build_once_run_id }}
+          BUILD_ONCE_ARTIFACT: ${{ inputs.build_once_artifact }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+          UPLOAD_TARGET: ${{ inputs.upload_target }}
+          REPOSITORY: ${{ inputs.repository }}
+          ARTIFACT_REPOSITORY: ${{ inputs.artifact_repository }}
+        run: |
+          set -euo pipefail
+          python -m cbm_attach upload --fetch \
+            --report cbm-evidence/cbm-report.json \
+            --decision cbm-evidence/cbm-decision.json \
+            --build-once-run-id "$BUILD_ONCE_RUN_ID" \
+            --build-once-artifact "$BUILD_ONCE_ARTIFACT" \
+            --release-tag "$RELEASE_TAG" \
+            --upload-target "$UPLOAD_TARGET" \
+            --repository "$REPOSITORY" \
+            --artifact-repository "$ARTIFACT_REPOSITORY" \
+            --output cbm-evidence/cbm-report.final.json \
+            --body cbm-evidence/cbm-body.final.md
+
+      - name: Retain final evidence even when upload fails
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cbm-evidence-final
+          path: cbm-evidence/
+          if-no-files-found: error
+
+  finalize:
+    name: cbm-finalize
+    needs: [verify, upload]
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    outputs:
+      cbm_gate_status: ${{ steps.finalize.outputs.cbm_gate_status }}
+      upload_status: ${{ steps.finalize.outputs.upload_status }}
+      cbe_report_hash: ${{ steps.finalize.outputs.cbe_report_hash }}
+      cbp_report_hash: ${{ steps.finalize.outputs.cbp_report_hash }}
+    steps:
+      - name: Checkout CBM tooling
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: ${{ inputs.cbm_repository || github.repository }}
+          ref: ${{ inputs.cbm_ref || github.sha }}
+          token: ${{ secrets.artifact_token || github.token }}
+          persist-credentials: false
+
+      - name: Recover every evidence artifact (including failures)
+        env:
+          GH_TOKEN: ${{ secrets.artifact_token || github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p cbm-evidence
+          artifact_ids="$(gh api \
+            "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts?per_page=100" \
+            --jq '.artifacts[] | select(.name | startswith("cbm-evidence")) | .id')"
+          if [ -z "$artifact_ids" ]; then
+            echo "CBM_EVIDENCE_ABSENT: finalize will write WORKFLOW_FAILED_BEFORE_EVIDENCE"
+            exit 0
+          fi
+          for artifact_id in $artifact_ids; do
+            zip_path="artifact-${artifact_id}.zip"
+            gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${artifact_id}/zip" > "$zip_path"
+            unzip -q -o "$zip_path" -d cbm-evidence
+            rm -f "$zip_path"
+          done
+
+      - name: Finalize report and body fragment
+        id: finalize
+        env:
+          DECLARED_ATTACHED: ${{ inputs.declared_attached }}
+          CBM_VERSION: ${{ inputs.cbm_version }}
+          CBM_TAG: ${{ inputs.cbm_tag }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+          UPLOAD_RESULT: ${{ needs.upload.result }}
+        run: |
+          set -euo pipefail
+          python -m cbm_attach finalize \
+            --input cbm-evidence \
+            --output cbm-evidence-out/cbm-report.json \
+            --body cbm-evidence-out/cbm-body.md \
+            --declared-attached "$DECLARED_ATTACHED" \
+            --version "$CBM_VERSION" \
+            --tag "$CBM_TAG" \
+            --release-tag "$RELEASE_TAG" \
+            --upload-result "$UPLOAD_RESULT"
+
+      - name: Publish evidence artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cbm-evidence-out
+          path: cbm-evidence-out/
+          if-no-files-found: error

@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.pytest-tmp/
+.cbm-incoming/
+cbm-evidence/
+cbm-evidence-out/
+*.egg-info/
+dist/
+build/
+.venv/

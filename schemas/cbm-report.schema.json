@@ -1,0 +1,310 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyber-butler.local/schemas/v1.7/cbm-report.schema.json",
+  "title": "CBM attach evidence report v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "package_id",
+    "version",
+    "tag",
+    "release_tag",
+    "cbm_gate_status",
+    "exit_code",
+    "cbe_report_hash",
+    "cbp_report_hash",
+    "cbp_release_body_hash",
+    "cbp_body_hash_scope",
+    "upload_status",
+    "reason",
+    "reason_detail",
+    "declared_attached",
+    "upstream_gate_status",
+    "artifact_name",
+    "artifact_sha256",
+    "cbp_artifact_sha256",
+    "build_once_run_id",
+    "ci_commit_sha",
+    "upload_target",
+    "uploaded_asset_url",
+    "uploaded_asset_digest",
+    "verified_at",
+    "evidence_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "package_id": {
+      "const": "cbm"
+    },
+    "version": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^v?[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "tag": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "release_tag": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "cbm_gate_status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "NOT_UPLOADED",
+        "SKIPPED_INFRA",
+        "PRECONDITION_FAIL"
+      ]
+    },
+    "exit_code": {
+      "enum": [
+        0,
+        2,
+        3,
+        4
+      ]
+    },
+    "cbe_report_hash": {
+      "$ref": "#/$defs/hashOrNull"
+    },
+    "cbp_report_hash": {
+      "$ref": "#/$defs/hashOrNull"
+    },
+    "upload_status": {
+      "enum": [
+        "UPLOADED_VERIFIED",
+        "UPLOADED_UNVERIFIED",
+        "NOT_UPLOADED"
+      ]
+    },
+    "reason": {
+      "enum": [
+        "MISSING_CBE_REPORT",
+        "MISSING_CBP_REPORT",
+        "MISSING_BUILD_ONCE_ARTIFACT",
+        "MISSING_DECLARED_ATTACHED",
+        "MISSING_ARGUMENT",
+        "MISSING_EVIDENCE",
+        "MISSING_RELEASE",
+        "ARTIFACT_FORBIDDEN",
+        "INVALID_JSON",
+        "SCHEMA_VIOLATION",
+        "REPORT_INCONSISTENT",
+        "REPORT_IDENTITY_MISMATCH",
+        "CBE_NOT_PASS",
+        "CBP_NOT_PASS",
+        "UPSTREAM_PRECONDITION_FAIL",
+        "UPSTREAM_SKIPPED_INFRA",
+        "SKIP_RATIO_EXCEEDED",
+        "BLOCKING_SKIP",
+        "CBP_ARTIFACT_HASH_MISSING",
+        "ARTIFACT_HASH_MISMATCH",
+        "UPLOAD_FAILED",
+        "UPLOAD_VERIFY_FAILED",
+        "ASSET_DIGEST_CONFLICT",
+        "REMOTE_DIGEST_UNAVAILABLE",
+        "UNSUPPORTED_UPLOAD_TARGET",
+        "UPLOAD_NOT_APPROVED",
+        "INFRA_FETCH_FAILED",
+        "INFRA_UPLOAD_FAILED",
+        "NOT_CLAIMED",
+        "UPLOAD_PENDING",
+        "EVIDENCE_ABSENT",
+        "EVIDENCE_INVALID",
+        "EVIDENCE_WRITE_FAILED",
+        "WORKFLOW_FAILED_BEFORE_EVIDENCE",
+        "INTERNAL_ERROR",
+        "UPLOADED_VERIFIED",
+        "MISSING_RELEASE_BODY_HASH",
+        "MISSING_BODY_HASH_SCOPE",
+        "BODY_HASH_SCOPE_UNSUPPORTED"
+      ]
+    },
+    "reason_detail": {
+      "type": "string"
+    },
+    "declared_attached": {
+      "type": "boolean"
+    },
+    "upstream_gate_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cbe",
+        "cbp"
+      ],
+      "properties": {
+        "cbe": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/upstream"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "cbp": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/upstream"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "artifact_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "artifact_sha256": {
+      "$ref": "#/$defs/hashOrNull"
+    },
+    "cbp_artifact_sha256": {
+      "$ref": "#/$defs/hashOrNull"
+    },
+    "build_once_run_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ci_commit_sha": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{40}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "upload_target": {
+      "enum": [
+        "github-release",
+        "pypi",
+        null
+      ]
+    },
+    "uploaded_asset_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "uploaded_asset_digest": {
+      "$ref": "#/$defs/hashOrNull"
+    },
+    "verified_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "evidence_sha256": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "cbp_release_body_hash": {
+      "$ref": "#/$defs/hashOrNull"
+    },
+    "cbp_body_hash_scope": {
+      "enum": [
+        "base",
+        null
+      ]
+    }
+  },
+  "$defs": {
+    "hashOrNull": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "upstream": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gate_status",
+        "exit_code",
+        "skip_ratio",
+        "blocking_skip",
+        "producer_id",
+        "producer_version"
+      ],
+      "properties": {
+        "gate_status": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "SKIPPED_INFRA",
+            "PRECONDITION_FAIL"
+          ]
+        },
+        "exit_code": {
+          "enum": [
+            0,
+            2,
+            3,
+            4
+          ]
+        },
+        "skip_ratio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "blocking_skip": {
+          "type": "boolean"
+        },
+        "producer_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "producer_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}
