@@ -48,8 +48,8 @@ implemented:
    different repositories; CBM v0.1.0 takes one repository.
 
 **B3+B4 are a compound blocker and B5 is a fail-silent hard blocker** — these
-are v1.7 release-train blockers, not CBM documentation risks. See
-`docs/V17_BLOCKERS.md`.
+are v1.7 release-train blockers, not CBM documentation risks. Dependency order is
+B1 -> B2 -> B3+B4; B5 is independent. See `docs/V17_BLOCKERS.md`.
 
 Until all five hard blockers land, the 84 tests prove **logic on mock
 fixtures**, not real-data consumption. See `docs/CONTRACT_PROPOSAL_5.1.md`.
@@ -216,9 +216,29 @@ verify/upload/finalize flow. These are offline/static tests, not real E2E.
 
 `tests/test_known_fail_silent.py` is a deliberate canary, not an acceptance: it
 asserts the current CBS `- none` output and is marked `KNOWN_FAIL_SILENT`. It
-uses the real CBS `release_body_v17.py` when present, otherwise a mock that
-reproduces the audited lines. Update it to assert the fixed behavior when CBS
-implements `docs/CBS_BODY_REQUIREMENT.md`.
+uses the real CBS `release_body_v17.py`; if the checkout is missing it skips
+with `SKIP_REASON=CBS_BODY_GENERATOR_NOT_FOUND`; if the file exists but cannot
+be imported or built it fails with
+`FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE`. Update it to assert the fixed
+behavior when CBS implements `docs/CBS_BODY_REQUIREMENT.md`.
+
+**84 passed = 83 normal tests + 1 `KNOWN_FAIL_SILENT` canary.** The canary
+asserts that the B5 defect exists; it does not assert that B5 is fixed. 84
+passed does not mean all functions are correct.
+
+Probe CLI:
+
+```bash
+python tools/check_b5.py --check-upstream
+```
+
+| Output | Exit | Meaning |
+| --- | --- | --- |
+| `STATUS=KNOWN_FAIL_SILENT` | 0 | current B5 defect; canary stays green |
+| `STATUS=B5_MAYBE_FIXED` | 0 | CBS changed; loud signal to flip the canary (pytest then fails) |
+| `SKIP_REASON=CBS_BODY_GENERATOR_NOT_FOUND` | 0 | CBS checkout missing; test skips, not fails |
+| `FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE` | 3 | CBS file exists but import/build fails; test fails |
+| `FAIL_REASON=UNEXPECTED_OUTPUT` | 2 | output is neither current defect nor fixed; inspect |
 
 ## Open contract points
 
@@ -229,7 +249,9 @@ implements `docs/CBS_BODY_REQUIREMENT.md`.
    `body_hash_scope: "base"` in the CBP quality manifest; missing or `"full"`
    exits 2.
 
-Both proposals are in
-[`docs/CONTRACT_PROPOSAL_5.1.md`](docs/CONTRACT_PROPOSAL_5.1.md). They are
+The proposals are in
+[`docs/CONTRACT_PROPOSAL_5.1.md`](docs/CONTRACT_PROPOSAL_5.1.md); the full
+blocker list is [`docs/V17_BLOCKERS.md`](docs/V17_BLOCKERS.md). They are
 change-control inputs for the CBS/CBP owners; this repository does not edit the
-frozen contract. **CBM 0.1.0 rejects real CBE/CBP reports until both land.**
+frozen contract. **CBM 0.1.0 rejects real CBE/CBP reports until all five hard
+blockers land.**

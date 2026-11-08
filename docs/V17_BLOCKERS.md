@@ -13,6 +13,25 @@ risks. CBM cannot close these inside its own repository.
 | B4 | `artifact_repository` is not unified: CBE/CBP/CBS artifacts live in separate repositories | CBS orchestration + CBE/CBP | exit 2 `MISSING_BUILD_ONCE_ARTIFACT` / `MISSING_CBE_REPORT` / `MISSING_CBP_REPORT` |
 | B5 | CBS body generator writes `- none` when the CBM report is completely missing | CBS | fail-silent: CBM is invisible instead of `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT` |
 
+## Dependency order
+
+They are not parallel switches:
+
+```text
+B1 §5.1 (package_id = subject)
+  -> B2 CBE/CBP CBM-scoped report (package_id: "cbm" + producer_id)
+     -> B3 CBP P0-06  +  B4 artifact_repository
+        (both required) -> CBM real-data artifact/body stage
+
+B5 CBS body generator (independent; runs in the body pipeline)
+```
+
+- B1 not landed -> B2 cannot start (the report identity is still ambiguous).
+- B2 not landed -> B3/B4 CBM consumption cannot be truly tested with real data.
+- B3 alone or B4 alone -> CBM still exits 2; see the compound table below.
+- B5 is independent: it controls whether a completely absent CBM is visible in
+  the CBS Release body, even when CBM never runs.
+
 ## B3 + B4 are a compound blocker
 
 They must be solved together. Solving only one still leaves CBM at exit 2:
@@ -45,9 +64,32 @@ Proof in this repository:
 - `tests/test_known_fail_silent.py::test_known_fail_silent_cbs_body_omits_missing_cbm`
   loads the real CBS `release_body_v17.py` and asserts the current `- none`
   output, no `CBM`, and no `EVIDENCE_ABSENT`; marker `known_fail_silent`.
-- If the CBS checkout is absent, the test uses a mock that reproduces the exact
-  audited lines, so the known gap is still recorded rather than skipped.
+- If the CBS checkout is absent, the test skips with
+  `SKIP_REASON=CBS_BODY_GENERATOR_NOT_FOUND`; if the CBS file exists but cannot
+  be imported/built, the test fails with
+  `FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE`. It does not silently mock.
 - Proposed CBS fix and test: `docs/CBS_BODY_REQUIREMENT.md`.
+
+## Probe maintenance (B5_MAYBE_FIXED)
+
+The canary is **conditional green**, not permanent green:
+
+```bash
+python tools/check_b5.py --check-upstream
+```
+
+| Output | Exit | Test behaviour |
+| --- | --- | --- |
+| `STATUS=KNOWN_FAIL_SILENT` | 0 | green; current defect recorded |
+| `STATUS=B5_MAYBE_FIXED` | 0 | CLI prints a loud flip instruction; pytest canary **fails** so the flip is not forgotten |
+| `SKIP_REASON=CBS_BODY_GENERATOR_NOT_FOUND` | 0 | pytest skips; no false pass |
+| `FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE` | 3 | pytest fails; CBS code is broken |
+| `FAIL_REASON=UNEXPECTED_OUTPUT` | 2 | pytest fails; output is neither defect nor fix |
+
+When `B5_MAYBE_FIXED` appears, flip
+`tests/test_known_fail_silent.py` to require `CBM: NOT_UPLOADED` +
+`EVIDENCE_ABSENT`, remove `- none`, and remove the `known_fail_silent` marker.
+Do not change the assertion back to `- none`.
 
 ## Hard-blocker checklist
 
@@ -60,5 +102,7 @@ Proof in this repository:
         not "- none"; exact phrase when the train claims CBM attached
 ```
 
-Until all five are checked, CBM's 84 static tests prove logic on fixtures, not
-real-data readiness. A–F live E2E remains unexecuted.
+Until all five are checked, CBM's **84 passed = 83 normal tests + 1
+KNOWN_FAIL_SILENT canary** prove logic on fixtures, not real-data readiness.
+The canary asserts the B5 defect exists, not that B5 is fixed. A–F live E2E
+remains unexecuted.

@@ -107,6 +107,27 @@ This covers "CBM ran but lost its evidence". It does **not** cover "CBM never
 ran"; only the CBS body generator can cover that case.
 
 The canary test `tests/test_known_fail_silent.py` proves the current CBS output
-is `- none` with no CBM entry; it loads the real CBS `release_body_v17.py` when
-available, otherwise a mock that reproduces the audited lines. It is marked
-`KNOWN_FAIL_SILENT` and must be flipped when CBS implements this document.
+is `- none` with no CBM entry. It loads the real CBS `release_body_v17.py`; a
+missing CBS checkout skips with `SKIP_REASON=CBS_BODY_GENERATOR_NOT_FOUND`, and
+an unimportable CBS file fails with
+`FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE` (no mock fallback, no silent
+pass). It is marked `KNOWN_FAIL_SILENT` and must be flipped when CBS implements
+this document.
+
+## Probe maintenance contract
+
+```bash
+python tools/check_b5.py --check-upstream
+```
+
+| Output | Exit | Meaning |
+| --- | --- | --- |
+| `STATUS=KNOWN_FAIL_SILENT` | 0 | current defect; canary green |
+| `STATUS=B5_MAYBE_FIXED` | 0 | CBS changed; CLI prints the flip instruction, pytest canary fails |
+| `SKIP_REASON=CBS_BODY_GENERATOR_NOT_FOUND` | 0 | environment missing; pytest skips |
+| `FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE` | 3 | CBS file exists but import/build fails; pytest fails |
+| `FAIL_REASON=UNEXPECTED_OUTPUT` | 2 | neither current defect nor fixed; inspect |
+
+Flip rule: when `B5_MAYBE_FIXED` appears, require `CBM: NOT_UPLOADED` +
+`EVIDENCE_ABSENT`, assert `- none` is gone, and remove the `known_fail_silent`
+marker. Never flip the assertion back to `- none`.

@@ -1,81 +1,75 @@
 """KNOWN_FAIL_SILENT: current CBS body generator hides a completely missing CBM.
 
-This test is deliberately green while the upstream defect exists. It asserts the
-current CBS behavior (`- none`) and the absence of `CBM: NOT_UPLOADED` /
-`EVIDENCE_ABSENT`. It is not an acceptance of the defect; when CBS implements
-`docs/CBS_BODY_REQUIREMENT.md`, this test must be updated to assert the fixed
-behavior and this marker removed.
+This is a **conditional green** canary, not an acceptance:
 
-The probe imports the real CBS `tools/release_body_v17.py` when the CBS checkout
-is available (set `CBS_REPO`, or use the sibling `public-release` directory).
-When it is not available, the test uses a minimal mock that reproduces the
-current `not_uploaded ... or ['- none']` behavior, so a CBM-only checkout still
-records the known gap instead of skipping it.
+- CBS output `- none`, no CBM, no `EVIDENCE_ABSENT` -> KNOWN_FAIL_SILENT (green).
+- CBS output `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT`, no `- none` ->
+  B5_MAYBE_FIXED. The CLI exits 0 with a prominent message; this pytest canary
+  fails so the flip is not forgotten.
+- CBS file missing -> skip with `SKIP_REASON=CBS_BODY_GENERATOR_NOT_FOUND`.
+- CBS file exists but cannot import/build -> FAIL with
+  `FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE` (not skip).
+- Anything else -> UNEXPECTED_OUTPUT, a failure.
 
-Proof in this workspace (2026-11-08): the real CBS file was loaded and the
-assertions passed with `- none`, no `CBM`, no `EVIDENCE_ABSENT`.
+When B5 is fixed, flip the assertions to require `CBM: NOT_UPLOADED` and
+`EVIDENCE_ABSENT`, and remove the `known_fail_silent` marker.
 """
 from __future__ import annotations
 
-import importlib.util
 import os
 from pathlib import Path
 
 import pytest
 
+from tools.check_b5 import (
+    B5_MAYBE_FIXED,
+    CBS_BODY_GENERATOR_NOT_FOUND,
+    CBS_BODY_GENERATOR_UNIMPORTABLE,
+    KNOWN_FAIL_SILENT,
+    UNEXPECTED_OUTPUT,
+    classify_body_output,
+    probe,
+)
 
-KNOWN_FAIL_SILENT = True
+
 ROOT = Path(__file__).resolve().parents[2]
 CBS_REPO = Path(os.environ.get("CBS_REPO", ROOT / "public-release")).resolve()
-CBS_BODY = CBS_REPO / "tools" / "release_body_v17.py"
 
 pytestmark = pytest.mark.known_fail_silent
 
 
-def _load_cbs_build():
-    spec = importlib.util.spec_from_file_location("cbs_release_body_v17", CBS_BODY)
-    assert spec is not None and spec.loader is not None
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module.build
-
-
-def _mock_cbs_build(report: dict, wheel: Path) -> str:
-    """Reproduce the audited CBS lines: not_uploaded or '- none'."""
-    not_uploaded = report.get("not_uploaded", [])
-    lines = ["## NOT_UPLOADED", ""]
-    lines += [f"- {item}" for item in not_uploaded] or ["- none"]
-    return "\n".join(lines) + "\n"
-
-
-def _build_factory():
-    if CBS_BODY.is_file():
-        return _load_cbs_build(), "cbs"
-    return _mock_cbs_build, "mock"
-
-
 def test_known_fail_silent_cbs_body_omits_missing_cbm(tmp_path: Path) -> None:
-    build, source = _build_factory()
-    assert source in {"cbs", "mock"}
-    wheel = tmp_path / "pkg.whl"
-    wheel.write_bytes(b"wheel")
+    # Probe maintenance contract: all four classifications are exercised even
+    # when the real CBS checkout is absent.
+    assert classify_body_output("## NOT_UPLOADED\n- none\n") == KNOWN_FAIL_SILENT
+    assert (
+        classify_body_output("CBM: NOT_UPLOADED\nEVIDENCE_ABSENT\n")
+        == B5_MAYBE_FIXED
+    )
+    assert classify_body_output("something unexpected\n") == UNEXPECTED_OUTPUT
 
-    # A report with no CBM entry at all: exactly the "CBM never ran" case.
-    report = {
-        "version": "v1.7.0",
-        "gate_status": "PASS",
-        "applicable_gate_count": 4,
-        "skip_count": 0,
-        "skip_ratio": 0.0,
-        "blocking_skip": False,
-        "gates": [],
-        "not_uploaded": [],
-    }
-    text = build(report, wheel)
+    missing = probe(tmp_path / "missing-cbs")
+    assert missing.status == CBS_BODY_GENERATOR_NOT_FOUND
 
-    assert KNOWN_FAIL_SILENT is True
-    assert "## NOT_UPLOADED" in text
-    assert "- none" in text, source
-    assert "CBM" not in text, source
-    assert "CBM: NOT_UPLOADED" not in text, source
-    assert "EVIDENCE_ABSENT" not in text, source
+    unimportable = tmp_path / "bad_body.py"
+    unimportable.write_text("def build(:\n", encoding="utf-8")
+    bad = probe(unimportable)
+    assert bad.status == CBS_BODY_GENERATOR_UNIMPORTABLE
+
+    # Real CBS checkout: current defect or a call to flip the canary.
+    result = probe(CBS_REPO)
+    if result.status == CBS_BODY_GENERATOR_NOT_FOUND:
+        pytest.skip(f"SKIP_REASON={CBS_BODY_GENERATOR_NOT_FOUND}")
+    if result.status == CBS_BODY_GENERATOR_UNIMPORTABLE:
+        pytest.fail(f"FAIL_REASON={CBS_BODY_GENERATOR_UNIMPORTABLE}: {result.detail}")
+    if result.status == B5_MAYBE_FIXED:
+        pytest.fail(
+            "B5_MAYBE_FIXED: CBS no longer hides a missing CBM. "
+            "Flip this test to require CBM: NOT_UPLOADED + EVIDENCE_ABSENT "
+            "and remove the known_fail_silent marker."
+        )
+    assert result.status == KNOWN_FAIL_SILENT, result.status
+    assert "- none" in result.text
+    assert "CBM" not in result.text
+    assert "CBM: NOT_UPLOADED" not in result.text
+    assert "EVIDENCE_ABSENT" not in result.text
