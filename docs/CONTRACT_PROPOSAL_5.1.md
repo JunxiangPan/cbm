@@ -10,6 +10,10 @@ Observed during CBM v0.1.0: the CBS working tree advanced past `eeb3645` and
 added an additive §11 (build-once profiles). §5 and F1-F6 are unchanged. This
 proposal still targets §5.1 and still requires the change-control process.
 
+The full v1.7 hard-blocker list (identity, CBM-scoped reports, CBP P0-06,
+artifact_repository, CBS body fail-silent) is in
+[`docs/V17_BLOCKERS.md`](V17_BLOCKERS.md).
+
 ## Status warning
 
 **CBM 0.1.0 must not be connected to real CBE/CBP reports yet.**
@@ -21,7 +25,7 @@ proposal still targets §5.1 and still requires the change-control process.
   `body_hash_scope`. CBM exits 2 `MISSING_RELEASE_BODY_HASH` or
   `MISSING_BODY_HASH_SCOPE`.
 - Until §5.1 and §5.2 are applied and CBE/CBP P0-06 is implemented, CBM only
-  accepts mock fixtures. Its 83 passing tests are static/offline evidence, not
+  accepts mock fixtures. Its 84 passing tests are static/offline evidence, not
   real-data E2E.
 
 ## Problem

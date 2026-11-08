@@ -6,7 +6,7 @@ Run everything with:
 python -m pytest
 ```
 
-**Status: 83 offline/static tests pass; A-F live E2E has not been executed.**
+**Status: 84 offline/static tests pass; A-F live E2E has not been executed.**
 The GitHub Actions workflow is statically audited, not executed; the live path
 (real `gh` artifact download, release upload, digest re-read) is the next
 acceptance step and must use a private test repository and a draft release,
@@ -116,7 +116,17 @@ outside the offline skeleton:
 CBM v0.1.0 does not modify the CBS Release body and is not in the CBS `publish`
 `needs` graph.
 
-Real-data F runs are blocked until the two upstream contract items land. Do not
+Real-data F runs are blocked until the five hard blockers in docs/V17_BLOCKERS.md land. Do not
 report a live E2E pass by feeding the current real CBE/CBP reports into CBM and
 treating the expected exit 2/3 as a test failure; those exits are the correct
 fail-closed behavior.
+
+## G. Upstream defect probe
+
+| ID | Scenario | Test |
+| --- | --- | --- |
+| G-01 | CBS body generator currently hides a completely missing CBM (`- none`, no `CBM`, no `EVIDENCE_ABSENT`); marked `KNOWN_FAIL_SILENT` | `test_known_fail_silent.py::test_known_fail_silent_cbs_body_omits_missing_cbm` |
+
+G-01 is green while the defect exists; it is a canary, not an acceptance. When
+CBS implements `docs/CBS_BODY_REQUIREMENT.md`, change G-01 to assert
+`CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT`.

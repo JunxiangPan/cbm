@@ -1,8 +1,8 @@
 # CBS body generator requirement: CBM evidence absence must be visible
 
-Status: **requirement for the CBS thread**. CBM cannot implement this in its own
-repository; this document records the exact gap and the minimum expected
-behavior.
+Status: **v1.7 release-train hard blocker (B5)**. CBM cannot implement this in
+its own repository; this document records the exact gap and the minimum
+expected behavior.
 
 ## Why this exists
 
@@ -105,3 +105,8 @@ visible report/fragment:
 
 This covers "CBM ran but lost its evidence". It does **not** cover "CBM never
 ran"; only the CBS body generator can cover that case.
+
+The canary test `tests/test_known_fail_silent.py` proves the current CBS output
+is `- none` with no CBM entry; it loads the real CBS `release_body_v17.py` when
+available, otherwise a mock that reproduces the audited lines. It is marked
+`KNOWN_FAIL_SILENT` and must be flipped when CBS implements this document.

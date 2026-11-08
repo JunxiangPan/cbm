@@ -1,6 +1,6 @@
 # v1.7 release-train integration requirements for CBM
 
-Status: **requirements for CBS/CBE/CBP orchestration**. CBM cannot satisfy these
+Status: **v1.7 release-train hard blockers (B3+B4)**. CBM cannot satisfy these
 inside its own repository.
 
 ## 1. CBM needs a CBM-scoped CBE/CBP report
@@ -73,6 +73,12 @@ pass that value to `cbp_report_artifact` (CBM does not hardcode the name). The
 build-once and CBE artifacts must be co-located with it.
 
 This is not a CBM defect. It is an orchestration gap in the v1.7 train.
+
+**B3 (CBP P0-06) and B4 (artifact_repository) are a compound blocker.** Solving
+only B3 still exits 2 because the artifacts are in different repositories;
+solving only B4 still exits 2 because the CBP manifest lacks
+`release_body_hash`/`body_hash_scope`. Both must land together; see
+[`docs/V17_BLOCKERS.md`](V17_BLOCKERS.md).
 
 ## 4. Required train wiring
 
