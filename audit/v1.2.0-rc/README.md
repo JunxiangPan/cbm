@@ -10,7 +10,7 @@ CBM PASS claim was made. No CBS/CBE/CBP/CBC repository was modified.
 | CBM repository | https://github.com/JunxiangPan/cbm (public) |
 | CBM branch | `main` |
 | CBM manifest target commit | `f71d3b5` (object repository support) |
-| CBM audit commit | `0f84aae` |
+| CBM audit commit | `8b5c52b` |
 | CBM tag / release | none |
 | CBP 1.2.2 release | `v1.2.2` / `d4bfefb` |
 | CBP 1.2.2 publish state | released (tag, GitHub Release, PyPI) |
@@ -30,6 +30,7 @@ CBM PASS claim was made. No CBS/CBE/CBP/CBC repository was modified.
 | [42607873304](https://github.com/JunxiangPan/cbm/actions/runs/42607873304) | `503986b` | success: **102/102 on ubuntu-latest and windows-latest** (official CBP 1.2.0 manifest) |
 | [42639676069](https://github.com/JunxiangPan/cbm/actions/runs/42639676069) | `22831d6` | success: **105/105 on ubuntu-latest and windows-latest** (CBP 1.2.2 object manifest) |
 | [42645029320](https://github.com/JunxiangPan/cbm/actions/runs/42645029320) | `0f84aae` | success: **108/108 on ubuntu-latest and windows-latest** (object B4 boundaries) |
+| [42647681396](https://github.com/JunxiangPan/cbm/actions/runs/42647681396) | `8b5c52b` | success: **109/109 on ubuntu-latest and windows-latest** (B4 fail-closed + B2 object readiness) |
 
 **109 passed = 109 normal tests. No `KNOWN_FAIL_SILENT` canary remains.** The B5
 canary was flipped to assert the fixed behavior.
