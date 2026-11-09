@@ -37,7 +37,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           repository: JunxiangPan/Cyber-Butler-Security
-          ref: 88ec90fcafd1548b7810d0c446899ecd75f6b95a
+          ref: fa1740fe03590ec9adfc9ab57cf1485bdc3bea87
           path: cbs
           persist-credentials: false
 

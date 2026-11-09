@@ -1,18 +1,10 @@
-"""KNOWN_FAIL_SILENT: current CBS body generator hides a completely missing CBM.
+"""B5 FIXED: the old KNOWN_FAIL_SILENT canary is flipped.
 
-This is a **conditional green** canary, not an acceptance:
-
-- CBS output `- none`, no CBM, no `EVIDENCE_ABSENT` -> KNOWN_FAIL_SILENT (green).
-- CBS output `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT`, no `- none` ->
-  B5_MAYBE_FIXED. The CLI exits 0 with a prominent message; this pytest canary
-  fails so the flip is not forgotten.
-- CBS file missing -> skip with `SKIP_REASON=CBS_BODY_GENERATOR_NOT_FOUND`.
-- CBS file exists but cannot import/build -> FAIL with
-  `FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE` (not skip).
-- Anything else -> UNEXPECTED_OUTPUT, a failure.
-
-When B5 is fixed, flip the assertions to require `CBM: NOT_UPLOADED` and
-`EVIDENCE_ABSENT`, and remove the `known_fail_silent` marker.
+CBS v1.7.0-integration `fa1740f` now renders a missing CBM as a visible
+`CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT` section. This test asserts the fixed
+behavior (and the exact phrase when CBM is declared attached), so it must stay
+green. The historical KNOWN_FAIL_SILENT classification is retained only to test
+the probe's detector, not as an accepted CBM state.
 """
 from __future__ import annotations
 
@@ -35,12 +27,10 @@ from tools.check_b5 import (
 ROOT = Path(__file__).resolve().parents[2]
 CBS_REPO = Path(os.environ.get("CBS_REPO", ROOT / "public-release")).resolve()
 
-pytestmark = pytest.mark.known_fail_silent
 
-
-def test_known_fail_silent_cbs_body_omits_missing_cbm(tmp_path: Path) -> None:
-    # Probe maintenance contract: all four classifications are exercised even
-    # when the real CBS checkout is absent.
+def test_b5_fixed_cbs_body_emits_not_uploaded(tmp_path: Path) -> None:
+    # Probe detector maintenance: the old defect still classifies as KNOWN,
+    # the fixed output as B5_MAYBE_FIXED, and an unknown shape is flagged.
     assert classify_body_output("## NOT_UPLOADED\n- none\n") == KNOWN_FAIL_SILENT
     assert (
         classify_body_output("CBM: NOT_UPLOADED\nEVIDENCE_ABSENT\n")
@@ -56,20 +46,18 @@ def test_known_fail_silent_cbs_body_omits_missing_cbm(tmp_path: Path) -> None:
     bad = probe(unimportable)
     assert bad.status == CBS_BODY_GENERATOR_UNIMPORTABLE
 
-    # Real CBS checkout: current defect or a call to flip the canary.
+    # Real fixed CBS: must emit the visible CBM section, never `- none`.
     result = probe(CBS_REPO)
     if result.status == CBS_BODY_GENERATOR_NOT_FOUND:
         pytest.skip(f"SKIP_REASON={CBS_BODY_GENERATOR_NOT_FOUND}")
     if result.status == CBS_BODY_GENERATOR_UNIMPORTABLE:
         pytest.fail(f"FAIL_REASON={CBS_BODY_GENERATOR_UNIMPORTABLE}: {result.detail}")
-    if result.status == B5_MAYBE_FIXED:
-        pytest.fail(
-            "B5_MAYBE_FIXED: CBS no longer hides a missing CBM. "
-            "Flip this test to require CBM: NOT_UPLOADED + EVIDENCE_ABSENT "
-            "and remove the known_fail_silent marker."
-        )
-    assert result.status == KNOWN_FAIL_SILENT, result.status
-    assert "- none" in result.text
-    assert "CBM" not in result.text
-    assert "CBM: NOT_UPLOADED" not in result.text
-    assert "EVIDENCE_ABSENT" not in result.text
+    assert result.status == B5_MAYBE_FIXED, result.status
+    assert "CBM: NOT_UPLOADED" in result.text
+    assert "EVIDENCE_ABSENT" in result.text
+    assert "- none" not in result.text
+
+    declared = probe(CBS_REPO, declared_components=["cbm"])
+    assert declared.status == B5_MAYBE_FIXED
+    assert "declared_attached: `true`" in declared.text
+    assert "declared as attached but not uploaded" in declared.text

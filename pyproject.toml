@@ -16,6 +16,3 @@ where = ["src"]
 pythonpath = ["src"]
 testpaths = ["tests"]
 addopts = "-q --basetemp=.pytest-tmp"
-markers = [
-    "known_fail_silent: documents a known upstream fail-silent defect; green while the defect exists",
-]

@@ -1,119 +1,81 @@
-# v1.7 release-train hard blockers (CBM perspective)
+# v1.7 release-train blockers (CBM perspective)
 
-Status: **hard blockers for the v1.7 release train**, not CBM documentation
-risks. CBM cannot close these inside its own repository.
+Status: **B5 fixed; B3 field-level complete; B1/B2 blocked; B4 fail-closed only.**
+No tag, release, or PyPI publish. CBM cannot close B1/B2/B4 inside its own
+repository.
 
 ## Blocker list
 
-| ID | Blocker | Owner | CBM behaviour until fixed |
-| --- | --- | --- | --- |
-| B1 | CONTRACT.md §5.1 is not applied: `package_id` is still ambiguous | CBS contract owner | CBM requires `package_id == "cbm"`; producer names exit 3 `REPORT_IDENTITY_MISMATCH` |
-| B2 | CBE/CBP do not emit a CBM-scoped report (`package_id: "cbm"` + `producer_id`) | CBE/CBP + CBS train | CBM cannot reuse CBS reports; it exits 3 or has no input |
-| B3 | CBP P0-06 is not implemented: no `release_body_hash` + `body_hash_scope: "base"` | CBP | exit 2 `MISSING_RELEASE_BODY_HASH` / `MISSING_BODY_HASH_SCOPE` / `BODY_HASH_SCOPE_UNSUPPORTED` |
-| B4 | `artifact_repository` is not unified: CBE/CBP/CBS artifacts live in separate repositories | CBS orchestration + CBE/CBP | exit 2 `MISSING_BUILD_ONCE_ARTIFACT` / `MISSING_CBE_REPORT` / `MISSING_CBP_REPORT` |
-| B5 | CBS body generator writes `- none` when the CBM report is completely missing | CBS | fail-silent: CBM is invisible instead of `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT` |
-
-## 2026-11-09 partial progress
-
-| ID | Status | Evidence / limit |
+| ID | Status | Blocker / evidence |
 | --- | --- | --- |
-| B3 | **PARTIAL** | Real CBP 1.2.0 RC-era manifest with `body_hash_scope: "base"` is accepted; missing/full exit 2. The manifest is `package_id: "cbp"`, not a CBM-scoped/attested CBM manifest, so full B3 stays blocked by B1/B2. |
-| B4 | **FAIL_CLOSED_ONLY** | Cross-repository and missing `artifact_repository` exit 2 `ARTIFACT_REPOSITORY_MISMATCH`; same repository continues. CBE/CBS are not unified, so B4 is not complete. |
-| B1/B2/B5 | **BLOCKED** | §5.1 absent; no CBM-scoped report; CBS body generator still resolves missing CBM to `- none` (KNOWN_FAIL_SILENT canary). |
-
-No tag, release, or PyPI publish was made. The audit package is
-`audit/v1.2.0-rc/`.
+| B1 | **BLOCKED** | CONTRACT.md §5.1 is not applied: `package_id` remains ambiguous. Producer `package_id` exits 3 `REPORT_IDENTITY_MISMATCH`. |
+| B2 | **BLOCKED** | No real CBE report with `package_id: "cbm"`. The CBP side now exists (`bc5461e6…`, `package_id: cbm`, `producer_id: cbp`); full CBM identity needs both. |
+| B3 | **FIELD_LEVEL_COMPLETE** | CBP 1.2.0 RC `855fed7` produced a CBM-scoped manifest: `body_hash_scope: "base"`, `release_body_hash`, two `artifact_hashes`, `evidence_sha256`. Missing/full scope exits 2. This is not B2. |
+| B4 | **FAIL_CLOSED_ONLY** | Cross-repository and missing `artifact_repository` exit 2 `ARTIFACT_REPOSITORY_MISMATCH`; same repository continues. CBE/CBS are still not unified, so B4 is not complete. |
+| B5 | **FIXED** | CBS v1.7.0-integration `fa1740f` emits a visible `## CBM` section with `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT`; canary flipped. Historical `- none` behavior is gone. |
 
 ## Dependency order
 
-They are not parallel switches:
-
 ```text
 B1 §5.1 (package_id = subject)
-  -> B2 CBE/CBP CBM-scoped report (package_id: "cbm" + producer_id)
-     -> B3 CBP P0-06  +  B4 artifact_repository
-        (both required) -> CBM real-data artifact/body stage
+  -> B2 real CBE report with package_id: "cbm" + producer_id
+     -> B3 field-level manifest  +  B4 artifact_repository
+        (both required for full CBM consumption)
 
-B5 CBS body generator (independent; runs in the body pipeline)
+B5 CBS body generator (independent; FIXED in fa1740f; tests/test_known_fail_silent.py)
 ```
 
-- B1 not landed -> B2 cannot start (the report identity is still ambiguous).
-- B2 not landed -> B3/B4 CBM consumption cannot be truly tested with real data.
-- B3 alone or B4 alone -> CBM still exits 2; see the compound table below.
-- B5 is independent: it controls whether a completely absent CBM is visible in
-  the CBS Release body, even when CBM never runs.
+- B1 not landed -> B2 cannot start.
+- B2 not landed -> full CBM consumption cannot pass; B3 is field-level only.
+- B3 alone or B4 alone -> CBM still exits 2 for full consumption.
+- B5 is fixed and no longer a blocker.
 
-## B3 + B4 are a compound blocker
-
-They must be solved together. Solving only one still leaves CBM at exit 2:
+## B3 + B4 are a compound blocker for full consumption
 
 | Solved | Not solved | CBM result |
 | --- | --- | --- |
-| B3 only | B4 | exit 2 `MISSING_BUILD_ONCE_ARTIFACT` / `MISSING_CBE_REPORT` / `MISSING_CBP_REPORT` |
-| B4 only | B3 | exit 2 `MISSING_BODY_HASH_SCOPE` (or `MISSING_RELEASE_BODY_HASH`) |
-| B3 + B4 | — | artifact/body stage can pass |
+| B3 field-level | B4 | exit 2 `ARTIFACT_REPOSITORY_MISMATCH` / `MISSING_*` |
+| B4 | B2 | exit 2/3 `REPORT_IDENTITY_MISMATCH` or missing CBE report |
+| B3 + B4 | B2 | still blocked by identity; cannot claim full PASS |
 
-Do not report "CBM is one step away" after solving only one of them.
+## B5 is fixed (historical requirement)
 
-## B5 is fail-silent, not fail-closed
-
-Audited CBS source:
+CBS `fa1740f` changes `tools/release_body_v17.py` to synthesize structured CBM
+and CBC records. The probe now returns:
 
 ```text
-public-release/tools/release_body_v17.py:20
-  not_uploaded = report.get("not_uploaded", [])
-public-release/tools/release_body_v17.py:39
-  lines += [f"- {item}" for item in not_uploaded] or ["- none"]
+STATUS=B5_MAYBE_FIXED
+CBM: NOT_UPLOADED
+reason: EVIDENCE_ABSENT
+declared_attached: false
 ```
 
-If CBM never runs (or its evidence is completely absent), the body renders
-`- none`; it does not render `CBM: NOT_UPLOADED` or `EVIDENCE_ABSENT`. F6 says
-NOT_UPLOADED must be visible; `- none` is a third, invisible state.
+With `declared_components: ["cbm"]`, the exact phrase
+`declared as attached but not uploaded` is emitted. The old
+`KNOWN_FAIL_SILENT` canary in `tests/test_known_fail_silent.py` is flipped to
+assert this fixed state; the file name is retained as history. No
+`KNOWN_FAIL_SILENT` marker remains in the suite.
 
-Proof in this repository:
+Probe maintenance:
 
-- `tests/test_known_fail_silent.py::test_known_fail_silent_cbs_body_omits_missing_cbm`
-  loads the real CBS `release_body_v17.py` and asserts the current `- none`
-  output, no `CBM`, and no `EVIDENCE_ABSENT`; marker `known_fail_silent`.
-- If the CBS checkout is absent, the test skips with
-  `SKIP_REASON=CBS_BODY_GENERATOR_NOT_FOUND`; if the CBS file exists but cannot
-  be imported/built, the test fails with
-  `FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE`. It does not silently mock.
-- Proposed CBS fix and test: `docs/CBS_BODY_REQUIREMENT.md`.
-
-## Probe maintenance (B5_MAYBE_FIXED)
-
-The canary is **conditional green**, not permanent green:
-
-```bash
-python tools/check_b5.py --check-upstream
-```
-
-| Output | Exit | Test behaviour |
+| Output | Exit | Meaning |
 | --- | --- | --- |
-| `STATUS=KNOWN_FAIL_SILENT` | 0 | green; current defect recorded |
-| `STATUS=B5_MAYBE_FIXED` | 0 | CLI prints a loud flip instruction; pytest canary **fails** so the flip is not forgotten |
-| `SKIP_REASON=CBS_BODY_GENERATOR_NOT_FOUND` | 0 | pytest skips; no false pass |
-| `FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE` | 3 | pytest fails; CBS code is broken |
-| `FAIL_REASON=UNEXPECTED_OUTPUT` | 2 | pytest fails; output is neither defect nor fix |
+| `STATUS=B5_MAYBE_FIXED` | 0 | expected fixed state; B5 test green |
+| `STATUS=KNOWN_FAIL_SILENT` | 0 | old/failed CBS behavior; B5 test fails as regression |
+| `SKIP_REASON=CBS_BODY_GENERATOR_NOT_FOUND` | 0 | CBS checkout missing; test skips |
+| `FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE` | 3 | CBS file exists but import/build fails; test fails |
+| `FAIL_REASON=UNEXPECTED_OUTPUT` | 2 | neither old defect nor fixed; inspect |
 
-When `B5_MAYBE_FIXED` appears, flip
-`tests/test_known_fail_silent.py` to require `CBM: NOT_UPLOADED` +
-`EVIDENCE_ABSENT`, remove `- none`, and remove the `known_fail_silent` marker.
-Do not change the assertion back to `- none`.
-
-## Hard-blocker checklist
+## Checklist
 
 ```text
+[x] B3  CBM-scoped manifest fields (body_hash_scope/release_body_hash/
+        artifact_hashes/evidence_sha256) — field-level complete
 [ ] B1  CONTRACT.md §5.1: package_id = subject, producer_id = producer
-[ ] B2  CBE/CBP emit CBM-scoped package_id="cbm" reports; no CBS-report reuse
-[ ] B3  CBP P0-06: release_body_hash + body_hash_scope="base"
+[ ] B2  real CBE report with package_id="cbm" + producer_id
 [ ] B4  artifact_repository unified for build-once + CBE + CBP artifacts
-[ ] B5  CBS body generator: missing CBM -> CBM: NOT_UPLOADED + EVIDENCE_ABSENT,
-        not "- none"; exact phrase when the train claims CBM attached
+[x] B5  CBS body generator: missing CBM -> CBM: NOT_UPLOADED + EVIDENCE_ABSENT
 ```
 
-Until all five are checked, CBM's **91 passed = 90 normal tests + 1
-KNOWN_FAIL_SILENT canary** prove logic on fixtures, not real-data readiness.
-The canary asserts the B5 defect exists, not that B5 is fixed. A–F live E2E
-remains unexecuted.
+**91 tests pass (91 normal; no KNOWN_FAIL_SILENT canary).** A-F live E2E is
+still not executed. The audit package is `audit/v1.2.0-rc/`.

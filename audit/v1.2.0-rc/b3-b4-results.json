@@ -1,39 +1,38 @@
 {
-  "generated_at": "2026-11-09T09:20:00+08:00",
-  "cbp_rc_code_commit": "5da8b87",
-  "cbm_code_commit": "6c77bc764edd79f31cb3baa80d0e4bd2fe7d63f1",
-  "ci_run": "42544444367",
+  "generated_at": "2026-11-09T17:35:00+08:00",
+  "cbp_rc_code_commit": "855fed7",
+  "manifest_target_cbm_head": "45c49bc",
   "test_suite": {
     "passed": 91,
-    "normal": 90,
-    "known_fail_silent_canary": 1
+    "normal": 91,
+    "known_fail_silent_canary": 0
   },
   "b3": {
-    "status": "PARTIAL",
-    "manifest_file": "cbp-1.2.0-rc-quality-manifest.json",
-    "manifest_sha256": "53d80bb1a73b91b7205f4bc4b96817f7d83ae341164fb10ba1464372801d55ba",
-    "package_id": "cbp",
+    "status": "FIELD_LEVEL_COMPLETE",
+    "manifest_file": "cbp-1.2.0-cbm-manifest.json",
+    "manifest_sha256": "bc5461e61a4167dfae21fdf12fe169fa8339c7f20eac09f861799d89926196c1",
+    "package_id": "cbm",
     "producer_id": "cbp",
-    "version": "v1.2.0",
+    "version": "v0.1.0",
     "body_hash_scope": "base",
-    "release_body_hash": "6cca0e560af9a1239b619bb6cb8d1d2b90e102e51cd058fbb83f00114da8a09b",
-    "manifest_artifact_wheel_sha256": "40ae798a9e480383b7069f8a488225ea8ac806e8dd2cc9120abf9fdb5a76b3ba",
-    "manifest_artifact_sdist_sha256": "7a9b5db62229ecaf3073ed62c556080583f2a5c283b729a8297ded308423c2fb",
-    "manifest_ci_commit_sha": "904494452458bde3bb4d2174abc2664413e41100",
-    "cbp_rc_code_commit": "5da8b87",
-    "b3_limit": "The manifest is package_id=cbp / version=v1.2.0, not a CBM-scoped or attested CBM manifest. Full B3 remains blocked by B1/B2.",
+    "release_body_hash": "b4fa95034d31a84d5fc60a9773852e5ffd002624987947b903ad99ff21e3f077",
+    "artifact_hashes": {
+      "cbm_attach-0.1.0-py3-none-any.whl": "a6a812cf6e99a51211ac30b4ef3574ecc7851ff05d3095406a325d1aa8596362",
+      "cbm_attach-0.1.0.tar.gz": "3fdb074f7739ff9e14b1bb51b6d43561a9e01b5f1395ac6fc1536295ff690d50"
+    },
+    "evidence_sha256": "0edf31e8757d7c6f577efa2a3472c7b33836db9bdc14685634264c201b07732a",
     "results": {
-      "base_scope": "PASS (load_report accepts release_body_hash + body_hash_scope=base)",
+      "base_scope": "PASS (load_report accepts body_hash_scope=base + release_body_hash + artifact_hashes + evidence_sha256)",
       "missing_scope": "exit 2 MISSING_BODY_HASH_SCOPE",
-      "full_scope": "exit 2 BODY_HASH_SCOPE_UNSUPPORTED",
-      "package_identity": "package_id=cbp; identity_errors against cbm non-empty"
+      "full_scope": "exit 2 BODY_HASH_SCOPE_UNSUPPORTED"
     },
     "tests": [
       "tests/test_b3_cbp_rc.py::test_b3_rc_manifest_base_scope_is_accepted",
       "tests/test_b3_cbp_rc.py::test_b3_scope_variants_exit_2[MISSING_BODY_HASH_SCOPE]",
       "tests/test_b3_cbp_rc.py::test_b3_scope_variants_exit_2[BODY_HASH_SCOPE_UNSUPPORTED]",
-      "tests/test_b3_cbp_rc.py::test_b3_manifest_is_not_cbm_scoped"
-    ]
+      "tests/test_b3_cbp_rc.py::test_b3_manifest_is_cbm_scoped_but_b2_is_blocked"
+    ],
+    "limit": "B3 field-level complete. B2 is still blocked: no real CBE report with package_id=cbm; full verify cannot pass."
   },
   "b4": {
     "status": "FAIL_CLOSED_ONLY",
@@ -47,12 +46,24 @@
       "tests/test_exit_codes.py::test_missing_artifact_repository_exits_2",
       "tests/test_exit_codes.py::test_same_artifact_repository_continues"
     ],
-    "limit": "CBE/CBS artifact repositories are not unified; CBM only fails closed. B4 is not complete."
+    "limit": "CBE/CBS artifact repositories are not unified; B4 remains fail-closed only."
+  },
+  "b5": {
+    "status": "FIXED",
+    "cbs_commit": "fa1740fe03590ec9adfc9ab57cf1485bdc3bea87",
+    "probe_status": "B5_MAYBE_FIXED",
+    "canary_flipped": true,
+    "test": "tests/test_known_fail_silent.py::test_b5_fixed_cbs_body_emits_not_uploaded",
+    "evidence": [
+      "b5-probe.stdout.txt",
+      "b5-probe-declared.stdout.txt",
+      "b5-fixed-body.md",
+      "b5-fixed-body-declared.md"
+    ]
   },
   "blocked": {
-    "B1": "BLOCKED: CONTRACT.md §5.1 is not applied; producer package_id -> exit 3 REPORT_IDENTITY_MISMATCH.",
-    "B2": "BLOCKED: no CBM-scoped report (package_id=cbm + producer_id); current manifest is package_id=cbp.",
-    "B5": "BLOCKED: CBS release_body_v17.py renders - none for a missing CBM; KNOWN_FAIL_SILENT canary.",
+    "B1": "CONTRACT.md §5.1 not applied; producer package_id -> exit 3 REPORT_IDENTITY_MISMATCH.",
+    "B2": "No real CBE report with package_id=cbm; the CBP side is real (bc5461e6…).",
     "no_fake_pass": true
   }
 }

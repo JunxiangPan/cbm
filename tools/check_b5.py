@@ -82,8 +82,8 @@ def _load_build(path: Path):
     return build
 
 
-def _fixture():
-    return {
+def _fixture(declared_components: list[str] | None = None):
+    report = {
         "version": "v1.7.0",
         "gate_status": "PASS",
         "applicable_gate_count": 4,
@@ -93,9 +93,16 @@ def _fixture():
         "gates": [],
         "not_uploaded": [],
     }
+    if declared_components:
+        report["declared_components"] = list(declared_components)
+    return report
 
 
-def probe(cbs_repo: str | Path) -> ProbeResult:
+def probe(
+    cbs_repo: str | Path,
+    *,
+    declared_components: list[str] | None = None,
+) -> ProbeResult:
     path = _body_path(cbs_repo)
     if not path.is_file():
         return ProbeResult(CBS_BODY_GENERATOR_NOT_FOUND, detail=str(path))
@@ -111,7 +118,7 @@ def probe(cbs_repo: str | Path) -> ProbeResult:
         wheel = Path(tmp) / "pkg.whl"
         wheel.write_bytes(b"wheel")
         try:
-            text = build(_fixture(), wheel)
+            text = build(_fixture(declared_components), wheel)
         except Exception as exc:  # build failure is a code failure, not a skip
             return ProbeResult(
                 CBS_BODY_GENERATOR_UNIMPORTABLE,
@@ -155,8 +162,8 @@ def _emit(result: ProbeResult, *, as_json: bool) -> int:
             print("B5_MAYBE_FIXED")
             print("CBS no longer hides a missing CBM.")
             print(
-                "Flip tests/test_known_fail_silent.py: assert CBM: NOT_UPLOADED + "
-                "EVIDENCE_ABSENT and remove the known_fail_silent marker."
+                "Fixed behavior present: CBM: NOT_UPLOADED + EVIDENCE_ABSENT. "
+                "The canary is flipped to assert this state."
             )
         elif result.status == CBS_BODY_GENERATOR_NOT_FOUND:
             print(f"SKIP_REASON={CBS_BODY_GENERATOR_NOT_FOUND}")
@@ -180,11 +187,19 @@ def main(argv: list[str] | None = None) -> int:
         help="run the B5 probe against the CBS body generator",
     )
     parser.add_argument("--cbs-repo", default="", help="CBS checkout or release_body_v17.py")
+    parser.add_argument(
+        "--declared-cbm",
+        action="store_true",
+        help="render with declared_components=[cbm] and require the exact phrase",
+    )
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
     if not args.check_upstream:
         parser.error("--check-upstream is required")
-    result = probe(args.cbs_repo or default_cbs_repo())
+    result = probe(
+        args.cbs_repo or default_cbs_repo(),
+        declared_components=["cbm"] if args.declared_cbm else None,
+    )
     return _emit(result, as_json=args.json)
 
 

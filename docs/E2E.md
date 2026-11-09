@@ -7,15 +7,14 @@ python -m pytest
 ```
 
 **Status: 91 offline/static tests pass; A-F live E2E has not been executed.**
+B5 is fixed (CBS `fa1740f`, canary flipped); B3 is field-level complete (CBP
+1.2.0 RC `855fed7`, manifest `bc5461e6…`); B1/B2 remain blocked; B4 is
+fail-closed only. Full CBM consumption still waits for B1/B2 (and B4).
+
 The GitHub Actions workflow is statically audited, not executed; the live path
 (real `gh` artifact download, release upload, digest re-read) is the next
 acceptance step and must use a private test repository and a draft release,
 never a production tag.
-
-CBM 0.1.0 cannot consume real CBE/CBP reports until CONTRACT.md §5.1/§5.2 land
-and CBE/CBP P0-06 is implemented. Current real reports would exit 3
-`REPORT_IDENTITY_MISMATCH` or exit 2 `MISSING_RELEASE_BODY_HASH` /
-`MISSING_BODY_HASH_SCOPE`; the suite below uses generated mock fixtures.
 
 ## A. Input / format (exit 2)
 
@@ -116,21 +115,20 @@ outside the offline skeleton:
 CBM v0.1.0 does not modify the CBS Release body and is not in the CBS `publish`
 `needs` graph.
 
-Real-data F runs are blocked until the five hard blockers in docs/V17_BLOCKERS.md land. Do not
+Real-data F runs are blocked until B1/B2 (and the unified B4 repository) land. Do not
 report a live E2E pass by feeding the current real CBE/CBP reports into CBM and
 treating the expected exit 2/3 as a test failure; those exits are the correct
 fail-closed behavior.
 
-## G. Upstream defect probe
+## G. B5 regression probe
 
 | ID | Scenario | Test |
 | --- | --- | --- |
-| G-01 | CBS body generator currently hides a completely missing CBM (`- none`, no `CBM`, no `EVIDENCE_ABSENT`); marked `KNOWN_FAIL_SILENT` | `test_known_fail_silent.py::test_known_fail_silent_cbs_body_omits_missing_cbm` |
+| G-01 | CBS body generator emits `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT` for a missing CBM (fixed in `fa1740f`); exact phrase when declared | `test_known_fail_silent.py::test_b5_fixed_cbs_body_emits_not_uploaded` |
 
-G-01 is green while the defect exists; it is a canary, not an acceptance.
-**91 passed = 90 normal tests + 1 canary; 91 passed does not mean all functions
-are correct.** When CBS implements `docs/CBS_BODY_REQUIREMENT.md`, the CLI
-prints `B5_MAYBE_FIXED` and the pytest canary fails; flip G-01 to assert
-`CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT` and remove the marker. Missing CBS
-checkout skips with `SKIP_REASON=CBS_BODY_GENERATOR_NOT_FOUND`; an unimportable
-CBS file fails with `FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE`.
+G-01 asserts the fixed behavior and must stay green. `tools/check_b5.py
+--check-upstream` should print `STATUS=B5_MAYBE_FIXED`; a `KNOWN_FAIL_SILENT`
+result is a regression and fails the test. **91 passed = 91 normal tests; no
+KNOWN_FAIL_SILENT canary remains.** Missing CBS checkout skips with
+`SKIP_REASON=CBS_BODY_GENERATOR_NOT_FOUND`; an unimportable CBS file fails with
+`FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE`.

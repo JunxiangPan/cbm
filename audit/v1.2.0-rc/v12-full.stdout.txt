@@ -10,14 +10,13 @@ CBP-DOC-001 DOC_REFERENCES_EXIST: WARN
   docs/INTEGRATION_REQUIREMENTS.md:59: referenced path missing: tools/dogfood_manifest.py
   docs/INTEGRATION_REQUIREMENTS.md:64: referenced path missing: tests/v17/mock/cbe_cli.py
   docs/INTEGRATION_REQUIREMENTS.md:64: referenced path missing: tests/v17/mock/cbp_cli.py
-  README.md:70: referenced path missing: tools/release_body_v17.py
-  README.md:170: referenced path missing: cbm-evidence/cbm-report.json
-  README.md:170: referenced path missing: cbm-evidence/cbm-body.md
-  README.md:173: referenced path missing: cbm-evidence/cbm-report.final.json
-  README.md:174: referenced path missing: cbm-evidence/cbm-body.final.md
-  README.md:178: referenced path missing: cbm-evidence-out/cbm-report.json
-  README.md:179: referenced path missing: cbm-evidence-out/cbm-body.md
-  README.md:183: referenced path missing: tools/release_body_v17.py
+  docs/V17_BLOCKERS.md:43: referenced path missing: tools/release_body_v17.py
+  README.md:154: referenced path missing: cbm-evidence/cbm-report.json
+  README.md:154: referenced path missing: cbm-evidence/cbm-body.md
+  README.md:157: referenced path missing: cbm-evidence/cbm-report.final.json
+  README.md:158: referenced path missing: cbm-evidence/cbm-body.final.md
+  README.md:162: referenced path missing: cbm-evidence-out/cbm-report.json
+  README.md:163: referenced path missing: cbm-evidence-out/cbm-body.md
 CBP-CLAIM-001 CAPABILITY_CLAIMS: PASS
 CBP-COV-001 COVERAGE_HARD: PASS
 CBP-PROOF-001 PROOF_HIGH_TIER: PASS
