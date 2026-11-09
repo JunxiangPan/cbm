@@ -58,5 +58,11 @@
     "commit": "8b5c52b",
     "status": "success",
     "tests": "109 passed on ubuntu-latest and windows-latest (B4 fail-closed + B2 object readiness)"
+  },
+  {
+    "run": 42656004220,
+    "commit": "304d4e7",
+    "status": "success",
+    "tests": "110 passed on ubuntu-latest and windows-latest (different-owner object cross)"
   }
 ]
