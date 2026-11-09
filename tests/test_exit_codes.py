@@ -480,3 +480,29 @@ def test_same_artifact_repository_continues(tmp_path: Path) -> None:
     assert decision["decision"] == "UPLOAD"
     assert report["reason"] == "UPLOAD_PENDING"
     assert report["cbp_artifact_repository"] == "owner/repo"
+
+
+def test_cross_repository_different_repo_exits_2(tmp_path: Path) -> None:
+    root, _, digest = make_artifact(tmp_path)
+    code, report, _, _ = _run(
+        tmp_path,
+        cbe=make_cbe(),
+        cbp=make_cbp(digest, artifact_repository="owner/other"),
+        artifact_root=root,
+    )
+    assert code == 2
+    assert report["reason"] == "ARTIFACT_REPOSITORY_MISMATCH"
+
+
+def test_same_repository_case_insensitive_continues(tmp_path: Path) -> None:
+    root, _, digest = make_artifact(tmp_path)
+    code, report, _, decision = _run(
+        tmp_path,
+        cbe=make_cbe(),
+        cbp=make_cbp(digest, artifact_repository="OWNER/REPO"),
+        artifact_root=root,
+    )
+    assert code == 0
+    assert decision["decision"] == "UPLOAD"
+    assert report["reason"] == "UPLOAD_PENDING"
+    assert report["cbp_artifact_repository"] == "OWNER/REPO"

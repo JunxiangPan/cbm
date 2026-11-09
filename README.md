@@ -20,23 +20,26 @@ self-listed manifest. The contract identity proposal in
 
 ## Current status: B5 fixed; B3 field-level complete; B1/B2/B4 open
 
-CBM v0.1.0 is a **skeleton**. It has **91 offline/static tests passing**. A-F
+CBM v0.1.0 is a **skeleton**. It has **102 offline/static tests passing**. A-F
 live E2E is still not executed (private test repo + scoped tokens).
 
 2026-11-09 status:
 
 - **B1 BLOCKED** — §5.1 is not in CONTRACT.md; producer `package_id` exits 3
-  `REPORT_IDENTITY_MISMATCH`.
+  `REPORT_IDENTITY_MISMATCH`. Consumer readiness tests cover `package_id: "cbm"` +
+  `producer_id: "cbe"/"cbp"` and reject old-field mixing; B1 itself is not applied.
 - **B2 BLOCKED** — there is no real CBE report with `package_id: "cbm"`; the
-  CBP side now exists, but full identity needs both.
+  CBP side now exists, but full identity needs both. A synthetic fixture/schema
+  readiness test exists (`not_upstream_evidence`); it is not B2 evidence.
 - **B3 FIELD_LEVEL_COMPLETE** — CBP 1.2.0 RC `855fed7` produced a CBM-scoped
   manifest `bc5461e6…` (`package_id: "cbm"`, `producer_id: "cbp"`, `base`).
   `body_hash_scope`, `release_body_hash`, `artifact_hashes` and
   `evidence_sha256` are accepted; missing/full scope exits 2. This is
   field-level B3, not B2.
-- **B4 FAIL_CLOSED_ONLY** — cross/missing `artifact_repository` exits 2
-  `ARTIFACT_REPOSITORY_MISMATCH`; same repository continues. CBE/CBS are still
-  not unified.
+- **B4 FAIL_CLOSED_ONLY** — cross-repository and missing `artifact_repository`
+  exit 2 `ARTIFACT_REPOSITORY_MISMATCH`; same repository (case-insensitive)
+  continues. Boundary tests cover different-repo, missing and case variants;
+  CBE/CBS are still not unified.
 - **B5 FIXED** — CBS v1.7.0-integration `fa1740f` (regression `tests/test_known_fail_silent.py`) renders
   `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT`; the canary is flipped to assert the
   fixed behavior.
@@ -200,7 +203,7 @@ the SHA-256 of the canonical JSON of the report without that field.
 python -m pytest
 ```
 
-**91 tests pass**: exit-code mapping, gate-before-upload (including a mock
+**102 tests pass**: exit-code mapping, gate-before-upload (including a mock
 uploader that records calls), NOT_UPLOADED body rendering, hashes, workflow
 static audit, schema/report lockstep, and a mock end-to-end
 verify/upload/finalize flow. These are offline/static tests, not real E2E.
@@ -212,7 +215,7 @@ probe's missing/import/unexpected modes; a missing CBS checkout skips with
 `SKIP_REASON=CBS_BODY_GENERATOR_NOT_FOUND`, and an unimportable file fails with
 `FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE`.
 
-**91 passed = 91 normal tests; no `KNOWN_FAIL_SILENT` canary remains.** Do not
+**102 passed = 102 normal tests; no `KNOWN_FAIL_SILENT` canary remains.** Do not
 reintroduce the old `- none` assertion as an accepted state.
 
 Probe CLI:

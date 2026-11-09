@@ -10,8 +10,10 @@ CBM v0.1.0 does not claim B1 or B2 as complete. B5 is fixed in CBS
 - CBM behavior: `package_id != "cbm"` → exit 3,
   `cbm_gate_status=FAIL`, `reason=REPORT_IDENTITY_MISMATCH`,
   `upload_status=NOT_UPLOADED`.
-- Evidence: `tests/test_exit_codes.py::test_identity_mismatch_exits_3`,
-  `test_cbp_identity_mismatch_exits_3`, `test_cbs_report_is_not_reused`.
+- Evidence: `tests/test_b1_identity.py` (6 tests: accepted subject/producer,
+  old package_id mixing, producer mismatch, integration exit 3); plus
+  `test_cbs_report_is_not_reused`. B1 remains blocked because §5.1 is not in
+  CONTRACT.md.
 
 ## B2 — real CBE report with `package_id: "cbm"`
 
@@ -20,7 +22,10 @@ CBM v0.1.0 does not claim B1 or B2 as complete. B5 is fixed in CBS
   side is still missing; there is no real CBE report with `package_id: "cbm"`.
 - CBM behavior: `load_report` can load the CBP manifest and B3 fields pass,
   but a full `verify` needs both reports; CBM must not synthesize the CBE side.
-- Evidence: `tests/test_b3_cbp_rc.py::test_b3_manifest_is_cbm_scoped_but_b2_is_blocked`.
+- Evidence: `tests/test_b3_cbp_rc.py::test_b3_manifest_is_cbm_scoped_but_b2_is_blocked`;
+  `tests/test_b2_readiness.py` (3 tests) uses a synthetic CBE fixture marked
+  `not_upstream_evidence`, plus the real CBP CBM manifest. It proves the schema/
+  identity path only; it is not a real CBE report and does not make B2 PASS.
 - B3 is **FIELD_LEVEL_COMPLETE**, not B2 complete.
 
 ## B5 — fixed (not blocked)
@@ -36,4 +41,4 @@ CBM v0.1.0 does not claim B1 or B2 as complete. B5 is fixed in CBS
 
 - No tag, GitHub Release, PyPI upload, or `PASS` claim for B1/B2.
 - B3 is marked FIELD_LEVEL_COMPLETE; B4 FAIL_CLOSED_ONLY; B5 FIXED (`tests/test_known_fail_silent.py`).
-- `91 passed = 91 normal tests`.
+- `102 passed = 102 normal tests`.

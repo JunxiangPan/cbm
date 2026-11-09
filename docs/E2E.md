@@ -6,7 +6,7 @@ Run everything with:
 python -m pytest
 ```
 
-**Status: 91 offline/static tests pass; A-F live E2E has not been executed.**
+**Status: 102 offline/static tests pass; A-F live E2E has not been executed.**
 B5 is fixed (CBS `fa1740f`, canary flipped); B3 is field-level complete (CBP
 1.2.0 RC `855fed7`, manifest `bc5461e6…`); B1/B2 remain blocked; B4 is
 fail-closed only. Full CBM consumption still waits for B1/B2 (and B4).
@@ -50,6 +50,10 @@ never a production tag.
 | B-11 | CBP top-level PASS contradicts a failed gate | `test_exit_codes.py::test_cbp_top_level_pass_with_failed_gate_exits_3` |
 | B-12 | CBP blocking gate SKIPPED | `test_exit_codes.py::test_cbp_blocking_gate_skipped_exits_3` |
 | B-13 | CBS report is not reused (`package_id: "cbs"`) | `test_exit_codes.py::test_cbs_report_is_not_reused` |
+| B-14 | B1 consumer readiness: package_id=cbm + producer_id=cbe/cbp; old-field mixing exits 3 | `test_b1_identity.py` (6 tests) |
+| B-15 | B2 synthetic CBM-scoped CBE schema/identity readiness; marked not_upstream_evidence | `test_b2_readiness.py` (3 tests) |
+| B-16 | B4 cross-repository different repo exits 2 | `test_exit_codes.py::test_cross_repository_different_repo_exits_2` |
+| B-17 | B4 same repository case-insensitive continues | `test_exit_codes.py::test_same_repository_case_insensitive_continues` |
 
 ## C. Artifact / upload (exit 0/3)
 
@@ -128,7 +132,7 @@ fail-closed behavior.
 
 G-01 asserts the fixed behavior and must stay green. `tools/check_b5.py
 --check-upstream` should print `STATUS=B5_MAYBE_FIXED`; a `KNOWN_FAIL_SILENT`
-result is a regression and fails the test. **91 passed = 91 normal tests; no
+result is a regression and fails the test. **102 passed = 102 normal tests; no
 KNOWN_FAIL_SILENT canary remains.** Missing CBS checkout skips with
 `SKIP_REASON=CBS_BODY_GENERATOR_NOT_FOUND`; an unimportable CBS file fails with
 `FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE`.

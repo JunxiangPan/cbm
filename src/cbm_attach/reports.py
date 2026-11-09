@@ -395,6 +395,15 @@ def identity_errors(cbe: Report, cbp: Report, *, version: str, tag: str) -> list
         errors.append(f"CBP version={cbp.version!r} expected {version!r}")
     if cbe.data.get("tag") != tag:
         errors.append(f"CBE tag={cbe.data.get('tag')!r} expected {tag!r}")
+
+    # §5.1 producer_id: optional for pre-clause reports, but when present it
+    # must be the producer, not the subject. A mixed old/new report is rejected.
+    cbe_producer = cbe.data.get("producer_id")
+    if cbe_producer is not None and cbe_producer != "cbe":
+        errors.append(f"CBE producer_id={cbe_producer!r} expected 'cbe'")
+    cbp_producer = cbp.data.get("producer_id")
+    if cbp_producer is not None and cbp_producer != "cbp":
+        errors.append(f"CBP producer_id={cbp_producer!r} expected 'cbp'")
     return errors
 
 

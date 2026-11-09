@@ -147,7 +147,11 @@ def evaluate(
     # (exit 2), not a PASS and not a soft warning.
     if expected_artifact_repository is not None:
         actual_repository = cbp.data.get("artifact_repository")
-        if not isinstance(actual_repository, str) or actual_repository != expected_artifact_repository:
+        if (
+            not isinstance(actual_repository, str)
+            or not actual_repository.strip()
+            or actual_repository.strip().lower() != expected_artifact_repository.strip().lower()
+        ):
             raise InputError(
                 f"CBP artifact_repository={actual_repository!r} expected "
                 f"{expected_artifact_repository!r} (cross-repository artifact)",

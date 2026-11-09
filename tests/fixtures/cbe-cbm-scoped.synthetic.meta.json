@@ -1,0 +1,8 @@
+{
+  "synthetic": true,
+  "not_upstream_evidence": true,
+  "purpose": "B2 consumer readiness: package_id=cbm + producer_id=cbe shape validation. This is not a real CBE report and must not be used as B2 evidence.",
+  "producer_id": "cbe",
+  "package_id": "cbm",
+  "version": "v0.1.0"
+}

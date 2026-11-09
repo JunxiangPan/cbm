@@ -1,0 +1,18 @@
+{
+  "schema_version": "1",
+  "package_id": "cbm",
+  "producer_id": "cbe",
+  "producer_version": "1.7.0",
+  "version": "v0.1.0",
+  "tag": "v0.1.0",
+  "gate_status": "PASS",
+  "exit_code": 0,
+  "applicable_count": 4,
+  "skip_count": 0,
+  "skip_ratio": 0.0,
+  "blocking_skip": false,
+  "warn_count": 0,
+  "rules_manifest_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "sarif_paths": [],
+  "evidence_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+}

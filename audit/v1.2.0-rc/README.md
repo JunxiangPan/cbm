@@ -26,7 +26,7 @@ CBM PASS claim was made. No CBS/CBE/CBP/CBC repository was modified.
 | [42544980840](https://github.com/JunxiangPan/cbm/actions/runs/42544980840) | `45c49bc` | success: 91/91 (final old audit) |
 | [42593726644](https://github.com/JunxiangPan/cbm/actions/runs/42593726644) | `3458cb8` | success: **91/91 on ubuntu-latest and windows-latest** (B5 flip + CBM manifest) |
 
-**91 passed = 91 normal tests. No `KNOWN_FAIL_SILENT` canary remains.** The B5
+**102 passed = 102 normal tests. No `KNOWN_FAIL_SILENT` canary remains.** The B5
 canary was flipped to assert the fixed behavior.
 
 ## CBP-CI-001 — PASS
@@ -126,7 +126,7 @@ See [`B1_B2_BLOCKED.md`](B1_B2_BLOCKED.md). No fake PASS:
 
 ```bash
 cd D:\qq苏瑾言大肥鱼\cbm
-python -m pytest                                  # 91 passed (CBS present)
+python -m pytest                                  # 102 passed (CBS present)
 python tools/check_b5.py --check-upstream         # STATUS=B5_MAYBE_FIXED; exit 0
 python tools/check_b5.py --check-upstream --declared-cbm
 python -m pytest tests/test_b3_cbp_rc.py          # 4 passed
