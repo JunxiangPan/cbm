@@ -82,5 +82,11 @@
     "commit": "f414b78",
     "status": "success",
     "tests": "110 passed on ubuntu-latest and windows-latest (real F3 config; artifact still blocked)"
+  },
+  {
+    "run": 42720843255,
+    "commit": "2d87412",
+    "status": "success",
+    "tests": "110 passed on ubuntu-latest and windows-latest (exact artifact B2 gate verified)"
   }
 ]
