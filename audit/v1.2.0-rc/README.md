@@ -1,4 +1,4 @@
-# CBM v0.1.0 — CBP 1.2.0 RC audit package
+# CBM v0.1.0 — CBP 1.2.0 audit package
 
 Status: **STOPPED FOR HUMAN AUDIT**. No tag, GitHub Release, PyPI upload, or
 CBM PASS claim was made. No CBS/CBE/CBP/CBC repository was modified.
@@ -9,10 +9,10 @@ CBM PASS claim was made. No CBS/CBE/CBP/CBC repository was modified.
 | --- | --- |
 | CBM repository | https://github.com/JunxiangPan/cbm (public) |
 | CBM branch | `main` |
-| CBM code commit | `ae0ad13d47a71ab10dc8c1cd06601be5f3b0a66c` |
+| CBM manifest target commit | `dd756f9` (UTF-8 fix) |
 | CBM tag / release | none |
-| CBP RC code | `855fed7` (`1.2.0-dev`) |
-| CBP 1.2.0 publish state | not tagged, not released, PyPI 404 |
+| CBP 1.2.0 release | `v1.2.0` / `5ebd0eb` |
+| CBP 1.2.0 publish state | released (tag, GitHub Release, PyPI) |
 | CBS B5 fix | `fa1740fe03590ec9adfc9ab57cf1485bdc3bea87` (`v1.7.0-integration`) |
 
 ## CI
@@ -47,7 +47,7 @@ CBP_V12_RESULT=PASS rules=1 blocking_failed=false warning_failed=false
 exit 0
 ```
 
-Full 12-rule run (`855fed7`, read-only archive):
+Full 12-rule run (official v1.2.0, `5ebd0eb`, read-only archive):
 
 ```text
 PASS 11, WARN 1 (CBP-DOC-001, 12 findings), FAIL 0
@@ -58,6 +58,17 @@ exit 0
 CBP-DEBT-001 was a true positive on `docs/V17_BLOCKERS.md` (the word `FIXED` without a file);
 it now passes after the claim cites `tests/test_known_fail_silent.py`. DOC
 warnings are 1.2.0 warning-only, not waived.
+
+## Encoding fix
+
+`b5-probe.stdout.txt` and `b5-probe-declared.stdout.txt` were GBK bytes; both
+were decoded as GBK and re-encoded as UTF-8 without changing the text. A scan of
+the repository found no other non-UTF-8 text file. The official CBP 1.2.0 gate
+now reports:
+
+```text
+encoding: PASS encoding=60 UTF-8 files without BOM
+```
 
 ## B5 — FIXED (`tests/test_known_fail_silent.py`), canary flipped
 
@@ -83,26 +94,42 @@ Evidence:
 - `tools/check_b5.py --check-upstream` is green; `KNOWN_FAIL_SILENT` now means
   a regression and fails the test.
 
-## B3 — FIELD_LEVEL_COMPLETE
+## B3 — FIELD_LEVEL_COMPLETE (official CBP 1.2.0)
 
-Real CBP 1.2.0 RC `855fed7` external-package manifest:
+Official CBP 1.2.0 (tag `v1.2.0`, commit `5ebd0eb`) target gate on CBM
+`dd756f9`:
 
 ```text
-file cbp-1.2.0-cbm-manifest.json
-sha256 bc5461e61a4167dfae21fdf12fe169fa8339c7f20eac09f861799d89926196c1
+file cbm-target-gate.json
+sha256 f58ba9a4d38c3a66779c6a609f4f17fd9880c5cd682f071c74e40a4c1b4ddcd7
 package_id cbm, producer_id cbp, version v0.1.0
-body_hash_scope base
-release_body_hash b4fa95034d31a84d5fc60a9773852e5ffd002624987947b903ad99ff21e3f077
-wheel sha256 a6a812cf6e99a51211ac30b4ef3574ecc7851ff05d3095406a325d1aa8596362
-sdist sha256 3fdb074f7739ff9e14b1bb51b6d43561a9e01b5f1395ac6fc1536295ff690d50
-evidence_sha256 0edf31e8757d7c6f577efa2a3472c7b33836db9bdc14685634264c201b07732a
+gate_status PASS
+encoding PASS (60 UTF-8 files without BOM)
 ```
 
-`load_report` accepts all B3 fields; missing scope -> exit 2
-`MISSING_BODY_HASH_SCOPE`; `full` -> exit 2 `BODY_HASH_SCOPE_UNSUPPORTED`.
-Tests: 4 passed (`tests/test_b3_cbp_rc.py`).
+Generated manifest:
 
-**B3 field-level is complete. B2 is still blocked**: the CBE side has no real
+```text
+file cbm-quality-manifest.json
+sha256 6da7e848fa7214af49ceb9f1a165f048cd1c8c168be7eea4d2d4022addfe8400
+package_id cbm, producer_id cbp, version v0.1.0
+gate_status PASS
+body_hash_scope base
+release_body_hash 0db00009e0f711b965ec670a003a72ee9cffb13e7016bcb14211e2768c1cd288
+artifact_repository JunxiangPan/cbm
+wheel sha256 e43acd41c3ec75ae77f48221f65d92e86ebb5f413abc10360b2f2a4bc46fa621
+sdist sha256 0a9f07d09cfc6ae990dfe52b830bdd532dfdae3d5559101997029051aec31fad
+evidence_sha256 ec07d0ec1acd3502b0e4aa4845598cecbcd6a6be38dc01a5c2b626e1ea498fc5
+```
+
+The base body is `cbm-base-body.md`, assembled from the CBM README and labelled
+as such; it is not an official GitHub Release body. `load_report` returns PASS;
+missing scope -> exit 2 `MISSING_BODY_HASH_SCOPE`; `full` -> exit 2
+`BODY_HASH_SCOPE_UNSUPPORTED`. Tests: 4 passed (`tests/test_b3_cbp_rc.py`).
+
+The older RC-era `bc5461e6…` manifest is retained as history only.
+
+**B3 field-level is complete. B2 is still blocked**: there is no real CBE
 report with `package_id: "cbm"`; CBM does not synthesize it.
 
 ## B4 — FAIL_CLOSED_ONLY
@@ -145,8 +172,8 @@ python -m pytest tests/test_b2_readiness.py       # 3 passed (synthetic)
 python -m pytest   tests/test_exit_codes.py::test_cross_repository_artifact_exits_2   tests/test_exit_codes.py::test_cross_repository_different_repo_exits_2   tests/test_exit_codes.py::test_missing_artifact_repository_exits_2   tests/test_exit_codes.py::test_same_artifact_repository_continues   tests/test_exit_codes.py::test_same_repository_case_insensitive_continues  # 5 passed
 ```
 
-The CBP runs used a read-only `git archive` of `855fed7`; no CBP working tree
-was modified.
+The CBP gate/manifest used a read-only `git archive` of the official `v1.2.0`
+commit `5ebd0eb`; no CBP working tree was modified.
 
 ## No publish
 

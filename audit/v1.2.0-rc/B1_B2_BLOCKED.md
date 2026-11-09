@@ -17,8 +17,8 @@ CBM v0.1.0 does not claim B1 or B2 as complete. B5 is fixed in CBS
 
 ## B2 — real CBE report with `package_id: "cbm"`
 
-- State: the CBP side is now real: `cbp-1.2.0-cbm-manifest.json`, sha
-  `bc5461e6…`, `package_id: "cbm"`, `producer_id: "cbp"`, `base`. The CBE
+- State: the CBP side is now real: `cbm-quality-manifest.json`, sha
+  `6da7e848…`, `package_id: "cbm"`, `producer_id: "cbp"`, `base`, `gate_status: PASS`. The CBE
   side is still missing; there is no real CBE report with `package_id: "cbm"`.
 - CBM behavior: `load_report` can load the CBP manifest and B3 fields pass,
   but a full `verify` needs both reports; CBM must not synthesize the CBE side.

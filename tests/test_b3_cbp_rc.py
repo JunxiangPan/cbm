@@ -1,7 +1,7 @@
-"""B3 field-level evidence from the real CBP 1.2.0 RC CBM manifest.
+"""B3 field-level evidence from the official CBP 1.2.0 CBM manifest.
 
-The manifest is `package_id: "cbm"` / `producer_id: "cbp"` / `version: "v0.1.0"`
-and carries `body_hash_scope: "base"`, `release_body_hash`, two artifact hashes
+The manifest is `package_id: "cbm"` / `producer_id: "cbp"` / `version: "v0.1.0"`,
+`gate_status: "PASS"`, and carries `body_hash_scope: "base"`, `release_body_hash`, two artifact hashes
 and `evidence_sha256`. This proves B3 field-level handling on a real CBM-scoped
 manifest. B2 remains blocked: there is still no real CBE report with
 `package_id: "cbm"`, so CBM's full identity check cannot pass.
@@ -30,15 +30,16 @@ def test_b3_rc_manifest_base_scope_is_accepted() -> None:
     assert report.producer_id == "cbp"
     assert report.version == "v0.1.0"
     assert report.data["body_hash_scope"] == "base"
+    assert report.data["gate_status"] == "PASS"
     assert report.data["release_body_hash"] == (
-        "b4fa95034d31a84d5fc60a9773852e5ffd002624987947b903ad99ff21e3f077"
+        "0db00009e0f711b965ec670a003a72ee9cffb13e7016bcb14211e2768c1cd288"
     )
     assert report.data["artifact_hashes"] == {
-        "cbm_attach-0.1.0-py3-none-any.whl": "a6a812cf6e99a51211ac30b4ef3574ecc7851ff05d3095406a325d1aa8596362",
-        "cbm_attach-0.1.0.tar.gz": "3fdb074f7739ff9e14b1bb51b6d43561a9e01b5f1395ac6fc1536295ff690d50",
+        "cbm_attach-0.1.0-py3-none-any.whl": "e43acd41c3ec75ae77f48221f65d92e86ebb5f413abc10360b2f2a4bc46fa621",
+        "cbm_attach-0.1.0.tar.gz": "0a9f07d09cfc6ae990dfe52b830bdd532dfdae3d5559101997029051aec31fad",
     }
     assert report.data["evidence_sha256"] == (
-        "0edf31e8757d7c6f577efa2a3472c7b33836db9bdc14685634264c201b07732a"
+        "ec07d0ec1acd3502b0e4aa4845598cecbcd6a6be38dc01a5c2b626e1ea498fc5"
     )
 
 
