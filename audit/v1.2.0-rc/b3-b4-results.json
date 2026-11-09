@@ -1,6 +1,6 @@
 {
   "generated_at": "2026-11-09T17:35:00+08:00",
-  "cbp_rc_code_commit": "5ebd0eb",
+  "cbp_rc_code_commit": "d4bfefb",
   "manifest_target_cbm_head": "45c49bc",
   "test_suite": {
     "passed": 105,
@@ -14,33 +14,43 @@
     "gate_status": "PASS",
     "gate_encoding": "PASS",
     "manifest_file": "cbm-quality-manifest.json",
-    "manifest_sha256": "6da7e848fa7214af49ceb9f1a165f048cd1c8c168be7eea4d2d4022addfe8400",
+    "manifest_sha256": "b41798f07be4dda35e2afa1a810381bcd6f5025fb5d33f5c5a1054834a390c82",
+    "schema_version": "1",
     "package_id": "cbm",
     "producer_id": "cbp",
     "version": "v0.1.0",
     "body_hash_scope": "base",
-    "release_body_hash": "0db00009e0f711b965ec670a003a72ee9cffb13e7016bcb14211e2768c1cd288",
+    "release_body_hash": "97784c54872b32f89ac1f0ecb2300b51c1c625d31fd6ebb322940e8bb44963c2",
     "artifact_hashes": {
-      "cbm_attach-0.1.0-py3-none-any.whl": "e43acd41c3ec75ae77f48221f65d92e86ebb5f413abc10360b2f2a4bc46fa621",
-      "cbm_attach-0.1.0.tar.gz": "0a9f07d09cfc6ae990dfe52b830bdd532dfdae3d5559101997029051aec31fad"
+      "cbm_attach-0.1.0-py3-none-any.whl": "02bf840016f5a2630c70ab42286c3ea47c0091c5efb77c0429c3060c0bee8015",
+      "cbm_attach-0.1.0.tar.gz": "89379c009f3c0cfca072ceaf861e03923e00cbe15e617c55846ed7ec78fbad6e"
     },
-    "evidence_sha256": "ec07d0ec1acd3502b0e4aa4845598cecbcd6a6be38dc01a5c2b626e1ea498fc5",
-    "artifact_repository": "JunxiangPan/cbm",
+    "evidence_sha256": "84ea0b081a29dcc54fb92a74fb68eb178d576fc7267d04aa5b30c7612ceaa57f",
+    "artifact_repository": {
+      "repository": "JunxiangPan/cbm",
+      "run_id": "local-cbm-build-once",
+      "artifact_name": "cbm-build-once"
+    },
+    "ci_commit_sha": "f71d3b53df8f3fd8b1ee51ef1698f58392bc5c59",
     "release_body_file": "cbm-base-body.md",
     "release_body_note": "assembled from CBM README; not an official GitHub Release body",
     "load_report": "PASS",
     "tests": [
-      "tests/test_b3_cbp_rc.py::test_b3_rc_manifest_base_scope_is_accepted",
-      "tests/test_b3_cbp_rc.py::test_b3_scope_variants_exit_2[MISSING_BODY_HASH_SCOPE]",
-      "tests/test_b3_cbp_rc.py::test_b3_scope_variants_exit_2[BODY_HASH_SCOPE_UNSUPPORTED]",
-      "tests/test_b3_cbp_rc.py::test_b3_manifest_is_cbm_scoped_but_b2_is_blocked"
+      "tests/test_b3_cbp_rc.py (4 tests)"
     ],
     "limit": "B3 field-level complete; B2 blocked (no real CBE package_id=cbm report).",
-    "historical_manifest": {
-      "file": "cbp-1.2.0-cbm-manifest.json",
-      "sha256": "bc5461e61a4167dfae21fdf12fe169fa8339c7f20eac09f861799d89926196c1",
-      "note": "RC-era field-level evidence; superseded by official CBP 1.2.0 manifest"
-    }
+    "historical_manifests": [
+      {
+        "file": "cbm-quality-manifest-1.2.0.json",
+        "sha256": "6da7e848fa7214af49ceb9f1a165f048cd1c8c168be7eea4d2d4022addfe8400",
+        "note": "CBP 1.2.0; superseded by 1.2.2 b41798f0"
+      },
+      {
+        "file": "cbp-1.2.0-cbm-manifest.json",
+        "sha256": "bc5461e61a4167dfae21fdf12fe169fa8339c7f20eac09f861799d89926196c1",
+        "note": "RC-era historical"
+      }
+    ]
   },
   "b4": {
     "status": "FAIL_CLOSED_ONLY",
@@ -101,10 +111,10 @@
     "fixture_marked_not_upstream_evidence": true,
     "limit": "No real CBE report with package_id=cbm; synthetic fixture is not B2 evidence."
   },
-  "cbm_manifest_target": "dd756f9",
+  "cbm_manifest_target": "f71d3b5",
   "encoding": {
     "status": "PASS",
-    "gate": "encoding=60 UTF-8 files without BOM",
+    "gate": "encoding=63 UTF-8 files without BOM",
     "fixed_files": [
       "audit/v1.2.0-rc/b5-probe.stdout.txt",
       "audit/v1.2.0-rc/b5-probe-declared.stdout.txt"

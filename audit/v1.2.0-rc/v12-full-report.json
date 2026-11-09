@@ -56,6 +56,15 @@
       "baselined": []
     },
     {
+      "id": "CBP-BODY-001",
+      "name": "RELEASE_BODY_BINDING",
+      "severity": "blocking",
+      "status": "PASS",
+      "findings": [],
+      "waived": [],
+      "baselined": []
+    },
+    {
       "id": "CBP-BIN-001",
       "name": "BINARY_AUTHENTICODE",
       "severity": "warning",
@@ -123,7 +132,7 @@
     }
   ],
   "summary": {
-    "PASS": 11,
+    "PASS": 12,
     "FAIL": 0,
     "WARN": 1,
     "blocking_failed": false,

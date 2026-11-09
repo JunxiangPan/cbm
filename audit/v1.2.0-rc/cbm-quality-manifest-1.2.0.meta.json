@@ -1,0 +1,24 @@
+{
+  "cbm_commit": "dd756f9",
+  "cbp_commit": "5ebd0eb",
+  "gate_sha256": "f58ba9a4d38c3a66779c6a609f4f17fd9880c5cd682f071c74e40a4c1b4ddcd7",
+  "manifest_sha256": "6da7e848fa7214af49ceb9f1a165f048cd1c8c168be7eea4d2d4022addfe8400",
+  "artifacts": {
+    "cbm_attach-0.1.0-py3-none-any.whl": "e43acd41c3ec75ae77f48221f65d92e86ebb5f413abc10360b2f2a4bc46fa621",
+    "cbm_attach-0.1.0.tar.gz": "0a9f07d09cfc6ae990dfe52b830bdd532dfdae3d5559101997029051aec31fad"
+  },
+  "release_body": "audit/v1.2.0-rc/cbm-base-body.md",
+  "release_body_sha256": "0db00009e0f711b965ec670a003a72ee9cffb13e7016bcb14211e2768c1cd288",
+  "gate_status": "PASS",
+  "body_hash_scope": "base",
+  "release_body_hash": "0db00009e0f711b965ec670a003a72ee9cffb13e7016bcb14211e2768c1cd288",
+  "evidence_sha256": "ec07d0ec1acd3502b0e4aa4845598cecbcd6a6be38dc01a5c2b626e1ea498fc5",
+  "artifact_repository": "JunxiangPan/cbm",
+  "encoding_gate": [
+    {
+      "name": "encoding",
+      "reason": "",
+      "status": "PASS"
+    }
+  ]
+}

@@ -30,16 +30,22 @@ def test_b3_rc_manifest_base_scope_is_accepted() -> None:
     assert report.producer_id == "cbp"
     assert report.version == "v0.1.0"
     assert report.data["body_hash_scope"] == "base"
+    assert report.data["schema_version"] == "1"
     assert report.data["gate_status"] == "PASS"
+    assert report.data["artifact_repository"] == {
+        "repository": "JunxiangPan/cbm",
+        "run_id": "local-cbm-build-once",
+        "artifact_name": "cbm-build-once",
+    }
     assert report.data["release_body_hash"] == (
-        "0db00009e0f711b965ec670a003a72ee9cffb13e7016bcb14211e2768c1cd288"
+        "97784c54872b32f89ac1f0ecb2300b51c1c625d31fd6ebb322940e8bb44963c2"
     )
     assert report.data["artifact_hashes"] == {
-        "cbm_attach-0.1.0-py3-none-any.whl": "e43acd41c3ec75ae77f48221f65d92e86ebb5f413abc10360b2f2a4bc46fa621",
-        "cbm_attach-0.1.0.tar.gz": "0a9f07d09cfc6ae990dfe52b830bdd532dfdae3d5559101997029051aec31fad",
+        "cbm_attach-0.1.0-py3-none-any.whl": "02bf840016f5a2630c70ab42286c3ea47c0091c5efb77c0429c3060c0bee8015",
+        "cbm_attach-0.1.0.tar.gz": "89379c009f3c0cfca072ceaf861e03923e00cbe15e617c55846ed7ec78fbad6e",
     }
     assert report.data["evidence_sha256"] == (
-        "ec07d0ec1acd3502b0e4aa4845598cecbcd6a6be38dc01a5c2b626e1ea498fc5"
+        "84ea0b081a29dcc54fb92a74fb68eb178d576fc7267d04aa5b30c7612ceaa57f"
     )
 
 
