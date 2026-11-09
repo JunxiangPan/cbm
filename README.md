@@ -1,5 +1,7 @@
 # CBM attach evidence (v0.1.0)
 
+[![cbm-ci](https://github.com/JunxiangPan/cbm/actions/workflows/ci.yml/badge.svg)](https://github.com/JunxiangPan/cbm/actions/workflows/ci.yml)
+
 CBM is a **sidecar attachment attestation** for the v1.7 release train. It is
 not the 10th traditional gate, it is not a CBP gate, and it is not in the CBS
 `publish` `needs` graph. It consumes CBE/CBP reports that already exist and
