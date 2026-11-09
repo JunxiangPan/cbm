@@ -1,0 +1,20 @@
+[
+  {
+    "run": 42543756142,
+    "commit": "beffaef",
+    "status": "failure",
+    "reason": "PyYAML missing in CI; fixed by d03c439"
+  },
+  {
+    "run": 42543902925,
+    "commit": "d03c439",
+    "status": "success",
+    "tests": "84 passed on ubuntu-latest and windows-latest"
+  },
+  {
+    "run": 42544444367,
+    "commit": "6c77bc7",
+    "status": "success",
+    "tests": "91 passed on ubuntu-latest and windows-latest"
+  }
+]

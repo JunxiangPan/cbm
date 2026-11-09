@@ -1,0 +1,58 @@
+{
+  "generated_at": "2026-11-09T09:20:00+08:00",
+  "cbp_rc_code_commit": "5da8b87",
+  "cbm_code_commit": "6c77bc764edd79f31cb3baa80d0e4bd2fe7d63f1",
+  "ci_run": "42544444367",
+  "test_suite": {
+    "passed": 91,
+    "normal": 90,
+    "known_fail_silent_canary": 1
+  },
+  "b3": {
+    "status": "PARTIAL",
+    "manifest_file": "cbp-1.2.0-rc-quality-manifest.json",
+    "manifest_sha256": "53d80bb1a73b91b7205f4bc4b96817f7d83ae341164fb10ba1464372801d55ba",
+    "package_id": "cbp",
+    "producer_id": "cbp",
+    "version": "v1.2.0",
+    "body_hash_scope": "base",
+    "release_body_hash": "6cca0e560af9a1239b619bb6cb8d1d2b90e102e51cd058fbb83f00114da8a09b",
+    "manifest_artifact_wheel_sha256": "40ae798a9e480383b7069f8a488225ea8ac806e8dd2cc9120abf9fdb5a76b3ba",
+    "manifest_artifact_sdist_sha256": "7a9b5db62229ecaf3073ed62c556080583f2a5c283b729a8297ded308423c2fb",
+    "manifest_ci_commit_sha": "904494452458bde3bb4d2174abc2664413e41100",
+    "cbp_rc_code_commit": "5da8b87",
+    "b3_limit": "The manifest is package_id=cbp / version=v1.2.0, not a CBM-scoped or attested CBM manifest. Full B3 remains blocked by B1/B2.",
+    "results": {
+      "base_scope": "PASS (load_report accepts release_body_hash + body_hash_scope=base)",
+      "missing_scope": "exit 2 MISSING_BODY_HASH_SCOPE",
+      "full_scope": "exit 2 BODY_HASH_SCOPE_UNSUPPORTED",
+      "package_identity": "package_id=cbp; identity_errors against cbm non-empty"
+    },
+    "tests": [
+      "tests/test_b3_cbp_rc.py::test_b3_rc_manifest_base_scope_is_accepted",
+      "tests/test_b3_cbp_rc.py::test_b3_scope_variants_exit_2[MISSING_BODY_HASH_SCOPE]",
+      "tests/test_b3_cbp_rc.py::test_b3_scope_variants_exit_2[BODY_HASH_SCOPE_UNSUPPORTED]",
+      "tests/test_b3_cbp_rc.py::test_b3_manifest_is_not_cbm_scoped"
+    ]
+  },
+  "b4": {
+    "status": "FAIL_CLOSED_ONLY",
+    "results": {
+      "cross_repository": "exit 2 ARTIFACT_REPOSITORY_MISMATCH",
+      "missing_repository": "exit 2 ARTIFACT_REPOSITORY_MISMATCH",
+      "same_repository": "continues to UPLOAD_PENDING"
+    },
+    "tests": [
+      "tests/test_exit_codes.py::test_cross_repository_artifact_exits_2",
+      "tests/test_exit_codes.py::test_missing_artifact_repository_exits_2",
+      "tests/test_exit_codes.py::test_same_artifact_repository_continues"
+    ],
+    "limit": "CBE/CBS artifact repositories are not unified; CBM only fails closed. B4 is not complete."
+  },
+  "blocked": {
+    "B1": "BLOCKED: CONTRACT.md §5.1 is not applied; producer package_id -> exit 3 REPORT_IDENTITY_MISMATCH.",
+    "B2": "BLOCKED: no CBM-scoped report (package_id=cbm + producer_id); current manifest is package_id=cbp.",
+    "B5": "BLOCKED: CBS release_body_v17.py renders - none for a missing CBM; KNOWN_FAIL_SILENT canary.",
+    "no_fake_pass": true
+  }
+}
