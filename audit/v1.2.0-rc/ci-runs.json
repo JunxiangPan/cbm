@@ -40,5 +40,11 @@
     "commit": "503986b",
     "status": "success",
     "tests": "102 passed on ubuntu-latest and windows-latest (official CBP 1.2.0 manifest)"
+  },
+  {
+    "run": 42639676069,
+    "commit": "22831d6",
+    "status": "success",
+    "tests": "105 passed on ubuntu-latest and windows-latest (CBP 1.2.2 object manifest)"
   }
 ]

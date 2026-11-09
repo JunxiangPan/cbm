@@ -10,7 +10,7 @@ CBM PASS claim was made. No CBS/CBE/CBP/CBC repository was modified.
 | CBM repository | https://github.com/JunxiangPan/cbm (public) |
 | CBM branch | `main` |
 | CBM manifest target commit | `f71d3b5` (object repository support) |
-| CBM audit commit | `pending` |
+| CBM audit commit | `22831d6` |
 | CBM tag / release | none |
 | CBP 1.2.2 release | `v1.2.2` / `d4bfefb` |
 | CBP 1.2.2 publish state | released (tag, GitHub Release, PyPI) |
@@ -28,6 +28,7 @@ CBM PASS claim was made. No CBS/CBE/CBP/CBC repository was modified.
 | [42593726644](https://github.com/JunxiangPan/cbm/actions/runs/42593726644) | `3458cb8` | success: **91/91 on ubuntu-latest and windows-latest** (B5 flip + CBM manifest) |
 | [42595276523](https://github.com/JunxiangPan/cbm/actions/runs/42595276523) | `ae0ad13` | success: **102/102 on ubuntu-latest and windows-latest** (B1/B2 readiness + B4 boundary) |
 | [42607873304](https://github.com/JunxiangPan/cbm/actions/runs/42607873304) | `503986b` | success: **102/102 on ubuntu-latest and windows-latest** (official CBP 1.2.0 manifest) |
+| [42639676069](https://github.com/JunxiangPan/cbm/actions/runs/42639676069) | `22831d6` | success: **105/105 on ubuntu-latest and windows-latest** (CBP 1.2.2 object manifest) |
 
 **105 passed = 105 normal tests. No `KNOWN_FAIL_SILENT` canary remains.** The B5
 canary was flipped to assert the fixed behavior.
@@ -180,11 +181,11 @@ python tools/check_b5.py --check-upstream --declared-cbm
 python -m pytest tests/test_b3_cbp_rc.py          # 4 passed
 python -m pytest tests/test_b1_identity.py        # 6 passed
 python -m pytest tests/test_b2_readiness.py       # 3 passed (synthetic)
-python -m pytest   tests/test_exit_codes.py::test_cross_repository_artifact_exits_2   tests/test_exit_codes.py::test_cross_repository_different_repo_exits_2   tests/test_exit_codes.py::test_missing_artifact_repository_exits_2   tests/test_exit_codes.py::test_same_artifact_repository_continues   tests/test_exit_codes.py::test_same_repository_case_insensitive_continues \n  tests/test_exit_codes.py::test_object_artifact_repository_same_continues \n  tests/test_exit_codes.py::test_object_artifact_repository_cross_exits_2 \n  tests/test_exit_codes.py::test_object_artifact_repository_missing_repository_exits_2  # 8 passed
+python -m pytest   tests/test_exit_codes.py::test_cross_repository_artifact_exits_2   tests/test_exit_codes.py::test_cross_repository_different_repo_exits_2   tests/test_exit_codes.py::test_missing_artifact_repository_exits_2   tests/test_exit_codes.py::test_same_artifact_repository_continues   tests/test_exit_codes.py::test_same_repository_case_insensitive_continues   tests/test_exit_codes.py::test_object_artifact_repository_same_continues   tests/test_exit_codes.py::test_object_artifact_repository_cross_exits_2   tests/test_exit_codes.py::test_object_artifact_repository_missing_repository_exits_2  # 8 passed
 ```
 
-The CBP gate/manifest used a read-only `git archive` of the official `v1.2.0`
-commit `5ebd0eb`; no CBP working tree was modified.
+The CBP runs used a read-only `git archive` of the official `v1.2.2`
+commit `d4bfefb`; no CBP working tree was modified.
 
 ## No publish
 
