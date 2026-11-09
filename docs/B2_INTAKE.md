@@ -60,9 +60,9 @@ stays **BLOCKED**; do not rewrite the result to PASS.
 ```text
 identity_errors []
 CBP claims    PASS 3/5
-artifact     65174c9b… not retained; f605808 rebuild 94391185…
+CBP F3        binary/docs/custom PASS via .cbp/config.json
+artifact     65174c9b… not retained; builds 94391185…/bf367708… not adopted
 manifest     02bf8400… not retained
-remaining F3  binary/docs/custom SKIPPED (not configured)
 decision      NO_UPLOAD
 ```
 

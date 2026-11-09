@@ -127,7 +127,13 @@
     "tests": [
       "tests/test_b2_readiness.py (4 tests)"
     ],
-    "limit": "Claims gate fixed; exact artifact not retained; no mixed manifest/RC; other F3 gates skipped."
+    "limit": "Claims gate fixed; exact artifact not retained; no mixed manifest/RC; other F3 gates skipped.",
+    "f3_gates": {
+      "binary": "PASS N/A",
+      "docs": "PASS 3 files",
+      "custom": "PASS 1 rule"
+    },
+    "f3_evidence": "audit/v1.2.0-rc/cbm-target-gate-with-f3.json"
   },
   "cbm_manifest_target": "f71d3b5",
   "encoding": {

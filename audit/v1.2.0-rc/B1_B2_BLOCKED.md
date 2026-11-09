@@ -10,7 +10,7 @@ CBM v0.1.0 consumer status after CONTRACT v1.7.1 froze §5.1.
   `package_id: "cbe"/"cbp"` and producer mismatch; mixed reports exit 3
   `REPORT_IDENTITY_MISMATCH`.
 
-## B2 — BLOCKED
+## B2 — BLOCKED (claims/F3 fixed; artifact binding not)
 
 Inputs:
 
@@ -19,35 +19,34 @@ Inputs:
   `package_id=cbm`, `producer_id=cbe`, `version/tag=v0.1.0`, `gate_status=PASS`.
 - CBP 1.2.2 manifest: `cbm-quality-manifest.json`, sha256
   `b41798f07be4dda35e2afa1a810381bcd6f5025fb5d33f5c5a1054834a390c82`.
-- CBM readiness claims: `cbm-claims-manifest.json` + `cbm-claims-notes.md`
-  (3 PASS / 5 claims; B2/B4 explicitly not claimed).
 
 Progress:
 
 - `identity_errors == []`.
-- CBP claims gate now **PASS**: `claims=3/5` (manifest + notes).
-- CBM target gate with claims:
-  `cbm-target-gate-with-claims.json`, `gate_status=PASS`;
-  `claims` PASS, `encoding` PASS; binary/docs/custom/coverage/dependency/
-  comments/upgrade still SKIPPED not configured.
+- CBP claims gate PASS via `cbm-claims-manifest.json` /
+  `cbm-claims-notes.md` (3/5; B2/B4 not claimed).
+- Real F3 configs in `.cbp/config.json`:
+  - binary: no binaries -> PASS N/A
+  - docs: `cbm-docs-manifest.json` real hashes -> PASS
+  - custom: rule `no-notimplemented` -> PASS
+- `cbm-target-gate-with-f3.json`: claims/binary/encoding/docs/custom PASS;
+  `CBP_GATE_STATUS=PASS`.
 
-Remaining blockers:
+Remaining blocker: **exact artifact binding**.
 
-1. **Artifact binding**: the exact wheel `65174c9b…` (f605808) is not retained.
-   Rebuilding f605808 now produces different wheels (`94391185…` in the latest
-   build); CBP manifest wheel `02bf8400…` is also not retained. The instruction
-   requires using one exact artifact; using a newly built wheel would mix
-   hashes, so no new CBM manifest is generated.
-2. **Other F3 gates**: even after claims PASS, CBM F3 still sees
-   `binary`, `docs`, and `custom` as `SKIPPED (not configured)`. These need
-   real configs or a contract decision; they were not waived.
+- Required wheel `65174c9b…` is not retained.
+- Required CBP manifest wheel `02bf8400…` is not retained.
+- Fresh f605808 builds produced `94391185…` then
+  `bf367708…`; neither is the required 94391185 and neither is adopted.
+- No new CBM manifest is generated from a third hash; no mixed manifest/RC.
 
-B2 therefore stays **BLOCKED**; no CBM 0.1.0 RC, no tag/release.
+B2 stays **BLOCKED** until one exact retained artifact is bound to a
+regenerated manifest and CBM's own gate exits 0.
 
-Evidence: `cbe-report.json`, `cbm-claims-manifest.json`,
-`cbm-claims-notes.md`, `cbm-target-gate-with-claims.json`,
-`b2-gate-failure.json`, `b2-gate-failure.stdout.txt`; handoff
-`handoff/CBM_B2_CLAIMS_HANDOFF.md`.
+Evidence: `cbe-report.json`, `cbm-claims-manifest.json`, `cbm-claims-notes.md`,
+`cbm-target-gate-with-claims.json`, `cbm-target-gate-with-f3.json`,
+`.cbp/config.json`, `cbm-docs-manifest.json`,
+`b2-gate-failure.json`, `handoff/CBM_B2_CLAIMS_HANDOFF.md`.
 
 ## B4 — fail-closed only
 

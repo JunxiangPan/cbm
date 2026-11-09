@@ -1,9 +1,9 @@
-4e9bc385668e981af046902ef8a7999b4e80bb06c62a89942573a662d2595d6c *./B1_B2_BLOCKED.md
-08e9b2a161e673c9d29d027a030d224b3a5b9b153a259605e8a1d83e13c2a472 *./README.md
+2cd643abc3fa541e0f0ca7f1c8d06bc6a7babbbdf8b3009308989970b65a6107 *./B1_B2_BLOCKED.md
+a6acfeabc85f653d9785866ae25c15fbe6f20cc8c28bc414dba6b7305f0bf41c *./README.md
 5a722156f0fcc83acab91b50755b838da48f0fa7c88ca889cf212c3d1ecfa4fb *./b2-gate-failure-decision.json
 43455e7a7af587b062e01ee6ee7146b8080d493814c888ac3ed8becaca0518d8 *./b2-gate-failure.json
 74815990c8d74eabee0b41deca5fc6b1cd9e797f20c51eef28e2f55f84130449 *./b2-gate-failure.stdout.txt
-b877f0917012cfe36945b6900aa5b8b71d32f537a5ae3f18223521cbf0446b48 *./b3-b4-results.json
+6e1ea9625a7a79046d23fd40b2f5026180063fed2ea0e91110914e70e5dcb3b2 *./b3-b4-results.json
 5ba2d9629f3a413dd125c9b4444b15b4e6343386c2b9d7c9fef55300eb541f8e *./b3-tests.stdout.txt
 5b581b8146eb94de21ac38ae754c4decbb7c1318ce5c8295dbbc36c62bd0ed63 *./b4-tests.stdout.txt
 7ab50d5c63e185572d81dda0d6f2867e99246815b427c4cf18c823adf4091a70 *./b5-fixed-body-declared.md
@@ -15,11 +15,13 @@ b0a68cfa1d07e672cc8dce2fe45dbbfa6c61683d28870acf528938768b9d1155 *./b5-probe.std
 97784c54872b32f89ac1f0ecb2300b51c1c625d31fd6ebb322940e8bb44963c2 *./cbm-base-body.md
 3dba3696ca7ef9f20fc0fb928d7225403c41919b3d7e4b9d5fcd43f1a12db0b9 *./cbm-claims-manifest.json
 ca71d988129571290a1246b6327d5eb34a480333203c7fdccdee76b740b7cb44 *./cbm-claims-notes.md
+513df31b7fd86a05f60e35d0027e0d9dcbb35b628a0917f7ed948a2a8f509cbf *./cbm-docs-manifest.json
 6da7e848fa7214af49ceb9f1a165f048cd1c8c168be7eea4d2d4022addfe8400 *./cbm-quality-manifest-1.2.0.json
 ff48e4b70374629e6b49f7fb96ae4ae9590c32ed76795afe84cf44d07beab129 *./cbm-quality-manifest-1.2.0.meta.json
 b41798f07be4dda35e2afa1a810381bcd6f5025fb5d33f5c5a1054834a390c82 *./cbm-quality-manifest.json
 95d2df2b6ba38b9fd21d6f61c71afa37a0a1f5d0cb62c3dec92640d6a2da2705 *./cbm-quality-manifest.meta.json
 e88472c252ff3ab10ee4e1b00c9ac181e9fc108939be5f8aced7dc39c1e43d93 *./cbm-target-gate-with-claims.json
+af9e4f45b44a96ccabda9bc08606fc2857c14999e1cb3c7edfa543e2d631e826 *./cbm-target-gate-with-f3.json
 f58ba9a4d38c3a66779c6a609f4f17fd9880c5cd682f071c74e40a4c1b4ddcd7 *./cbm-target-gate.json
 bc5461e61a4167dfae21fdf12fe169fa8339c7f20eac09f861799d89926196c1 *./cbp-1.2.0-cbm-manifest.json
 b74df76af6f127a626819d32f81ec7adcd13ffd04654dd962abecc789ed996c5 *./cbp-1.2.0-cbm-manifest.meta.json

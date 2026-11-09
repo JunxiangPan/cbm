@@ -1,6 +1,6 @@
 # CBM B2 claims handoff to CBP
 
-Status: **BLOCKED on artifact choice; claims gate is fixed.**
+Status: **BLOCKED on artifact choice; claims and F3 gate configs are fixed.**
 
 ## Claims inputs (CBM-provided, real)
 
@@ -17,7 +17,19 @@ claims: PASS claims=3/5
 CBP_GATE_STATUS=PASS
 ```
 
-Evidence: `audit/v1.2.0-rc/cbm-target-gate-with-claims.json`.
+Evidence: `audit/v1.2.0-rc/cbm-target-gate-with-claims.json` and
+`audit/v1.2.0-rc/cbm-target-gate-with-f3.json`.
+
+## F3 gate configs (real)
+
+`.cbp/config.json` now configures:
+
+- claims: `cbm-claims-manifest.json` + `cbm-claims-notes.md` -> PASS 3/5
+- binary: no binaries found -> PASS N/A
+- docs: `cbm-docs-manifest.json` with real hashes -> PASS
+- custom: real rule `no-notimplemented` -> PASS
+
+Official CBP 1.2.2 target gate with these configs: `claims/binary/docs/custom/encoding` all PASS; `CBP_GATE_STATUS=PASS`.
 
 ## Artifact choice — unresolved
 
@@ -29,6 +41,10 @@ The instruction requires one exact artifact, no mixing:
   latest build).
 - CBP manifest wheel `02bf840016f5a2630c70ab42286c3ea47c0091c5efb77c0429c3060c0bee8015`
   — **not retained**.
+- A fresh build from f605808 produced
+  `bf367708202f9abbe1c416344e2fcecd201d7ea139402f135f42482e9b8b902d`; it is a
+  third hash and was **not** adopted into a manifest. The exact 94391185 wheel
+  was not reproduced.
 
 No new CBM manifest was generated, because doing so would bind a fresh wheel to
 an old manifest. CBP/owner must provide or retain exactly one of the two

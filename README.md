@@ -28,11 +28,10 @@ live E2E is still not executed (private test repo + scoped tokens).
 - **B1 CONTRACT_ACTIVE** — `contract-v1.7.1` / `209d75b4` freezes §5.1.
   Consumer tests cover `package_id: "cbm"` + `producer_id: "cbe"/"cbp"` and
   retain exit 3 `REPORT_IDENTITY_MISMATCH` for old-field mixing.
-- **B2 BLOCKED** — real CBE report `6b4dc1ef…` and `identity_errors=[]`;
-  CBP claims gate now PASS (3/5) via `cbm-claims-manifest.json`/notes. Exact
-  artifact `65174c9b…` is not retained (fresh f605808 build `94391185…`), and
-  manifest `02bf8400…` is not retained; no mixed manifest/RC. F3 also still sees
-  binary/docs/custom SKIPPED. Evidence: `audit/v1.2.0-rc/`.
+- **B2 BLOCKED** — real CBE report `6b4dc1ef…`, `identity_errors=[]`;
+  CBP claims PASS 3/5 and real F3 configs (binary/docs/custom) PASS. Exact
+  artifact `65174c9b…`/manifest `02bf8400…` not retained; fresh builds
+  `94391185…`, `bf367708…` not adopted. No mixed manifest/RC.
 - **B3 FIELD_LEVEL_COMPLETE** — CBP 1.2.2 produced CBM manifest `b41798f0…`
   (`schema_version: "1"`, object `artifact_repository`, base, PASS).
   `body_hash_scope`, `release_body_hash`, `artifact_hashes` and

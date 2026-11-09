@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.8",
+  "docs_manifest": "audit/v1.2.0-rc/cbm-docs-manifest.json",
+  "binary_artifacts": "audit/v1.2.0-rc/binary",
+  "claims_manifest": "audit/v1.2.0-rc/cbm-claims-manifest.json",
+  "claims_notes": "audit/v1.2.0-rc/cbm-claims-notes.md",
+  "enable_docs": true,
+  "enable_binary": true,
+  "enable_custom": true,
+  "enable_claims": true,
+  "enable_encoding": true,
+  "custom_rules": [
+    {
+      "name": "no-notimplemented",
+      "pattern": "NotImplementedError",
+      "files": [
+        "src/cbm_attach/*.py"
+      ],
+      "message": "CBM consumer code must not contain NotImplementedError stubs",
+      "mode": "enforce",
+      "severity": "error"
+    }
+  ]
+}

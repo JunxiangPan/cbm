@@ -171,18 +171,14 @@ See [`B1_B2_BLOCKED.md`](B1_B2_BLOCKED.md). No fake PASS:
   `producer_id: "cbe"/"cbp"`; old-field mixing exits 3
   `REPORT_IDENTITY_MISMATCH`. This is consumer-side active, not a full train
   PASS.
-- **B2 BLOCKED** — the real CBE report (`cbe-report.json`, sha
-  `6b4dc1ef…`) loaded with `identity_errors=[]`. The CBP claims gate is now
-  **PASS** via `cbm-claims-manifest.json` / `cbm-claims-notes.md` (3/5 claims;
-  B2/B4 not claimed); `cbm-target-gate-with-claims.json` has `claims PASS`.
-  Remaining blockers:
-  1. exact artifact binding: wheel `65174c9b…` is not retained; rebuilding
-     f605808 currently yields `94391185…`; manifest `02bf8400…` is also not
-     retained. No new manifest is generated from a mixed artifact.
-  2. CBM F3 still sees `binary`, `docs`, `custom` as `SKIPPED (not
-     configured)`; these are not waived.
-  No B2 PASS, no CBM 0.1.0 RC. Handoff:
-  `handoff/CBM_B2_CLAIMS_HANDOFF.md`.
+- **B2 BLOCKED** — real CBE report `cbe-report.json` sha `6b4dc1ef…` loaded;
+  `identity_errors=[]`. CBP claims gate PASS 3/5
+  (`cbm-claims-manifest.json`/`cbm-claims-notes.md`); real F3 configs in
+  `.cbp/config.json` make `binary` PASS N/A, `docs` PASS, `custom` PASS;
+  `cbm-target-gate-with-f3.json` has claims/binary/encoding/docs/custom PASS.
+  Remaining blocker: exact artifact — required `65174c9b…` and manifest
+  `02bf8400…` are not retained; fresh f605808 builds produced `94391185…`
+  then `bf367708…`, neither adopted. No mixed manifest/RC.
 - The synthetic fixture remains `not_upstream_evidence`; 4 readiness tests do
   not make B2 PASS.
 - B4 remains fail-closed only because the overall gate failed.
