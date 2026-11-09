@@ -34,5 +34,11 @@
     "commit": "ae0ad13",
     "status": "success",
     "tests": "102 passed on ubuntu-latest and windows-latest (B1/B2 readiness + B4 boundary)"
+  },
+  {
+    "run": 42607873304,
+    "commit": "503986b",
+    "status": "success",
+    "tests": "102 passed on ubuntu-latest and windows-latest (official CBP 1.2.0 manifest)"
   }
 ]
