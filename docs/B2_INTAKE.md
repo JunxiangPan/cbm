@@ -1,12 +1,9 @@
 # B2 intake — real CBM-scoped CBE report
 
-Status: **BLOCKED at artifact binding and remaining F3 gates.** The real CBE
-report was received and `identity_errors == []`. CBP claims gate is now PASS
-(3/5 claims). The exact f605808 wheel `65174c9b…` is not retained; a fresh build
-produces `94391185…`, and the manifest wheel `02bf8400…` is also not retained.
-No new manifest is generated from a mixed artifact. CBM F3 also still sees
-`binary`/`docs`/`custom` as SKIPPED (not configured). No CBM 0.1.0 RC; no
-tag/release.
+Status: **GATE_VERIFIED.** Real CBE report accepted with `identity_errors=[]`;
+claims PASS 3/5; real F3 configs binary/docs/custom PASS. Fresh f605808 build
+wheel `72254704…` is permanently retained and bound to CBP manifest
+`0e0d37bd…`; CBM verify exit 0 / decision UPLOAD, upload pending. No tag/release.
 
 ## Required inputs
 
@@ -61,9 +58,9 @@ stays **BLOCKED**; do not rewrite the result to PASS.
 identity_errors []
 CBP claims    PASS 3/5
 CBP F3        binary/docs/custom PASS via .cbp/config.json
-artifact     65174c9b… not retained; builds 94391185…/bf367708… not adopted
-manifest     02bf8400… not retained
-decision      NO_UPLOAD
+artifact     72254704… retained (fresh f605808 build)
+manifest     0e0d37bd… exact binding
+decision      UPLOAD (upload pending)
 ```
 
 Evidence: `audit/v1.2.0-rc/cbe-report.json`,

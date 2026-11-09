@@ -5,7 +5,7 @@
   "version": "v0.1.0",
   "gate_status": "PASS",
   "exit_code": 0,
-  "applicable_gate_count": 1,
+  "applicable_gate_count": 5,
   "skip_count": 0,
   "skip_ratio": 0.0,
   "blocking_skip": false,
@@ -14,13 +14,13 @@
   "gates": [
     {
       "name": "claims",
-      "status": "SKIPPED",
-      "reason": "not configured"
+      "status": "PASS",
+      "reason": ""
     },
     {
       "name": "binary",
-      "status": "SKIPPED",
-      "reason": "not configured"
+      "status": "PASS",
+      "reason": ""
     },
     {
       "name": "encoding",
@@ -29,13 +29,13 @@
     },
     {
       "name": "docs",
-      "status": "SKIPPED",
-      "reason": "not configured"
+      "status": "PASS",
+      "reason": ""
     },
     {
       "name": "custom",
-      "status": "SKIPPED",
-      "reason": "not configured"
+      "status": "PASS",
+      "reason": ""
     },
     {
       "name": "coverage",

@@ -1,6 +1,8 @@
 # CBM B2 claims handoff to CBP
 
-Status: **BLOCKED on artifact choice; claims and F3 gate configs are fixed.**
+Status: **RESOLVED for gate verification.** Exact artifact is the fresh f605808
+build `72254704…`, permanently retained; CBP manifest `0e0d37bd…` binds it;
+CBM verify exit 0. Upload remains pending; no tag/release.
 
 ## Claims inputs (CBM-provided, real)
 
@@ -42,9 +44,9 @@ The instruction requires one exact artifact, no mixing:
 - CBP manifest wheel `02bf840016f5a2630c70ab42286c3ea47c0091c5efb77c0429c3060c0bee8015`
   — **not retained**.
 - A fresh build from f605808 produced
-  `bf367708202f9abbe1c416344e2fcecd201d7ea139402f135f42482e9b8b902d`; it is a
-  third hash and was **not** adopted into a manifest. The exact 94391185 wheel
-  was not reproduced.
+  `72254704f5dc88688056fd3e4dac481edfa45f13e4bf5ae1aa8810cdaa48f45b` and was
+  adopted as the single exact artifact; `BUILD_ONCE.json` records the decision.
+  94391185/bf367708/65174/02bf are not used.
 
 No new CBM manifest was generated, because doing so would bind a fresh wheel to
 an old manifest. CBP/owner must provide or retain exactly one of the two

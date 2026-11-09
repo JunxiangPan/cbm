@@ -1,0 +1,71 @@
+{
+  "applicable_gate_count": 1,
+  "artifact_hashes": {
+    "cbm_attach-0.1.0-py3-none-any.whl": "02bf840016f5a2630c70ab42286c3ea47c0091c5efb77c0429c3060c0bee8015",
+    "cbm_attach-0.1.0.tar.gz": "89379c009f3c0cfca072ceaf861e03923e00cbe15e617c55846ed7ec78fbad6e"
+  },
+  "artifact_repository": {
+    "artifact_name": "cbm-build-once",
+    "repository": "JunxiangPan/cbm",
+    "run_id": "local-cbm-build-once"
+  },
+  "blocking_skip": false,
+  "body_hash_scope": "base",
+  "ci_commit_sha": "f71d3b53df8f3fd8b1ee51ef1698f58392bc5c59",
+  "evidence_sha256": "84ea0b081a29dcc54fb92a74fb68eb178d576fc7267d04aa5b30c7612ceaa57f",
+  "gate_status": "PASS",
+  "gates": [
+    {
+      "name": "claims",
+      "reason": "not configured",
+      "status": "SKIPPED"
+    },
+    {
+      "name": "binary",
+      "reason": "not configured",
+      "status": "SKIPPED"
+    },
+    {
+      "name": "encoding",
+      "reason": "",
+      "status": "PASS"
+    },
+    {
+      "name": "docs",
+      "reason": "not configured",
+      "status": "SKIPPED"
+    },
+    {
+      "name": "custom",
+      "reason": "not configured",
+      "status": "SKIPPED"
+    },
+    {
+      "name": "coverage",
+      "reason": "not configured",
+      "status": "SKIPPED"
+    },
+    {
+      "name": "dependency",
+      "reason": "not configured",
+      "status": "SKIPPED"
+    },
+    {
+      "name": "comments",
+      "reason": "not configured",
+      "status": "SKIPPED"
+    },
+    {
+      "name": "upgrade",
+      "reason": "not configured",
+      "status": "SKIPPED"
+    }
+  ],
+  "package_id": "cbm",
+  "producer_id": "cbp",
+  "release_body_hash": "97784c54872b32f89ac1f0ecb2300b51c1c625d31fd6ebb322940e8bb44963c2",
+  "schema_version": "1",
+  "skip_count": 0,
+  "skip_ratio": 0.0,
+  "version": "v0.1.0"
+}

@@ -1,8 +1,8 @@
 {
-  "applicable_gate_count": 1,
+  "applicable_gate_count": 5,
   "artifact_hashes": {
-    "cbm_attach-0.1.0-py3-none-any.whl": "02bf840016f5a2630c70ab42286c3ea47c0091c5efb77c0429c3060c0bee8015",
-    "cbm_attach-0.1.0.tar.gz": "89379c009f3c0cfca072ceaf861e03923e00cbe15e617c55846ed7ec78fbad6e"
+    "cbm_attach-0.1.0-py3-none-any.whl": "72254704f5dc88688056fd3e4dac481edfa45f13e4bf5ae1aa8810cdaa48f45b",
+    "cbm_attach-0.1.0.tar.gz": "6a7b6fe360b86e75a4c7bba0a2765f50e2195263735825e251ec91404927dd81"
   },
   "artifact_repository": {
     "artifact_name": "cbm-build-once",
@@ -11,19 +11,19 @@
   },
   "blocking_skip": false,
   "body_hash_scope": "base",
-  "ci_commit_sha": "f71d3b53df8f3fd8b1ee51ef1698f58392bc5c59",
-  "evidence_sha256": "84ea0b081a29dcc54fb92a74fb68eb178d576fc7267d04aa5b30c7612ceaa57f",
+  "ci_commit_sha": "f605808a89d334b5458c38f92201583004b6fff0",
+  "evidence_sha256": "84a7e8661f8ab9957393efa70991aa45a8c8052cb0e4dd66c67d6c1bc97081e3",
   "gate_status": "PASS",
   "gates": [
     {
       "name": "claims",
-      "reason": "not configured",
-      "status": "SKIPPED"
+      "reason": "",
+      "status": "PASS"
     },
     {
       "name": "binary",
-      "reason": "not configured",
-      "status": "SKIPPED"
+      "reason": "",
+      "status": "PASS"
     },
     {
       "name": "encoding",
@@ -32,13 +32,13 @@
     },
     {
       "name": "docs",
-      "reason": "not configured",
-      "status": "SKIPPED"
+      "reason": "",
+      "status": "PASS"
     },
     {
       "name": "custom",
-      "reason": "not configured",
-      "status": "SKIPPED"
+      "reason": "",
+      "status": "PASS"
     },
     {
       "name": "coverage",

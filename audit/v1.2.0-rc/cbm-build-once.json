@@ -1,0 +1,19 @@
+{
+  "decision": "fresh build from f605808 after exact 65174/02bf not found",
+  "source_commit": "f605808a89d334b5458c38f92201583004b6fff0",
+  "build_command": "python -m build --wheel --sdist --outdir artifacts/cbm-0.1.0/dist",
+  "python": "3.10.8",
+  "platform": "Windows-10-10.0.26300-SP0",
+  "wheel": "cbm_attach-0.1.0-py3-none-any.whl",
+  "wheel_sha256": "72254704f5dc88688056fd3e4dac481edfa45f13e4bf5ae1aa8810cdaa48f45b",
+  "sdist": "cbm_attach-0.1.0.tar.gz",
+  "sdist_sha256": "6a7b6fe360b86e75a4c7bba0a2765f50e2195263735825e251ec91404927dd81",
+  "rejected_hashes": {
+    "65174c9b6deab9f962fb63cb21721d1077c634b021fcec879731127e49558c65": "not_found",
+    "02bf840016f5a2630c70ab42286c3ea47c0091c5efb77c0429c3060c0bee8015": "not_found",
+    "94391185881bf975ba6735272b9c41d6635a68183eb19a13118b32db2f35e751": "not_found",
+    "bf367708202f9abbe1c416344e2fcecd201d7ea139402f135f42482e9b8b902d": "not_found"
+  },
+  "exact_build_retained": true,
+  "rebuilt_after_decision": false
+}

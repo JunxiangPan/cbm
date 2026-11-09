@@ -18,7 +18,7 @@ verifier accepts §11's basename `RELEASE_ASSETS.sha256` inventory and skips a
 self-listed manifest. The contract identity proposal in
 `docs/CONTRACT_PROPOSAL_5.1.md` is still an unapplied change-control input.
 
-## Current status: B1 contract active; B5 fixed; B3 field-level; B2/B4 blocked
+## Current status: B1 contract active; B2/B4 gate-verified; B3 field-level; B5 fixed; upload pending
 
 CBM v0.1.0 is a **skeleton**. It has **110 offline/static tests passing**. A-F
 live E2E is still not executed (private test repo + scoped tokens).
@@ -28,12 +28,13 @@ live E2E is still not executed (private test repo + scoped tokens).
 - **B1 CONTRACT_ACTIVE** — `contract-v1.7.1` / `209d75b4` freezes §5.1.
   Consumer tests cover `package_id: "cbm"` + `producer_id: "cbe"/"cbp"` and
   retain exit 3 `REPORT_IDENTITY_MISMATCH` for old-field mixing.
-- **B2 BLOCKED** — real CBE report `6b4dc1ef…`, `identity_errors=[]`;
-  CBP claims PASS 3/5 and real F3 configs (binary/docs/custom) PASS. Exact
-  artifact `65174c9b…`/manifest `02bf8400…` not retained; fresh builds
-  `94391185…`, `bf367708…` not adopted. No mixed manifest/RC.
-- **B3 FIELD_LEVEL_COMPLETE** — CBP 1.2.2 produced CBM manifest `b41798f0…`
-  (`schema_version: "1"`, object `artifact_repository`, base, PASS).
+- **B2 GATE_VERIFIED** — real CBE report `6b4dc1ef…`, `identity_errors=[]`;
+  claims PASS 3/5; real F3 configs binary/docs/custom PASS; exact wheel
+  `72254704…` matches CBP manifest `0e0d37bd…`; CBM verify exit 0,
+  `decision=UPLOAD`, `cbm_gate_status=NOT_UPLOADED`. Upload pending, not an
+  upload PASS. RC evidence: `release/0.1.0/`.
+- **B3 FIELD_LEVEL_COMPLETE** — CBP 1.2.2 produced exact-artifact manifest
+  `0e0d37bd…` (`schema_version: "1"`, object repo, base, PASS).
   `body_hash_scope`, `release_body_hash`, `artifact_hashes` and
   `evidence_sha256` are accepted; missing/full scope exits 2. This is
   field-level B3, not B2.

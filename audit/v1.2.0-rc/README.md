@@ -107,61 +107,41 @@ Evidence:
 - `tools/check_b5.py --check-upstream` is green; `KNOWN_FAIL_SILENT` now means
   a regression and fails the test.
 
-## B3 — FIELD_LEVEL_COMPLETE (CBP 1.2.2 object manifest)
+## B3 — FIELD_LEVEL_COMPLETE (exact artifact)
 
-Official CBP 1.2.2 (tag `v1.2.2`, commit `d4bfefb`) target gate on CBM
-`f71d3b5`:
+Official CBP 1.2.2 target gate on CBM `f605808` with real claims/F3 configs:
 
 ```text
 file cbm-target-gate.json
-sha256 f58ba9a4d38c3a66779c6a609f4f17fd9880c5cd682f071c74e40a4c1b4ddcd7
+sha256 af9e4f45b44a96ccabda9bc08606fc2857c14999e1cb3c7edfa543e2d631e826
 package_id cbm, producer_id cbp, version v0.1.0
-gate_status PASS
-encoding PASS (63 UTF-8 files without BOM)
+gate_status PASS; claims/binary/encoding/docs/custom PASS
 ```
 
-Generated manifest:
+Manifest:
 
 ```text
 file cbm-quality-manifest.json
-sha256 b41798f07be4dda35e2afa1a810381bcd6f5025fb5d33f5c5a1054834a390c82
-schema_version "1"
-package_id cbm, producer_id cbp, version v0.1.0
-gate_status PASS
-body_hash_scope base
+sha256 0e0d37bd083afc0a5e868d654d4b8808f9f91c91f45dd20d4dbad029945e7a9b
+schema_version "1"; gate_status PASS; body_hash_scope base
 release_body_hash 97784c54872b32f89ac1f0ecb2300b51c1c625d31fd6ebb322940e8bb44963c2
-artifact_repository {"repository": "JunxiangPan/cbm",
-                     "run_id": "local-cbm-build-once",
-                     "artifact_name": "cbm-build-once"}
-artifact_repository.repository JunxiangPan/cbm
-wheel sha256 02bf840016f5a2630c70ab42286c3ea47c0091c5efb77c0429c3060c0bee8015
-sdist sha256 89379c009f3c0cfca072ceaf861e03923e00cbe15e617c55846ed7ec78fbad6e
-evidence_sha256 84ea0b081a29dcc54fb92a74fb68eb178d576fc7267d04aa5b30c7612ceaa57f
-ci_commit_sha f71d3b53df8f3fd8b1ee51ef1698f58392bc5c59
+artifact_repository {repository: JunxiangPan/cbm, run_id: local-cbm-build-once,
+                     artifact_name: cbm-build-once}
+wheel sha256 72254704f5dc88688056fd3e4dac481edfa45f13e4bf5ae1aa8810cdaa48f45b
+sdist sha256 6a7b6fe360b86e75a4c7bba0a2765f50e2195263735825e251ec91404927dd81
+evidence_sha256 84a7e8661f8ab9957393efa70991aa45a8c8052cb0e4dd66c67d6c1bc97081e3
+ci_commit_sha f605808a89d334b5458c38f92201583004b6fff0
 ```
 
-The base body is `cbm-base-body.md`, assembled from the CBM README and labelled
-as such; it is not an official GitHub Release body. `load_report` returns PASS;
-missing scope -> exit 2 `MISSING_BODY_HASH_SCOPE`; `full` -> exit 2
-`BODY_HASH_SCOPE_UNSUPPORTED`. Tests: 4 passed (`tests/test_b3_cbp_rc.py`).
+`load_report` PASS; B3 fields complete. Old `b41798f0…` manifest is
+**superseded** and retained as history. B2 gate uses the exact artifact; no
+mixed hash.
 
-The older `6da7e848…` (CBP 1.2.0) manifest is **superseded** and retained at
-`cbm-quality-manifest-1.2.0.json` as history. The older `bc5461e6…` RC-era
-manifest is also historical.
+## B4 — GATE_VERIFIED
 
-**B3 field-level is complete. B2 is still blocked**: there is no real CBE
-report with `package_id: "cbm"`; CBM does not synthesize it.
-
-## B4 — FAIL_CLOSED_ONLY
-
-| Case | Result |
-| --- | --- |
-| object cross-repository (different owner or repo) | exit 2 `ARTIFACT_REPOSITORY_MISMATCH` |
-| object missing `artifact_repository`/`repository` | exit 2 `ARTIFACT_REPOSITORY_MISMATCH` |
-| object same repository (exact) | continues to `UPLOAD_PENDING` |
-| object same repository (case-insensitive) | continues to `UPLOAD_PENDING` |
-
-Tests: 12 passed (5 legacy/string + 7 object). CBE/CBS repositories are not unified; B4 is not complete.
+Object `artifact_repository` matched `JunxiangPan/cbm`; 12 boundary tests pass
+(cross/missing exit 2, same continues). CBE/CBS repository unification is not
+claimed. Upload remains pending.
 
 ## B1 CONTRACT_ACTIVE / B2 blocked
 
@@ -172,14 +152,13 @@ See [`B1_B2_BLOCKED.md`](B1_B2_BLOCKED.md). No fake PASS:
   `producer_id: "cbe"/"cbp"`; old-field mixing exits 3
   `REPORT_IDENTITY_MISMATCH`. This is consumer-side active, not a full train
   PASS.
-- **B2 BLOCKED** — real CBE report `cbe-report.json` sha `6b4dc1ef…` loaded;
-  `identity_errors=[]`. CBP claims gate PASS 3/5
-  (`cbm-claims-manifest.json`/`cbm-claims-notes.md`); real F3 configs in
-  `.cbp/config.json` make `binary` PASS N/A, `docs` PASS, `custom` PASS;
-  `cbm-target-gate-with-f3.json` has claims/binary/encoding/docs/custom PASS.
-  Remaining blocker: exact artifact — required `65174c9b…` and manifest
-  `02bf8400…` are not retained; fresh f605808 builds produced `94391185…`
-  then `bf367708…`, neither adopted. No mixed manifest/RC.
+- **B2 GATE_VERIFIED** — real CBE report `6b4dc1ef…` with
+  `identity_errors=[]`; claims PASS 3/5; real F3 configs make
+  binary/docs/custom PASS; exact artifact `72254704…` matches the CBP manifest
+  `0e0d37bd…`; CBM verify exit 0, `decision=UPLOAD`,
+  `cbm_gate_status=NOT_UPLOADED`. Upload pending; not an upload PASS.
+- `release/0.1.0/` contains exact wheel/sdist, manifest, gate report, claims,
+  F3 configs, BUILD_ONCE and CBE report. No tag/release/PyPI.
 - The synthetic fixture remains `not_upstream_evidence`; 4 readiness tests do
   not make B2 PASS.
 - B4 remains fail-closed only because the overall gate failed.

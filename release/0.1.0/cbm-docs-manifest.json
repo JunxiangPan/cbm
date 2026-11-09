@@ -1,0 +1,17 @@
+{
+  "schema_version": "1",
+  "files": [
+    {
+      "path": "docs/CONTRACT_PROPOSAL_5.1.md",
+      "sha256": "75c38e12921cdcab4bab65dea7399c9468a5fb24f9584784193f0fa80990fe30"
+    },
+    {
+      "path": "docs/CBS_BODY_REQUIREMENT.md",
+      "sha256": "210a6086d28d166e01845ac416fcb8d1b8be670164403c58b9799cbc19781cd5"
+    },
+    {
+      "path": "docs/INTEGRATION_REQUIREMENTS.md",
+      "sha256": "4cb7d81908094472187fa35f58dd3099c7e64398b6c18531067db0e8d3cb1821"
+    }
+  ]
+}

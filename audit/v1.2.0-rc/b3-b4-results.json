@@ -10,11 +10,11 @@
   "b3": {
     "status": "FIELD_LEVEL_COMPLETE",
     "gate_report_file": "cbm-target-gate.json",
-    "gate_report_sha256": "f58ba9a4d38c3a66779c6a609f4f17fd9880c5cd682f071c74e40a4c1b4ddcd7",
+    "gate_report_sha256": "af9e4f45b44a96ccabda9bc08606fc2857c14999e1cb3c7edfa543e2d631e826",
     "gate_status": "PASS",
     "gate_encoding": "PASS",
     "manifest_file": "cbm-quality-manifest.json",
-    "manifest_sha256": "b41798f07be4dda35e2afa1a810381bcd6f5025fb5d33f5c5a1054834a390c82",
+    "manifest_sha256": "0e0d37bd083afc0a5e868d654d4b8808f9f91c91f45dd20d4dbad029945e7a9b",
     "schema_version": "1",
     "package_id": "cbm",
     "producer_id": "cbp",
@@ -22,16 +22,16 @@
     "body_hash_scope": "base",
     "release_body_hash": "97784c54872b32f89ac1f0ecb2300b51c1c625d31fd6ebb322940e8bb44963c2",
     "artifact_hashes": {
-      "cbm_attach-0.1.0-py3-none-any.whl": "02bf840016f5a2630c70ab42286c3ea47c0091c5efb77c0429c3060c0bee8015",
-      "cbm_attach-0.1.0.tar.gz": "89379c009f3c0cfca072ceaf861e03923e00cbe15e617c55846ed7ec78fbad6e"
+      "cbm_attach-0.1.0-py3-none-any.whl": "72254704f5dc88688056fd3e4dac481edfa45f13e4bf5ae1aa8810cdaa48f45b",
+      "cbm_attach-0.1.0.tar.gz": "6a7b6fe360b86e75a4c7bba0a2765f50e2195263735825e251ec91404927dd81"
     },
-    "evidence_sha256": "84ea0b081a29dcc54fb92a74fb68eb178d576fc7267d04aa5b30c7612ceaa57f",
+    "evidence_sha256": "84a7e8661f8ab9957393efa70991aa45a8c8052cb0e4dd66c67d6c1bc97081e3",
     "artifact_repository": {
       "repository": "JunxiangPan/cbm",
       "run_id": "local-cbm-build-once",
       "artifact_name": "cbm-build-once"
     },
-    "ci_commit_sha": "f71d3b53df8f3fd8b1ee51ef1698f58392bc5c59",
+    "ci_commit_sha": "f605808a89d334b5458c38f92201583004b6fff0",
     "release_body_file": "cbm-base-body.md",
     "release_body_note": "assembled from CBM README; not an official GitHub Release body",
     "load_report": "PASS",
@@ -41,19 +41,19 @@
     "limit": "B3 field-level complete; B2 blocked (no real CBE package_id=cbm report).",
     "historical_manifests": [
       {
-        "file": "cbm-quality-manifest-1.2.0.json",
-        "sha256": "6da7e848fa7214af49ceb9f1a165f048cd1c8c168be7eea4d2d4022addfe8400",
-        "note": "CBP 1.2.0; superseded by 1.2.2 b41798f0"
+        "file": "cbm-quality-manifest-1.2.2-b41798.json",
+        "sha256": "b41798f07be4dda35e2afa1a810381bcd6f5025fb5d33f5c5a1054834a390c82",
+        "note": "superseded by exact-artifact manifest 0e0d37bd"
       },
       {
-        "file": "cbp-1.2.0-cbm-manifest.json",
-        "sha256": "bc5461e61a4167dfae21fdf12fe169fa8339c7f20eac09f861799d89926196c1",
-        "note": "RC-era historical"
+        "file": "cbm-quality-manifest-1.2.0.json",
+        "sha256": "6da7e848fa7214af49ceb9f1a165f048cd1c8c168be7eea4d2d4022addfe8400",
+        "note": "historical"
       }
     ]
   },
   "b4": {
-    "status": "FAIL_CLOSED_ONLY",
+    "status": "GATE_VERIFIED",
     "results": {
       "cross_repository": "exit 2 ARTIFACT_REPOSITORY_MISMATCH",
       "missing_repository": "exit 2 ARTIFACT_REPOSITORY_MISMATCH",
@@ -73,7 +73,8 @@
       "tests/test_exit_codes.py::test_object_artifact_repository_empty_repository_exits_2",
       "tests/test_exit_codes.py::test_object_artifact_repository_different_owner_same_repo_exits_2"
     ],
-    "limit": "CBE/CBS artifact repositories are not unified; B4 remains fail-closed only."
+    "limit": "CBE/CBS artifact repositories are not unified; B4 remains fail-closed only.",
+    "gate": "object repository JunxiangPan/cbm matches; CBM verify exit 0; upload pending"
   },
   "b5": {
     "status": "FIXED",
@@ -107,33 +108,26 @@
     "limit": "Consumer-side active; B2 still needs a real CBE report."
   },
   "b2_readiness": {
-    "status": "BLOCKED",
+    "status": "GATE_VERIFIED",
     "cbe_report": "audit/v1.2.0-rc/cbe-report.json",
     "cbe_report_sha256": "6b4dc1efd8433535efe70d4de9337910aa537fbcc982ebba3a014284f27fc76e",
     "identity_errors": [],
-    "claims_manifest": "audit/v1.2.0-rc/cbm-claims-manifest.json",
-    "claims_notes": "audit/v1.2.0-rc/cbm-claims-notes.md",
     "claims_gate": "PASS 3/5",
-    "target_gate_with_claims": "audit/v1.2.0-rc/cbm-target-gate-with-claims.json",
-    "artifact_expected": "65174c9b6deab9f962fb63cb21721d1077c634b021fcec879731127e49558c65",
-    "artifact_rebuilt": "94391185881bf975ba6735272b9c41d6635a68183eb19a13118b32db2f35e751",
-    "manifest_expected": "02bf840016f5a2630c70ab42286c3ea47c0091c5efb77c0429c3060c0bee8015",
-    "remaining_f3": [
-      "binary",
-      "docs",
-      "custom"
-    ],
-    "decision": "NO_UPLOAD",
-    "tests": [
-      "tests/test_b2_readiness.py (4 tests)"
-    ],
-    "limit": "Claims gate fixed; exact artifact not retained; no mixed manifest/RC; other F3 gates skipped.",
     "f3_gates": {
       "binary": "PASS N/A",
       "docs": "PASS 3 files",
       "custom": "PASS 1 rule"
     },
-    "f3_evidence": "audit/v1.2.0-rc/cbm-target-gate-with-f3.json"
+    "artifact_sha256": "72254704f5dc88688056fd3e4dac481edfa45f13e4bf5ae1aa8810cdaa48f45b",
+    "manifest_sha256": "0e0d37bd083afc0a5e868d654d4b8808f9f91c91f45dd20d4dbad029945e7a9b",
+    "cbm_gate_exit": 0,
+    "cbm_gate_status": "NOT_UPLOADED",
+    "decision": "UPLOAD",
+    "upload_status": "NOT_UPLOADED",
+    "tests": [
+      "tests/test_b2_readiness.py (4 tests)"
+    ],
+    "limit": "CBM gate exit 0/decision UPLOAD; upload_status NOT_UPLOADED is not an upload PASS."
   },
   "cbm_manifest_target": "f71d3b5",
   "encoding": {
