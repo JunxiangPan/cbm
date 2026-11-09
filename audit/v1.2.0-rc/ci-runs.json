@@ -88,5 +88,11 @@
     "commit": "2d87412",
     "status": "success",
     "tests": "110 passed on ubuntu-latest and windows-latest (exact artifact B2 gate verified)"
+  },
+  {
+    "run": 42723720005,
+    "commit": "c593251",
+    "status": "success",
+    "tests": "110 passed on ubuntu-latest and windows-latest (sidecar upload verified)"
   }
 ]
