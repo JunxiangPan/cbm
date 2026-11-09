@@ -16,7 +16,7 @@ CBM v0.1.0 consumer status after CONTRACT v1.7.1 froze §5.1.
 ## B2 — BLOCKED
 
 - Still no real CBE report with `package_id: "cbm"` + `producer_id: "cbe"`.
-- `tests/test_b2_readiness.py` uses
+- `tests/test_b2_readiness.py` (4 tests) uses
   `cbe-cbm-scoped.synthetic.json`, explicitly marked
   `not_upstream_evidence`. It proves schema/identity readiness only.
 - Do not claim B2 PASS; no synthetic CBE report is presented as real evidence.
@@ -30,4 +30,4 @@ flipped and no `KNOWN_FAIL_SILENT` marker remains.
 
 - No tag, GitHub Release, or PyPI upload.
 - B2 remains blocked; B4 remains fail-closed only.
-- `108 passed = 108 normal tests` (with the pinned CBS fixture).
+- `109 passed = 109 normal tests` (with the pinned CBS fixture).

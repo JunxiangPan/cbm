@@ -458,7 +458,7 @@ def test_missing_artifact_repository_exits_2(tmp_path: Path) -> None:
     root, _, digest = make_artifact(tmp_path)
     cbp = make_cbp(digest)
     cbp.pop("artifact_repository")
-    code, report, _, _ = _run(
+    code, report, _, decision = _run(
         tmp_path,
         cbe=make_cbe(),
         cbp=cbp,
@@ -466,6 +466,7 @@ def test_missing_artifact_repository_exits_2(tmp_path: Path) -> None:
     )
     assert code == 2
     assert report["reason"] == "ARTIFACT_REPOSITORY_MISMATCH"
+    assert decision["decision"] == "NO_UPLOAD"
 
 
 def test_same_artifact_repository_continues(tmp_path: Path) -> None:
@@ -532,7 +533,7 @@ def test_object_artifact_repository_same_continues(tmp_path: Path) -> None:
 
 def test_object_artifact_repository_cross_exits_2(tmp_path: Path) -> None:
     root, _, digest = make_artifact(tmp_path)
-    code, report, _, _ = _run(
+    code, report, _, decision = _run(
         tmp_path,
         cbe=make_cbe(),
         cbp=make_cbp(digest, artifact_repository=_repo_object("owner/other")),
@@ -540,11 +541,12 @@ def test_object_artifact_repository_cross_exits_2(tmp_path: Path) -> None:
     )
     assert code == 2
     assert report["reason"] == "ARTIFACT_REPOSITORY_MISMATCH"
+    assert decision["decision"] == "NO_UPLOAD"
 
 
 def test_object_artifact_repository_missing_repository_exits_2(tmp_path: Path) -> None:
     root, _, digest = make_artifact(tmp_path)
-    code, report, _, _ = _run(
+    code, report, _, decision = _run(
         tmp_path,
         cbe=make_cbe(),
         cbp=make_cbp(digest, artifact_repository={"run_id": "x", "artifact_name": "y"}),
@@ -552,6 +554,7 @@ def test_object_artifact_repository_missing_repository_exits_2(tmp_path: Path) -
     )
     assert code == 2
     assert report["reason"] == "ARTIFACT_REPOSITORY_MISMATCH"
+    assert decision["decision"] == "NO_UPLOAD"
 
 
 def test_object_artifact_repository_same_exact_continues(tmp_path: Path) -> None:
@@ -572,7 +575,7 @@ def test_object_artifact_repository_missing_field_exits_2(tmp_path: Path) -> Non
     root, _, digest = make_artifact(tmp_path)
     cbp = make_cbp(digest)
     cbp.pop("artifact_repository")
-    code, report, _, _ = _run(
+    code, report, _, decision = _run(
         tmp_path,
         cbe=make_cbe(),
         cbp=cbp,
@@ -580,11 +583,12 @@ def test_object_artifact_repository_missing_field_exits_2(tmp_path: Path) -> Non
     )
     assert code == 2
     assert report["reason"] == "ARTIFACT_REPOSITORY_MISMATCH"
+    assert decision["decision"] == "NO_UPLOAD"
 
 
 def test_object_artifact_repository_empty_repository_exits_2(tmp_path: Path) -> None:
     root, _, digest = make_artifact(tmp_path)
-    code, report, _, _ = _run(
+    code, report, _, decision = _run(
         tmp_path,
         cbe=make_cbe(),
         cbp=make_cbp(digest, artifact_repository=_repo_object("")),
@@ -592,3 +596,4 @@ def test_object_artifact_repository_empty_repository_exits_2(tmp_path: Path) -> 
     )
     assert code == 2
     assert report["reason"] == "ARTIFACT_REPOSITORY_MISMATCH"
+    assert decision["decision"] == "NO_UPLOAD"

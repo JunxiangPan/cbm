@@ -38,3 +38,12 @@ def test_b2_fixture_is_marked_synthetic_not_upstream_evidence() -> None:
     assert meta["not_upstream_evidence"] is True
     # This is the B2 blocked state, not a PASS:
     assert "real CBE report" in meta["purpose"]
+
+
+def test_b2_real_cbp_manifest_is_object_shape() -> None:
+    """The CBP 1.2.2 side is real and object-shaped; the CBE side is not."""
+    cbp = load_report(CBP, "cbp")
+    assert cbp.data["schema_version"] == "1"
+    assert isinstance(cbp.data["artifact_repository"], dict)
+    assert cbp.data["artifact_repository"]["repository"] == "JunxiangPan/cbm"
+    assert cbp.gate_status == "PASS"

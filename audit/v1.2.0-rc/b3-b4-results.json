@@ -3,8 +3,8 @@
   "cbp_rc_code_commit": "d4bfefb",
   "manifest_target_cbm_head": "45c49bc",
   "test_suite": {
-    "passed": 108,
-    "normal": 108,
+    "passed": 109,
+    "normal": 109,
     "known_fail_silent_canary": 0
   },
   "b3": {
@@ -108,7 +108,7 @@
   "b2_readiness": {
     "status": "BLOCKED",
     "tests": [
-      "tests/test_b2_readiness.py (3 tests)"
+      "tests/test_b2_readiness.py (4 tests)"
     ],
     "fixture": "tests/fixtures/cbe-cbm-scoped.synthetic.json",
     "fixture_marked_not_upstream_evidence": true,
