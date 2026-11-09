@@ -28,13 +28,13 @@ live E2E is still not executed (private test repo + scoped tokens).
 - **B1 CONTRACT_ACTIVE** — `contract-v1.7.1` / `209d75b4` freezes §5.1.
   Consumer tests cover `package_id: "cbm"` + `producer_id: "cbe"/"cbp"` and
   retain exit 3 `REPORT_IDENTITY_MISMATCH` for old-field mixing.
-- **B2 BLOCKED** — the real CBE report `6b4dc1ef…` (`package_id=cbm`,
-  `producer_id=cbe`, v0.1.0 PASS) was received and `identity_errors=[]`, but CBM
-  verify failed `BLOCKING_SKIP` (`claims` SKIPPED, F3); the manifest wheel
-  `02bf8400…` also does not match the rebuilt wheel `65174c9b…`. No B2 PASS / RC.
-  Evidence: `audit/v1.2.0-rc/`; intake: `docs/B2_INTAKE.md`.
-- **B3 FIELD_LEVEL_COMPLETE** — CBP 1.2.0 RC `855fed7` produced a CBM-scoped
-  manifest `bc5461e6…` (`package_id: "cbm"`, `producer_id: "cbp"`, `base`).
+- **B2 BLOCKED** — real CBE report `6b4dc1ef…` and `identity_errors=[]`;
+  CBP claims gate now PASS (3/5) via `cbm-claims-manifest.json`/notes. Exact
+  artifact `65174c9b…` is not retained (fresh f605808 build `94391185…`), and
+  manifest `02bf8400…` is not retained; no mixed manifest/RC. F3 also still sees
+  binary/docs/custom SKIPPED. Evidence: `audit/v1.2.0-rc/`.
+- **B3 FIELD_LEVEL_COMPLETE** — CBP 1.2.2 produced CBM manifest `b41798f0…`
+  (`schema_version: "1"`, object `artifact_repository`, base, PASS).
   `body_hash_scope`, `release_body_hash`, `artifact_hashes` and
   `evidence_sha256` are accepted; missing/full scope exits 2. This is
   field-level B3, not B2.

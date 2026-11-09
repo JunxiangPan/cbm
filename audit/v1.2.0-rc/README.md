@@ -171,13 +171,17 @@ See [`B1_B2_BLOCKED.md`](B1_B2_BLOCKED.md). No fake PASS:
   `REPORT_IDENTITY_MISMATCH`. This is consumer-side active, not a full train
   PASS.
 - **B2 BLOCKED** — the real CBE report (`cbe-report.json`, sha
-  `6b4dc1ef…`, `package_id=cbm`, `producer_id=cbe`, v0.1.0 PASS) loaded and
-  `identity_errors=[]`. CBM verify then failed:
-  `BLOCKING_SKIP: CBP blocking gate 'claims' is SKIPPED (F3)`; the manifest
-  wheel `02bf8400…` also does not match the rebuilt wheel `65174c9b…`.
-  Evidence: `cbe-report.json`, `b2-gate-failure.json`,
-  `b2-gate-failure.stdout.txt`, `b2-gate-failure-decision.json`.
-  No B2 PASS, no CBM 0.1.0 RC.
+  `6b4dc1ef…`) loaded with `identity_errors=[]`. The CBP claims gate is now
+  **PASS** via `cbm-claims-manifest.json` / `cbm-claims-notes.md` (3/5 claims;
+  B2/B4 not claimed); `cbm-target-gate-with-claims.json` has `claims PASS`.
+  Remaining blockers:
+  1. exact artifact binding: wheel `65174c9b…` is not retained; rebuilding
+     f605808 currently yields `94391185…`; manifest `02bf8400…` is also not
+     retained. No new manifest is generated from a mixed artifact.
+  2. CBM F3 still sees `binary`, `docs`, `custom` as `SKIPPED (not
+     configured)`; these are not waived.
+  No B2 PASS, no CBM 0.1.0 RC. Handoff:
+  `handoff/CBM_B2_CLAIMS_HANDOFF.md`.
 - The synthetic fixture remains `not_upstream_evidence`; 4 readiness tests do
   not make B2 PASS.
 - B4 remains fail-closed only because the overall gate failed.

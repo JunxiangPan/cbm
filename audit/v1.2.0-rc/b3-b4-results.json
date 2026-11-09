@@ -111,16 +111,23 @@
     "cbe_report": "audit/v1.2.0-rc/cbe-report.json",
     "cbe_report_sha256": "6b4dc1efd8433535efe70d4de9337910aa537fbcc982ebba3a014284f27fc76e",
     "identity_errors": [],
-    "cbm_gate_exit": 3,
-    "reason": "BLOCKING_SKIP",
-    "detail": "CBP blocking gate 'claims' is SKIPPED (F3)",
-    "artifact_sha256": "65174c9b6deab9f962fb63cb21721d1077c634b021fcec879731127e49558c65",
-    "cbp_artifact_sha256": "02bf840016f5a2630c70ab42286c3ea47c0091c5efb77c0429c3060c0bee8015",
+    "claims_manifest": "audit/v1.2.0-rc/cbm-claims-manifest.json",
+    "claims_notes": "audit/v1.2.0-rc/cbm-claims-notes.md",
+    "claims_gate": "PASS 3/5",
+    "target_gate_with_claims": "audit/v1.2.0-rc/cbm-target-gate-with-claims.json",
+    "artifact_expected": "65174c9b6deab9f962fb63cb21721d1077c634b021fcec879731127e49558c65",
+    "artifact_rebuilt": "94391185881bf975ba6735272b9c41d6635a68183eb19a13118b32db2f35e751",
+    "manifest_expected": "02bf840016f5a2630c70ab42286c3ea47c0091c5efb77c0429c3060c0bee8015",
+    "remaining_f3": [
+      "binary",
+      "docs",
+      "custom"
+    ],
     "decision": "NO_UPLOAD",
     "tests": [
       "tests/test_b2_readiness.py (4 tests)"
     ],
-    "limit": "Real CBE identity passes, but CBM own gate fails; no B2 PASS or RC."
+    "limit": "Claims gate fixed; exact artifact not retained; no mixed manifest/RC; other F3 gates skipped."
   },
   "cbm_manifest_target": "f71d3b5",
   "encoding": {

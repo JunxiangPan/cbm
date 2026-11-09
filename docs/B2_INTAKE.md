@@ -1,10 +1,12 @@
 # B2 intake — real CBM-scoped CBE report
 
-Status: **BLOCKED at the CBM gate.** The real CBE report with
-`package_id: "cbm"` was received; `identity_errors == []`, but CBM verify failed
-with `BLOCKING_SKIP` (`claims` is `SKIPPED (not configured)`, F3) and the
-manifest wheel also does not match the rebuilt wheel. No CBM 0.1.0 RC is
-created; no tag/release.
+Status: **BLOCKED at artifact binding and remaining F3 gates.** The real CBE
+report was received and `identity_errors == []`. CBP claims gate is now PASS
+(3/5 claims). The exact f605808 wheel `65174c9b…` is not retained; a fresh build
+produces `94391185…`, and the manifest wheel `02bf8400…` is also not retained.
+No new manifest is generated from a mixed artifact. CBM F3 also still sees
+`binary`/`docs`/`custom` as SKIPPED (not configured). No CBM 0.1.0 RC; no
+tag/release.
 
 ## Required inputs
 
@@ -56,22 +58,21 @@ stays **BLOCKED**; do not rewrite the result to PASS.
 ## Current gate result
 
 ```text
-CBE report   6b4dc1ef…  package_id=cbm producer_id=cbe v0.1.0 PASS
 identity_errors []
-CBM_VERIFY   exit 3
-reason       BLOCKING_SKIP
-detail       CBP blocking gate 'claims' is SKIPPED (F3)
-artifact     65174c9b… (rebuilt from CBM f605808)
-manifest     02bf8400… (CBP 1.2.2 b41798, old artifact)
-decision     NO_UPLOAD
+CBP claims    PASS 3/5
+artifact     65174c9b… not retained; f605808 rebuild 94391185…
+manifest     02bf8400… not retained
+remaining F3  binary/docs/custom SKIPPED (not configured)
+decision      NO_UPLOAD
 ```
 
 Evidence: `audit/v1.2.0-rc/cbe-report.json`,
-`audit/v1.2.0-rc/b2-gate-failure.json`,
-`audit/v1.2.0-rc/b2-gate-failure.stdout.txt`.
+`audit/v1.2.0-rc/cbm-claims-manifest.json`,
+`audit/v1.2.0-rc/cbm-claims-notes.md`,
+`audit/v1.2.0-rc/cbm-target-gate-with-claims.json`.
 
-B2 stays BLOCKED until the CBP target manifest/gates and artifact binding are
-consistent and CBM's own gate exits 0 with a valid upload decision.
+B2 stays BLOCKED until an exact retained artifact is bound to a regenerated
+manifest and CBM's own gate exits 0.
 
 ## CBM 0.1.0 RC gate
 

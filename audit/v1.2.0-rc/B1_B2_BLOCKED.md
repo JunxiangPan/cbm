@@ -1,4 +1,4 @@
-# B1 active / B2 blocked at CBM gate (no fake PASS)
+# B1 active / B2 blocked (claims fixed; artifact binding not fixed)
 
 CBM v0.1.0 consumer status after CONTRACT v1.7.1 froze §5.1.
 
@@ -10,7 +10,7 @@ CBM v0.1.0 consumer status after CONTRACT v1.7.1 froze §5.1.
   `package_id: "cbe"/"cbp"` and producer mismatch; mixed reports exit 3
   `REPORT_IDENTITY_MISMATCH`.
 
-## B2 — BLOCKED (real report received, CBM gate failed)
+## B2 — BLOCKED
 
 Inputs:
 
@@ -18,45 +18,42 @@ Inputs:
   `6b4dc1efd8433535efe70d4de9337910aa537fbcc982ebba3a014284f27fc76e`;
   `package_id=cbm`, `producer_id=cbe`, `version/tag=v0.1.0`, `gate_status=PASS`.
 - CBP 1.2.2 manifest: `cbm-quality-manifest.json`, sha256
-  `b41798f07be4dda35e2afa1a810381bcd6f5025fb5d33f5c5a1054834a390c82`;
-  `package_id=cbm`, `producer_id=cbp`, `v0.1.0`, `PASS`, object repo.
+  `b41798f07be4dda35e2afa1a810381bcd6f5025fb5d33f5c5a1054834a390c82`.
+- CBM readiness claims: `cbm-claims-manifest.json` + `cbm-claims-notes.md`
+  (3 PASS / 5 claims; B2/B4 explicitly not claimed).
 
-Identity:
+Progress:
 
-```text
-identity_errors []
-```
+- `identity_errors == []`.
+- CBP claims gate now **PASS**: `claims=3/5` (manifest + notes).
+- CBM target gate with claims:
+  `cbm-target-gate-with-claims.json`, `gate_status=PASS`;
+  `claims` PASS, `encoding` PASS; binary/docs/custom/coverage/dependency/
+  comments/upgrade still SKIPPED not configured.
 
-CBM gate:
+Remaining blockers:
 
-```text
-CBM_VERIFY exit 3
-reason BLOCKING_SKIP
-detail CBP blocking gate 'claims' is SKIPPED (F3)
-artifact_sha256 65174c9b...
-cbp_artifact_sha256 02bf8400...
-decision NO_UPLOAD
-```
+1. **Artifact binding**: the exact wheel `65174c9b…` (f605808) is not retained.
+   Rebuilding f605808 now produces different wheels (`94391185…` in the latest
+   build); CBP manifest wheel `02bf8400…` is also not retained. The instruction
+   requires using one exact artifact; using a newly built wheel would mix
+   hashes, so no new CBM manifest is generated.
+2. **Other F3 gates**: even after claims PASS, CBM F3 still sees
+   `binary`, `docs`, and `custom` as `SKIPPED (not configured)`. These need
+   real configs or a contract decision; they were not waived.
 
-Two independent blockers remain:
+B2 therefore stays **BLOCKED**; no CBM 0.1.0 RC, no tag/release.
 
-1. CBP 1.2.2 target manifest has `claims` SKIPPED with reason
-   `not configured`; CBM F3 treats `claims` as a blocking gate.
-2. The manifest wheel `02bf8400…` does not match the wheel rebuilt from the
-   CBE-validated CBM source `f605808` (`65174c9b…`).
-
-B2 therefore stays **BLOCKED**; no CBM 0.1.0 RC is created. Evidence:
-`audit/v1.2.0-rc/cbe-report.json`, `b2-gate-failure.json`,
-`b2-gate-failure.stdout.txt`, `b2-gate-failure-decision.json`.
-
-The synthetic fixture remains marked `not_upstream_evidence`; it is not B2
-evidence.
+Evidence: `cbe-report.json`, `cbm-claims-manifest.json`,
+`cbm-claims-notes.md`, `cbm-target-gate-with-claims.json`,
+`b2-gate-failure.json`, `b2-gate-failure.stdout.txt`; handoff
+`handoff/CBM_B2_CLAIMS_HANDOFF.md`.
 
 ## B4 — fail-closed only
 
-Object manifest shape is parsed and 12 boundary tests pass; the object repository
-matches `JunxiangPan/cbm`. Because the overall CBM gate failed, B4 remains
-FAIL_CLOSED_ONLY; CBE/CBS repository unification is not claimed.
+Object `artifact_repository` shape is parsed and 12 boundary tests pass; the
+overall CBM gate is not passed, so B4 is not PASS. CBE/CBS unification is not
+claimed.
 
 ## B5 — fixed
 

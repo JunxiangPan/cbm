@@ -1,0 +1,12 @@
+{
+  "schema_version": "1",
+  "package_id": "cbm",
+  "version": "v0.1.0",
+  "gates": [
+    {"name": "b1-contract-active", "status": "PASS", "reason": "CONTRACT v1.7.1 §5.1 active"},
+    {"name": "b3-field-level", "status": "PASS", "reason": "CBP 1.2.2 object manifest fields complete"},
+    {"name": "b5-fixed", "status": "PASS", "reason": "CBS fa1740f emits NOT_UPLOADED/EVIDENCE_ABSENT"},
+    {"name": "b2-real-cbe-gate", "status": "SKIPPED", "reason": "CBM gate blocked; not claimed"},
+    {"name": "b4-object-gate", "status": "SKIPPED", "reason": "CBM gate blocked; not claimed"}
+  ]
+}
