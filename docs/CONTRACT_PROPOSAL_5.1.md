@@ -25,7 +25,7 @@ artifact_repository, CBS body fail-silent) is in
   `body_hash_scope`. CBM exits 2 `MISSING_RELEASE_BODY_HASH` or
   `MISSING_BODY_HASH_SCOPE`.
 - Until §5.1 and §5.2 are applied and CBE/CBP P0-06 is implemented, CBM only
-  accepts mock fixtures. Its 102 passing tests are static/offline evidence, not
+  accepts mock fixtures. Its 105 passing tests are static/offline evidence, not
   real-data E2E.
 
 ## Problem

@@ -506,3 +506,49 @@ def test_same_repository_case_insensitive_continues(tmp_path: Path) -> None:
     assert decision["decision"] == "UPLOAD"
     assert report["reason"] == "UPLOAD_PENDING"
     assert report["cbp_artifact_repository"] == "OWNER/REPO"
+
+
+def _repo_object(repository: str) -> dict[str, str]:
+    return {
+        "repository": repository,
+        "run_id": "local-cbm-build-once",
+        "artifact_name": "cbm-build-once",
+    }
+
+
+def test_object_artifact_repository_same_continues(tmp_path: Path) -> None:
+    root, _, digest = make_artifact(tmp_path)
+    code, report, _, decision = _run(
+        tmp_path,
+        cbe=make_cbe(),
+        cbp=make_cbp(digest, artifact_repository=_repo_object("OWNER/REPO")),
+        artifact_root=root,
+    )
+    assert code == 0
+    assert decision["decision"] == "UPLOAD"
+    assert report["reason"] == "UPLOAD_PENDING"
+    assert report["cbp_artifact_repository"]["repository"] == "OWNER/REPO"
+
+
+def test_object_artifact_repository_cross_exits_2(tmp_path: Path) -> None:
+    root, _, digest = make_artifact(tmp_path)
+    code, report, _, _ = _run(
+        tmp_path,
+        cbe=make_cbe(),
+        cbp=make_cbp(digest, artifact_repository=_repo_object("owner/other")),
+        artifact_root=root,
+    )
+    assert code == 2
+    assert report["reason"] == "ARTIFACT_REPOSITORY_MISMATCH"
+
+
+def test_object_artifact_repository_missing_repository_exits_2(tmp_path: Path) -> None:
+    root, _, digest = make_artifact(tmp_path)
+    code, report, _, _ = _run(
+        tmp_path,
+        cbe=make_cbe(),
+        cbp=make_cbp(digest, artifact_repository={"run_id": "x", "artifact_name": "y"}),
+        artifact_root=root,
+    )
+    assert code == 2
+    assert report["reason"] == "ARTIFACT_REPOSITORY_MISMATCH"

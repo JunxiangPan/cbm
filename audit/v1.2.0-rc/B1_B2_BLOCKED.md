@@ -1,44 +1,33 @@
-# B1 / B2 — blocked (B5 fixed; no fake PASS)
+# B1 active / B2 blocked (B5 fixed; no fake PASS)
 
-CBM v0.1.0 does not claim B1 or B2 as complete. B5 is fixed in CBS
-`fa1740f` and the canary is flipped.
+CBM v0.1.0 consumer status after CONTRACT v1.7.1 froze §5.1.
 
-## B1 — CONTRACT.md §5.1 identity
+## B1 — CONTRACT_ACTIVE
 
-- State: §5.1 is **not applied** to CONTRACT.md. The proposal is
-  `docs/CONTRACT_PROPOSAL_5.1.md`; the contract owner must apply it.
-- CBM behavior: `package_id != "cbm"` → exit 3,
-  `cbm_gate_status=FAIL`, `reason=REPORT_IDENTITY_MISMATCH`,
-  `upload_status=NOT_UPLOADED`.
-- Evidence: `tests/test_b1_identity.py` (6 tests: accepted subject/producer,
-  old package_id mixing, producer mismatch, integration exit 3); plus
-  `test_cbs_report_is_not_reused`. B1 remains blocked because §5.1 is not in
-  CONTRACT.md.
+- Contract: `contract-v1.7.1` / `209d75b4`; §5.1 is frozen and active.
+- Subject: `package_id: "cbm"`.
+- Producer: `producer_id: "cbe"` or `"cbp"`.
+- CBM readiness tests (`tests/test_b1_identity.py`, 6 tests): accept the
+  subject/producer pair; reject old `package_id: "cbe"/"cbp"` and producer
+  mismatch; mixed reports exit 3 `REPORT_IDENTITY_MISMATCH`.
+- This is consumer-side active; it does not by itself prove the full train.
+  `REPORT_IDENTITY_MISMATCH` tests are retained.
 
-## B2 — real CBE report with `package_id: "cbm"`
+## B2 — BLOCKED
 
-- State: the CBP side is now real: `cbm-quality-manifest.json`, sha
-  `6da7e848…`, `package_id: "cbm"`, `producer_id: "cbp"`, `base`, `gate_status: PASS`. The CBE
-  side is still missing; there is no real CBE report with `package_id: "cbm"`.
-- CBM behavior: `load_report` can load the CBP manifest and B3 fields pass,
-  but a full `verify` needs both reports; CBM must not synthesize the CBE side.
-- Evidence: `tests/test_b3_cbp_rc.py::test_b3_manifest_is_cbm_scoped_but_b2_is_blocked`;
-  `tests/test_b2_readiness.py` (3 tests) uses a synthetic CBE fixture marked
-  `not_upstream_evidence`, plus the real CBP CBM manifest. It proves the schema/
-  identity path only; it is not a real CBE report and does not make B2 PASS.
-- B3 is **FIELD_LEVEL_COMPLETE**, not B2 complete.
+- Still no real CBE report with `package_id: "cbm"` + `producer_id: "cbe"`.
+- `tests/test_b2_readiness.py` uses
+  `cbe-cbm-scoped.synthetic.json`, explicitly marked
+  `not_upstream_evidence`. It proves schema/identity readiness only.
+- Do not claim B2 PASS; no synthetic CBE report is presented as real evidence.
 
-## B5 — fixed (not blocked)
+## B5 — fixed
 
-- CBS `fa1740f` emits `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT` (and the exact
-  phrase when declared). `tools/check_b5.py --check-upstream` returns
-  `STATUS=B5_MAYBE_FIXED`.
-- `tests/test_known_fail_silent.py` is flipped; **no KNOWN_FAIL_SILENT canary
-  remains**. A `STATUS=KNOWN_FAIL_SILENT` result is a regression and fails the
-  test.
+CBS `fa1740f` emits `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT`; the canary is
+flipped and no `KNOWN_FAIL_SILENT` marker remains.
 
 ## No fake PASS
 
-- No tag, GitHub Release, PyPI upload, or `PASS` claim for B1/B2.
-- B3 is marked FIELD_LEVEL_COMPLETE; B4 FAIL_CLOSED_ONLY; B5 FIXED (`tests/test_known_fail_silent.py`).
-- `102 passed = 102 normal tests`.
+- No tag, GitHub Release, or PyPI upload.
+- B2 remains blocked; B4 remains fail-closed only.
+- `105 passed = 105 normal tests` (with the pinned CBS fixture).

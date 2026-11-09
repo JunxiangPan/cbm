@@ -146,14 +146,19 @@ def evaluate(
     # names a different repository.  This is an input/precondition failure
     # (exit 2), not a PASS and not a soft warning.
     if expected_artifact_repository is not None:
-        actual_repository = cbp.data.get("artifact_repository")
+        raw_repository = cbp.data.get("artifact_repository")
+        actual_repository = (
+            raw_repository.get("repository")
+            if isinstance(raw_repository, dict)
+            else raw_repository
+        )
         if (
             not isinstance(actual_repository, str)
             or not actual_repository.strip()
             or actual_repository.strip().lower() != expected_artifact_repository.strip().lower()
         ):
             raise InputError(
-                f"CBP artifact_repository={actual_repository!r} expected "
+                f"CBP artifact_repository={raw_repository!r} expected "
                 f"{expected_artifact_repository!r} (cross-repository artifact)",
                 reason=Reason.ARTIFACT_REPOSITORY_MISMATCH,
             )

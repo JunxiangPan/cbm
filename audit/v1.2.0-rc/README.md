@@ -29,7 +29,7 @@ CBM PASS claim was made. No CBS/CBE/CBP/CBC repository was modified.
 | [42595276523](https://github.com/JunxiangPan/cbm/actions/runs/42595276523) | `ae0ad13` | success: **102/102 on ubuntu-latest and windows-latest** (B1/B2 readiness + B4 boundary) |
 | [42607873304](https://github.com/JunxiangPan/cbm/actions/runs/42607873304) | `503986b` | success: **102/102 on ubuntu-latest and windows-latest** (official CBP 1.2.0 manifest) |
 
-**102 passed = 102 normal tests. No `KNOWN_FAIL_SILENT` canary remains.** The B5
+**105 passed = 105 normal tests. No `KNOWN_FAIL_SILENT` canary remains.** The B5
 canary was flipped to assert the fixed behavior.
 
 ## CBP-CI-001 — PASS
@@ -138,22 +138,22 @@ report with `package_id: "cbm"`; CBM does not synthesize it.
 
 | Case | Result |
 | --- | --- |
-| cross-repository (different owner or repo) | exit 2 `ARTIFACT_REPOSITORY_MISMATCH` |
-| missing `artifact_repository` | exit 2 `ARTIFACT_REPOSITORY_MISMATCH` |
-| same repository (exact) | continues to `UPLOAD_PENDING` |
-| same repository (case-insensitive) | continues to `UPLOAD_PENDING` |
+| object cross-repository (different owner or repo) | exit 2 `ARTIFACT_REPOSITORY_MISMATCH` |
+| object missing `artifact_repository`/`repository` | exit 2 `ARTIFACT_REPOSITORY_MISMATCH` |
+| object same repository (exact) | continues to `UPLOAD_PENDING` |
+| object same repository (case-insensitive) | continues to `UPLOAD_PENDING` |
 
-Tests: 5 passed. CBE/CBS repositories are not unified; B4 is not complete.
+Tests: 8 passed. CBE/CBS repositories are not unified; B4 is not complete.
 
-## B1 / B2 — blocked (readiness only)
+## B1 CONTRACT_ACTIVE / B2 blocked
 
 See [`B1_B2_BLOCKED.md`](B1_B2_BLOCKED.md). No fake PASS:
 
-- **B1 readiness** — `tests/test_b1_identity.py` (6 tests): accepts
-  `package_id: "cbm"` with `producer_id: "cbe"/"cbp"`; rejects old
-  `package_id: "cbe"/"cbp"` and producer mismatches; mixed reports exit 3
-  `REPORT_IDENTITY_MISMATCH`. B1 remains blocked because §5.1 is not in
-  CONTRACT.md.
+- **B1 CONTRACT_ACTIVE** — `contract-v1.7.1` / `209d75b4` freezes §5.1;
+  `tests/test_b1_identity.py` (6 tests) accepts `package_id: "cbm"` with
+  `producer_id: "cbe"/"cbp"`; old-field mixing exits 3
+  `REPORT_IDENTITY_MISMATCH`. This is consumer-side active, not a full train
+  PASS.
 - **B2 readiness** — `tests/test_b2_readiness.py` (3 tests): the synthetic CBE
   fixture (`tests/fixtures/cbe-cbm-scoped.synthetic.json`) is explicitly marked
   `not_upstream_evidence`; it validates the schema/identity path together with
@@ -165,7 +165,7 @@ See [`B1_B2_BLOCKED.md`](B1_B2_BLOCKED.md). No fake PASS:
 
 ```bash
 cd D:\qq苏瑾言大肥鱼\cbm
-python -m pytest                                  # 102 passed (CBS present)
+python -m pytest                                  # 105 passed (CBS present)
 python tools/check_b5.py --check-upstream         # STATUS=B5_MAYBE_FIXED; exit 0
 python tools/check_b5.py --check-upstream --declared-cbm
 python -m pytest tests/test_b3_cbp_rc.py          # 4 passed

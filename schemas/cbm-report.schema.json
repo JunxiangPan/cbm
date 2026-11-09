@@ -246,9 +246,33 @@
       ]
     },
     "cbp_artifact_repository": {
-      "type": [
-        "string",
-        "null"
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "repository",
+            "run_id",
+            "artifact_name"
+          ],
+          "properties": {
+            "repository": {
+              "type": "string"
+            },
+            "run_id": {
+              "type": "string"
+            },
+            "artifact_name": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
       ]
     }
   },

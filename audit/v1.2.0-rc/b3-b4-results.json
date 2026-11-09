@@ -3,8 +3,8 @@
   "cbp_rc_code_commit": "5ebd0eb",
   "manifest_target_cbm_head": "45c49bc",
   "test_suite": {
-    "passed": 102,
-    "normal": 102,
+    "passed": 105,
+    "normal": 105,
     "known_fail_silent_canary": 0
   },
   "b3": {
@@ -54,7 +54,10 @@
       "tests/test_exit_codes.py::test_missing_artifact_repository_exits_2",
       "tests/test_exit_codes.py::test_same_artifact_repository_continues",
       "tests/test_exit_codes.py::test_cross_repository_different_repo_exits_2",
-      "tests/test_exit_codes.py::test_same_repository_case_insensitive_continues"
+      "tests/test_exit_codes.py::test_same_repository_case_insensitive_continues",
+      "tests/test_exit_codes.py::test_object_artifact_repository_same_continues",
+      "tests/test_exit_codes.py::test_object_artifact_repository_cross_exits_2",
+      "tests/test_exit_codes.py::test_object_artifact_repository_missing_repository_exits_2"
     ],
     "limit": "CBE/CBS artifact repositories are not unified; B4 remains fail-closed only."
   },
@@ -72,13 +75,12 @@
     ]
   },
   "blocked": {
-    "B1": "CONTRACT.md §5.1 not applied; producer package_id -> exit 3 REPORT_IDENTITY_MISMATCH.",
-    "B2": "No real CBE report with package_id=cbm; the CBP side is real (bc5461e6…).",
-    "no_fake_pass": true,
-    "readiness": "B1/B2 consumer tests exist but do not make either PASS; no real CBE CBM-scoped report."
+    "B2": "No real CBE report with package_id=cbm; CBP 1.2.2 object manifest is ready.",
+    "no_fake_pass": true
   },
   "b1_readiness": {
-    "status": "BLOCKED",
+    "status": "CONTRACT_ACTIVE",
+    "contract": "contract-v1.7.1 / 209d75b4",
     "tests": [
       "tests/test_b1_identity.py (6 tests)"
     ],
@@ -88,7 +90,7 @@
       "producer_id mismatch rejected",
       "mixed-report verify exit 3 REPORT_IDENTITY_MISMATCH"
     ],
-    "limit": "§5.1 is not applied to CONTRACT.md; readiness only."
+    "limit": "Consumer-side active; B2 still needs a real CBE report."
   },
   "b2_readiness": {
     "status": "BLOCKED",
@@ -97,7 +99,7 @@
     ],
     "fixture": "tests/fixtures/cbe-cbm-scoped.synthetic.json",
     "fixture_marked_not_upstream_evidence": true,
-    "limit": "No real CBE report with package_id=cbm; synthetic fixture proves schema/identity path only and is not B2 evidence."
+    "limit": "No real CBE report with package_id=cbm; synthetic fixture is not B2 evidence."
   },
   "cbm_manifest_target": "dd756f9",
   "encoding": {
