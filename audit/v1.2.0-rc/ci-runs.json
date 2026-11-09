@@ -64,5 +64,11 @@
     "commit": "304d4e7",
     "status": "success",
     "tests": "110 passed on ubuntu-latest and windows-latest (different-owner object cross)"
+  },
+  {
+    "run": 42660486530,
+    "commit": "1bbe892",
+    "status": "success",
+    "tests": "110 passed on ubuntu-latest and windows-latest (B2 gate failure evidence)"
   }
 ]
