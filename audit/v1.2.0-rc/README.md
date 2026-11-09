@@ -49,17 +49,19 @@ CBP_V12_RESULT=PASS rules=1 blocking_failed=false warning_failed=false
 exit 0
 ```
 
-Full 12-rule run (official v1.2.0, `5ebd0eb`, read-only archive):
+Full 13-rule run (official v1.2.2, `d4bfefb`, read-only archive):
 
 ```text
-PASS 11, WARN 1 (CBP-DOC-001, 12 findings), FAIL 0
-CBP_V12_RESULT=WARN rules=12 blocking_failed=false
+PASS 12, WARN 1 (CBP-DOC-001, 12 findings), FAIL 0
+CBP-BODY-001 PASS
+CBP_V12_RESULT=WARN rules=13 blocking_failed=false
 exit 0
 ```
 
-CBP-DEBT-001 was a true positive on `docs/V17_BLOCKERS.md` (the word `FIXED` without a file);
-it now passes after the claim cites `tests/test_known_fail_silent.py`. DOC
-warnings are 1.2.0 warning-only, not waived.
+CBP-DEBT-001 was a true positive on `docs/V17_BLOCKERS.md` (the word `FIXED`
+without a file); it now passes after the claim cites
+`tests/test_known_fail_silent.py`. DOC warnings are 1.2.2 warning-only, not
+waived.
 
 ## Encoding fix
 
