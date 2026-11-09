@@ -22,5 +22,11 @@
     "commit": "65ae31f",
     "status": "success",
     "tests": "91 passed on ubuntu-latest and windows-latest (audit package docs commit)"
+  },
+  {
+    "run": 42593726644,
+    "commit": "3458cb8",
+    "status": "success",
+    "tests": "91 passed on ubuntu-latest and windows-latest (B5 flip + CBM manifest)"
   }
 ]

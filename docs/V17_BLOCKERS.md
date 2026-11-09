@@ -12,7 +12,7 @@ repository.
 | B2 | **BLOCKED** | No real CBE report with `package_id: "cbm"`. The CBP side now exists (`bc5461e6…`, `package_id: cbm`, `producer_id: cbp`); full CBM identity needs both. |
 | B3 | **FIELD_LEVEL_COMPLETE** | CBP 1.2.0 RC `855fed7` produced a CBM-scoped manifest: `body_hash_scope: "base"`, `release_body_hash`, two `artifact_hashes`, `evidence_sha256`. Missing/full scope exits 2. This is not B2. |
 | B4 | **FAIL_CLOSED_ONLY** | Cross-repository and missing `artifact_repository` exit 2 `ARTIFACT_REPOSITORY_MISMATCH`; same repository continues. CBE/CBS are still not unified, so B4 is not complete. |
-| B5 | **FIXED** | CBS v1.7.0-integration `fa1740f` emits a visible `## CBM` section with `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT`; canary flipped. Historical `- none` behavior is gone. |
+| B5 | **FIXED** | CBS v1.7.0-integration `fa1740f` (`tests/test_known_fail_silent.py`) emits a visible `## CBM` section with `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT`; canary flipped. Historical `- none` behavior is gone. |
 
 ## Dependency order
 

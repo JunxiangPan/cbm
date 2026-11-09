@@ -37,7 +37,7 @@ live E2E is still not executed (private test repo + scoped tokens).
 - **B4 FAIL_CLOSED_ONLY** — cross/missing `artifact_repository` exits 2
   `ARTIFACT_REPOSITORY_MISMATCH`; same repository continues. CBE/CBS are still
   not unified.
-- **B5 FIXED** — CBS v1.7.0-integration `fa1740f` renders
+- **B5 FIXED** — CBS v1.7.0-integration `fa1740f` (regression `tests/test_known_fail_silent.py`) renders
   `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT`; the canary is flipped to assert the
   fixed behavior.
 

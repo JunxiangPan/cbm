@@ -1,6 +1,6 @@
 # CBS body generator requirement — B5 (fixed)
 
-Status: **FIXED in CBS v1.7.0-integration `fa1740f`**. This document is retained
+Status: **FIXED in CBS v1.7.0-integration `fa1740f`** (regression `tests/test_known_fail_silent.py`). This document is retained
 as the historical requirement and regression contract. The old
 `KNOWN_FAIL_SILENT` canary has been flipped; no `known_fail_silent` marker
 remains in the CBM suite.

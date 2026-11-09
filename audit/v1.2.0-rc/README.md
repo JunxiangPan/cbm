@@ -9,30 +9,27 @@ CBM PASS claim was made. No CBS/CBE/CBP/CBC repository was modified.
 | --- | --- |
 | CBM repository | https://github.com/JunxiangPan/cbm (public) |
 | CBM branch | `main` |
-| CBM code commit | `6c77bc764edd79f31cb3baa80d0e4bd2fe7d63f1` |
-| CBM audit package commit | `65ae31f` |
+| CBM code commit | `3458cb81ffb30a71d6606830e8d8276e993d6ae4` |
 | CBM tag / release | none |
-| CBP RC code used for gate evidence | `5da8b87` (`1.2.0-dev`) |
+| CBP RC code | `855fed7` (`1.2.0-dev`) |
 | CBP 1.2.0 publish state | not tagged, not released, PyPI 404 |
-| CBS pin for B5 canary | `88ec90fcafd1548b7810d0c446899ecd75f6b95a` |
-
-The local CBP audit package records a later candidate (`9ee52fb`) that
-supersedes `5da8b87`; this audit uses `5da8b87` for the CBM gate evidence and
-does **not** claim that `5da8b87` is the final CBP 1.2.0 build.
+| CBS B5 fix | `fa1740fe03590ec9adfc9ab57cf1485bdc3bea87` (`v1.7.0-integration`) |
 
 ## CI
 
 | Run | Commit | Result |
 | --- | --- | --- |
 | [42543756142](https://github.com/JunxiangPan/cbm/actions/runs/42543756142) | `beffaef` | failure: PyYAML missing; fixed by `d03c439` |
-| [42543902925](https://github.com/JunxiangPan/cbm/actions/runs/42543902925) | `d03c439` | success: 84 passed on ubuntu-latest and windows-latest |
-| [42544444367](https://github.com/JunxiangPan/cbm/actions/runs/42544444367) | `6c77bc7` | success: **91 passed** on ubuntu-latest and windows-latest |
-| [42544797487](https://github.com/JunxiangPan/cbm/actions/runs/42544797487) | `65ae31f` | success: 91 passed on ubuntu-latest and windows-latest (audit docs) |
+| [42543902925](https://github.com/JunxiangPan/cbm/actions/runs/42543902925) | `d03c439` | success: 84/84 |
+| [42544444367](https://github.com/JunxiangPan/cbm/actions/runs/42544444367) | `6c77bc7` | success: 91/91 |
+| [42544797487](https://github.com/JunxiangPan/cbm/actions/runs/42544797487) | `65ae31f` | success: 91/91 (audit docs) |
+| [42544980840](https://github.com/JunxiangPan/cbm/actions/runs/42544980840) | `45c49bc` | success: 91/91 (final old audit) |
+| [42593726644](https://github.com/JunxiangPan/cbm/actions/runs/42593726644) | `3458cb8` | success: **91/91 on ubuntu-latest and windows-latest** (B5 flip + CBM manifest) |
 
-`91 passed = 90 normal tests + 1 KNOWN_FAIL_SILENT canary`. The canary asserts
-that the B5 defect exists; it is not a PASS for B5.
+**91 passed = 91 normal tests. No `KNOWN_FAIL_SILENT` canary remains.** The B5
+canary was flipped to assert the fixed behavior.
 
-## CBP-CI-001 — before and after
+## CBP-CI-001 — PASS
 
 Before (CBP 1.2.0 E2E matrix, CBM `00d984e`):
 
@@ -41,83 +38,97 @@ CBP-CI-001 TEST_ROOTS_IN_CI: FAIL(1)
 tests: test root is not executed by any workflow
 ```
 
-After the CBM CI workflow and the test run:
+After the CBM CI workflow:
 
 ```text
-$ python -m cbp.cli --root <cbm> --v12 --v12-only CBP-CI-001
 CBP-CI-001 TEST_ROOTS_IN_CI: PASS
 CBP_V12_RESULT=PASS rules=1 blocking_failed=false warning_failed=false
 exit 0
 ```
 
-Full 12-rule run against CBM (`5da8b87`, read-only), captured at code commit
-`6c77bc7` before this audit package's docs-only commit:
+Full 12-rule run (`855fed7`, read-only archive):
 
 ```text
-CBP_V12_RESULT=WARN rules=12 blocking_failed=false warning_failed=true
 PASS 11, WARN 1 (CBP-DOC-001, 12 findings), FAIL 0
+CBP_V12_RESULT=WARN rules=12 blocking_failed=false
+exit 0
 ```
 
-The DOC warnings are known 1.2.0 warning-only findings (documentation paths that
-resolve only in other repositories or at runtime). They are not blocking in
-1.2.0 and are not being waived here.
+CBP-DEBT-001 was a true positive on `docs/V17_BLOCKERS.md` (the word `FIXED` without a file);
+it now passes after the claim cites `tests/test_known_fail_silent.py`. DOC
+warnings are 1.2.0 warning-only, not waived.
 
-## B3 — PARTIAL (real CBP 1.2.0 RC-era manifest, field-level)
+## B5 — FIXED (`tests/test_known_fail_silent.py`), canary flipped
 
-Real manifest used:
+CBS `fa1740f` synthesizes a dedicated `## CBM` section for a missing CBM:
 
 ```text
-cbp-action-release/quality-manifest.json
-sha256 53d80bb1a73b91b7205f4bc4b96817f7d83ae341164fb10ba1464372801d55ba
-package_id cbp, producer_id cbp, version v1.2.0
-body_hash_scope base
-release_body_hash 6cca0e560af9a1239b619bb6cb8d1d2b90e102e51cd058fbb83f00114da8a09b
-manifest wheel sha256 40ae798a9e480383b7069f8a488225ea8ac806e8dd2cc9120abf9fdb5a76b3ba
-manifest sdist sha256 7a9b5db62229ecaf3073ed62c556080583f2a5c283b729a8297ded308423c2fb
-manifest ci_commit_sha 904494452458bde3bb4d2174abc2664413e41100
+## CBM
+- CBM: NOT_UPLOADED
+  - cbm_gate_status: `NOT_UPLOADED`
+  - upload_status: `NOT_UPLOADED`
+  - reason: `EVIDENCE_ABSENT`
+  - declared_attached: `false`
 ```
 
-Results:
+With `declared_components: ["cbm"]` it emits the exact phrase
+`declared as attached but not uploaded`.
 
-| Scope | CBM result |
-| --- | --- |
-| `base` | accepted (`release_body_hash` + `body_hash_scope` pass) |
-| missing | exit 2 `MISSING_BODY_HASH_SCOPE` |
-| `full` | exit 2 `BODY_HASH_SCOPE_UNSUPPORTED` |
+Evidence:
 
-Tests: 4 passed (`tests/test_b3_cbp_rc.py`). **B3 is PARTIAL**: the manifest is
-`package_id: "cbp"` / `version: "v1.2.0"`, not a CBM-scoped or attested CBM
-manifest. Full B3 remains blocked by B1/B2. The manifest is RC-era evidence, not
-proof that the attested CBP 1.2.0 wheel was consumed by CBM.
+- `b5-probe.stdout.txt` / `b5-probe-declared.stdout.txt` — `STATUS=B5_MAYBE_FIXED`
+- `b5-fixed-body.md` / `b5-fixed-body-declared.md` — rendered output
+- `tests/test_known_fail_silent.py` — flipped; 1 passed
+- `tools/check_b5.py --check-upstream` is green; `KNOWN_FAIL_SILENT` now means
+  a regression and fails the test.
+
+## B3 — FIELD_LEVEL_COMPLETE
+
+Real CBP 1.2.0 RC `855fed7` external-package manifest:
+
+```text
+file cbp-1.2.0-cbm-manifest.json
+sha256 bc5461e61a4167dfae21fdf12fe169fa8339c7f20eac09f861799d89926196c1
+package_id cbm, producer_id cbp, version v0.1.0
+body_hash_scope base
+release_body_hash b4fa95034d31a84d5fc60a9773852e5ffd002624987947b903ad99ff21e3f077
+wheel sha256 a6a812cf6e99a51211ac30b4ef3574ecc7851ff05d3095406a325d1aa8596362
+sdist sha256 3fdb074f7739ff9e14b1bb51b6d43561a9e01b5f1395ac6fc1536295ff690d50
+evidence_sha256 0edf31e8757d7c6f577efa2a3472c7b33836db9bdc14685634264c201b07732a
+```
+
+`load_report` accepts all B3 fields; missing scope -> exit 2
+`MISSING_BODY_HASH_SCOPE`; `full` -> exit 2 `BODY_HASH_SCOPE_UNSUPPORTED`.
+Tests: 4 passed (`tests/test_b3_cbp_rc.py`).
+
+**B3 field-level is complete. B2 is still blocked**: the CBE side has no real
+report with `package_id: "cbm"`; CBM does not synthesize it.
 
 ## B4 — FAIL_CLOSED_ONLY
 
-| Case | CBM result |
+| Case | Result |
 | --- | --- |
 | cross-repository `artifact_repository` | exit 2 `ARTIFACT_REPOSITORY_MISMATCH` |
 | missing `artifact_repository` | exit 2 `ARTIFACT_REPOSITORY_MISMATCH` |
 | same repository | continues to `UPLOAD_PENDING` |
 
-Tests: 3 passed (`tests/test_exit_codes.py`). This is **not** B4 completion:
-CBE/CBS artifacts are still not uploaded to one repository. CBM only refuses a
-cross-repository manifest and cannot unify the train alone.
+Tests: 3 passed. CBE/CBS repositories are not unified; B4 is not complete.
 
-## B1 / B2 / B5 — blocked
+## B1 / B2 — blocked
 
-See [`B1_B2_B5_BLOCKED.md`](B1_B2_B5_BLOCKED.md). No fail-silent behavior is
-being converted into PASS:
+See [`B1_B2_BLOCKED.md`](B1_B2_BLOCKED.md). No fake PASS:
 
 - B1 §5.1 is not in CONTRACT.md; producer `package_id` exits 3.
-- B2 no CBM-scoped report exists; the B3 manifest is `package_id: "cbp"`.
-- B5 CBS body generator still renders `- none`; `KNOWN_FAIL_SILENT` canary.
+- B2 no real CBE report with `package_id: "cbm"`; the CBP side exists.
+- B4 remains fail-closed only.
 
 ## Reproduce
 
 ```bash
 cd D:\qq苏瑾言大肥鱼\cbm
-python -m pytest                                  # 90 passed, 1 skipped locally without CBS
-CBS_REPO=<pinned-cbs-checkout> python -m pytest   # 91 passed
-python tools/check_b5.py --check-upstream         # STATUS=KNOWN_FAIL_SILENT; exit 0
+python -m pytest                                  # 91 passed (CBS present)
+python tools/check_b5.py --check-upstream         # STATUS=B5_MAYBE_FIXED; exit 0
+python tools/check_b5.py --check-upstream --declared-cbm
 python -m pytest tests/test_b3_cbp_rc.py          # 4 passed
 python -m pytest \
   tests/test_exit_codes.py::test_cross_repository_artifact_exits_2 \
@@ -125,8 +136,8 @@ python -m pytest \
   tests/test_exit_codes.py::test_same_artifact_repository_continues  # 3 passed
 ```
 
-The CBP commands used a read-only `git archive` of `5da8b87`; no CBP working
-tree was modified.
+The CBP runs used a read-only `git archive` of `855fed7`; no CBP working tree
+was modified.
 
 ## No publish
 

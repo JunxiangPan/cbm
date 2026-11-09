@@ -18,7 +18,7 @@ CBM v0.1.0 does not claim B1 or B2 as complete. B5 is fixed in CBS
 - State: the CBP side is now real: `cbp-1.2.0-cbm-manifest.json`, sha
   `bc5461e6…`, `package_id: "cbm"`, `producer_id: "cbp"`, `base`. The CBE
   side is still missing; there is no real CBE report with `package_id: "cbm"`.
-- CBM behavior: `validate_cbm` can load the CBP manifest and B3 fields pass,
+- CBM behavior: `load_report` can load the CBP manifest and B3 fields pass,
   but a full `verify` needs both reports; CBM must not synthesize the CBE side.
 - Evidence: `tests/test_b3_cbp_rc.py::test_b3_manifest_is_cbm_scoped_but_b2_is_blocked`.
 - B3 is **FIELD_LEVEL_COMPLETE**, not B2 complete.
@@ -35,5 +35,5 @@ CBM v0.1.0 does not claim B1 or B2 as complete. B5 is fixed in CBS
 ## No fake PASS
 
 - No tag, GitHub Release, PyPI upload, or `PASS` claim for B1/B2.
-- B3 is marked FIELD_LEVEL_COMPLETE; B4 FAIL_CLOSED_ONLY; B5 FIXED.
+- B3 is marked FIELD_LEVEL_COMPLETE; B4 FAIL_CLOSED_ONLY; B5 FIXED (`tests/test_known_fail_silent.py`).
 - `91 passed = 91 normal tests`.
