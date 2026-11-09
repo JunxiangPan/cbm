@@ -1,0 +1,17 @@
+{
+  "source_file": "cbp-action-release/quality-manifest.json",
+  "sha256": "53d80bb1a73b91b7205f4bc4b96817f7d83ae341164fb10ba1464372801d55ba",
+  "generated_by": "cbp-action dogfood job",
+  "package_id": "cbp",
+  "producer_id": "cbp",
+  "version": "v1.2.0",
+  "manifest_ci_commit_sha": "904494452458bde3bb4d2174abc2664413e41100",
+  "manifest_ci_run_id": "local-rc",
+  "body_hash_scope": "base",
+  "release_body_hash": "6cca0e560af9a1239b619bb6cb8d1d2b90e102e51cd058fbb83f00114da8a09b",
+  "artifact_hashes": {
+    "cbp_action-1.2.0-py3-none-any.whl": "40ae798a9e480383b7069f8a488225ea8ac806e8dd2cc9120abf9fdb5a76b3ba",
+    "cbp_action-1.2.0.tar.gz": "7a9b5db62229ecaf3073ed62c556080583f2a5c283b729a8297ded308423c2fb"
+  },
+  "note": "CBP 1.2.0 RC-era manifest, package_id=cbp. Use as field-level B3 evidence only; it is not a CBM-scoped or attested CBM manifest. Full B3 remains blocked by B1/B2."
+}

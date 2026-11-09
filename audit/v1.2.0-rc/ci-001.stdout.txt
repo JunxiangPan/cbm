@@ -1,0 +1,2 @@
+CBP-CI-001 TEST_ROOTS_IN_CI: PASS
+CBP_V12_RESULT=PASS rules=1 blocking_failed=false warning_failed=false

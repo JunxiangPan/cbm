@@ -62,6 +62,7 @@ def make_cbp(artifact_sha: str, **overrides: Any) -> dict[str, Any]:
         "artifact_hashes": {WHEEL_NAME: artifact_sha},
         "release_body_hash": "c" * 64,
         "body_hash_scope": "base",
+        "artifact_repository": "owner/repo",
         "evidence_sha256": "d" * 64,
     }
     data.update(overrides)
@@ -125,6 +126,8 @@ def verify_args(
         declared,
         "--upload-target",
         "github-release",
+        "--artifact-repository",
+        "owner/repo",
         "--output",
         str(report),
         "--body",

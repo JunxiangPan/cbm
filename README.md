@@ -20,7 +20,7 @@ self-listed manifest. The contract identity proposal in
 
 ## Current status: five hard blockers
 
-CBM v0.1.0 is a **skeleton**. It has **84 offline/static tests passing**. The
+CBM v0.1.0 is a **skeleton**. It has **91 offline/static tests passing**. The
 A-F live E2E matrix has **not** been executed (it needs a private test
 repository and scoped tokens); do not claim "CBM passed real upload E2E".
 
@@ -53,7 +53,14 @@ implemented:
 are v1.7 release-train blockers, not CBM documentation risks. Dependency order is
 B1 -> B2 -> B3+B4; B5 is independent. See `docs/V17_BLOCKERS.md`.
 
-Until all five hard blockers land, the 84 tests prove **logic on mock
+2026-11-09 status: **B3 PARTIAL** (real CBP 1.2.0 RC-era manifest base scope
+accepted; missing/full exit 2; the manifest is `package_id: "cbp"`, so full B3
+stays blocked by B1/B2). **B4 FAIL_CLOSED_ONLY** (cross/missing repository exits
+2; same repository continues; the train is not unified). **B1/B2/B5 remain
+blocked.** No tag/release. Evidence: `audit/v1.2.0-rc/` and
+`docs/V17_BLOCKERS.md`.
+
+Until all five hard blockers land, the 91 tests prove **logic on mock
 fixtures**, not real-data consumption. See `docs/CONTRACT_PROPOSAL_5.1.md`.
 
 ### Fail-silent risk: CBS body generator
@@ -211,7 +218,7 @@ the SHA-256 of the canonical JSON of the report without that field.
 python -m pytest
 ```
 
-**84 tests pass**: exit-code mapping, gate-before-upload (including a mock
+**91 tests pass**: exit-code mapping, gate-before-upload (including a mock
 uploader that records calls), NOT_UPLOADED body rendering, hashes, workflow
 static audit, schema/report lockstep, and a mock end-to-end
 verify/upload/finalize flow. These are offline/static tests, not real E2E.
@@ -224,8 +231,8 @@ be imported or built it fails with
 `FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE`. Update it to assert the fixed
 behavior when CBS implements `docs/CBS_BODY_REQUIREMENT.md`.
 
-**84 passed = 83 normal tests + 1 `KNOWN_FAIL_SILENT` canary.** The canary
-asserts that the B5 defect exists; it does not assert that B5 is fixed. 84
+**91 passed = 90 normal tests + 1 `KNOWN_FAIL_SILENT` canary.** The canary
+asserts that the B5 defect exists; it does not assert that B5 is fixed. 91
 passed does not mean all functions are correct.
 
 Probe CLI:

@@ -103,6 +103,7 @@ def evaluate(
     declared_attached: bool,
     wheel_name: str | None = None,
     artifact_sha256: str | None = None,
+    expected_artifact_repository: str | None = None,
 ) -> Evaluation:
     """Return the CBM gate decision or raise a typed :class:`CbmError`."""
     # Identity is checked whenever both reports are supplied, even when the
@@ -140,6 +141,18 @@ def evaluate(
             "declared_attached=true but the CBP quality manifest is missing",
             reason=Reason.MISSING_CBP_REPORT,
         )
+
+    # B4: one artifact repository.  A consumer must not accept a manifest that
+    # names a different repository.  This is an input/precondition failure
+    # (exit 2), not a PASS and not a soft warning.
+    if expected_artifact_repository is not None:
+        actual_repository = cbp.data.get("artifact_repository")
+        if not isinstance(actual_repository, str) or actual_repository != expected_artifact_repository:
+            raise InputError(
+                f"CBP artifact_repository={actual_repository!r} expected "
+                f"{expected_artifact_repository!r} (cross-repository artifact)",
+                reason=Reason.ARTIFACT_REPOSITORY_MISMATCH,
+            )
 
     # Exit-code propagation.  A real FAIL wins over an infra SKIP so the
     # failure is not hidden; both are listed in the body.

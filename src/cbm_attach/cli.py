@@ -247,6 +247,9 @@ def _report_dict(ctx: ReportContext) -> dict[str, Any]:
         "cbp_body_hash_scope": (
             ctx.cbp.data.get("body_hash_scope") if ctx.cbp is not None else None
         ),
+        "cbp_artifact_repository": (
+            ctx.cbp.data.get("artifact_repository") if ctx.cbp is not None else None
+        ),
         "upload_status": ctx.upload_status,
         "reason": ctx.reason,
         "reason_detail": ctx.reason_detail,
@@ -333,6 +336,9 @@ def _verify(args: argparse.Namespace) -> int:
             args.declared_attached, "declared_attached", required=True
         )
         ctx.upload_target = _parse_target(args.upload_target, required=True)
+        expected_artifact_repository = _parse_repo(
+            args.artifact_repository, required=ctx.declared_attached
+        )
         ctx.build_once_run_id = args.build_once_run_id or None
         ctx.ci_commit_sha = _parse_ci_commit(args.ci_commit_sha)
 
@@ -365,6 +371,7 @@ def _verify(args: argparse.Namespace) -> int:
             declared_attached=ctx.declared_attached,
             wheel_name=artifact.name if artifact is not None else None,
             artifact_sha256=artifact.sha256 if artifact is not None else None,
+            expected_artifact_repository=expected_artifact_repository,
         )
         ctx.cbm_gate_status = evaluation.cbm_gate_status
         ctx.upload_status = evaluation.upload_status

@@ -16,6 +16,7 @@
     "cbp_report_hash",
     "cbp_release_body_hash",
     "cbp_body_hash_scope",
+    "cbp_artifact_repository",
     "upload_status",
     "reason",
     "reason_detail",
@@ -142,7 +143,8 @@
         "UPLOADED_VERIFIED",
         "MISSING_RELEASE_BODY_HASH",
         "MISSING_BODY_HASH_SCOPE",
-        "BODY_HASH_SCOPE_UNSUPPORTED"
+        "BODY_HASH_SCOPE_UNSUPPORTED",
+        "ARTIFACT_REPOSITORY_MISMATCH"
       ]
     },
     "reason_detail": {
@@ -241,6 +243,12 @@
       "enum": [
         "base",
         null
+      ]
+    },
+    "cbp_artifact_repository": {
+      "type": [
+        "string",
+        "null"
       ]
     }
   },

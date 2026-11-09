@@ -439,3 +439,44 @@ def test_cbs_report_is_not_reused(tmp_path: Path) -> None:
     assert decision["decision"] == "NO_UPLOAD"
     assert report["cbm_gate_status"] == "FAIL"
     assert report["reason"] == "REPORT_IDENTITY_MISMATCH"
+
+
+def test_cross_repository_artifact_exits_2(tmp_path: Path) -> None:
+    root, _, digest = make_artifact(tmp_path)
+    code, report, _, _ = _run(
+        tmp_path,
+        cbe=make_cbe(),
+        cbp=make_cbp(digest, artifact_repository="other/repo"),
+        artifact_root=root,
+    )
+    assert code == 2
+    assert report["cbm_gate_status"] == "PRECONDITION_FAIL"
+    assert report["reason"] == "ARTIFACT_REPOSITORY_MISMATCH"
+
+
+def test_missing_artifact_repository_exits_2(tmp_path: Path) -> None:
+    root, _, digest = make_artifact(tmp_path)
+    cbp = make_cbp(digest)
+    cbp.pop("artifact_repository")
+    code, report, _, _ = _run(
+        tmp_path,
+        cbe=make_cbe(),
+        cbp=cbp,
+        artifact_root=root,
+    )
+    assert code == 2
+    assert report["reason"] == "ARTIFACT_REPOSITORY_MISMATCH"
+
+
+def test_same_artifact_repository_continues(tmp_path: Path) -> None:
+    root, _, digest = make_artifact(tmp_path)
+    code, report, _, decision = _run(
+        tmp_path,
+        cbe=make_cbe(),
+        cbp=make_cbp(digest),
+        artifact_root=root,
+    )
+    assert code == 0
+    assert decision["decision"] == "UPLOAD"
+    assert report["reason"] == "UPLOAD_PENDING"
+    assert report["cbp_artifact_repository"] == "owner/repo"

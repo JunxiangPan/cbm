@@ -1,0 +1,22 @@
+{
+  "schema": "cbp-v12-rule-report/v1",
+  "rules": [
+    {
+      "id": "CBP-CI-001",
+      "name": "TEST_ROOTS_IN_CI",
+      "severity": "blocking",
+      "status": "PASS",
+      "findings": [],
+      "waived": [],
+      "baselined": []
+    }
+  ],
+  "summary": {
+    "PASS": 1,
+    "FAIL": 0,
+    "WARN": 0,
+    "blocking_failed": false,
+    "warning_failed": false
+  },
+  "expired_entries": []
+}

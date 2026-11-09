@@ -13,6 +13,17 @@ risks. CBM cannot close these inside its own repository.
 | B4 | `artifact_repository` is not unified: CBE/CBP/CBS artifacts live in separate repositories | CBS orchestration + CBE/CBP | exit 2 `MISSING_BUILD_ONCE_ARTIFACT` / `MISSING_CBE_REPORT` / `MISSING_CBP_REPORT` |
 | B5 | CBS body generator writes `- none` when the CBM report is completely missing | CBS | fail-silent: CBM is invisible instead of `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT` |
 
+## 2026-11-09 partial progress
+
+| ID | Status | Evidence / limit |
+| --- | --- | --- |
+| B3 | **PARTIAL** | Real CBP 1.2.0 RC-era manifest with `body_hash_scope: "base"` is accepted; missing/full exit 2. The manifest is `package_id: "cbp"`, not a CBM-scoped/attested CBM manifest, so full B3 stays blocked by B1/B2. |
+| B4 | **FAIL_CLOSED_ONLY** | Cross-repository and missing `artifact_repository` exit 2 `ARTIFACT_REPOSITORY_MISMATCH`; same repository continues. CBE/CBS are not unified, so B4 is not complete. |
+| B1/B2/B5 | **BLOCKED** | §5.1 absent; no CBM-scoped report; CBS body generator still resolves missing CBM to `- none` (KNOWN_FAIL_SILENT canary). |
+
+No tag, release, or PyPI publish was made. The audit package is
+`audit/v1.2.0-rc/`.
+
 ## Dependency order
 
 They are not parallel switches:
@@ -102,7 +113,7 @@ Do not change the assertion back to `- none`.
         not "- none"; exact phrase when the train claims CBM attached
 ```
 
-Until all five are checked, CBM's **84 passed = 83 normal tests + 1
+Until all five are checked, CBM's **91 passed = 90 normal tests + 1
 KNOWN_FAIL_SILENT canary** prove logic on fixtures, not real-data readiness.
 The canary asserts the B5 defect exists, not that B5 is fixed. A–F live E2E
 remains unexecuted.

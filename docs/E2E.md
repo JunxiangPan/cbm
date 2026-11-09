@@ -6,7 +6,7 @@ Run everything with:
 python -m pytest
 ```
 
-**Status: 84 offline/static tests pass; A-F live E2E has not been executed.**
+**Status: 91 offline/static tests pass; A-F live E2E has not been executed.**
 The GitHub Actions workflow is statically audited, not executed; the live path
 (real `gh` artifact download, release upload, digest re-read) is the next
 acceptance step and must use a private test repository and a draft release,
@@ -128,7 +128,7 @@ fail-closed behavior.
 | G-01 | CBS body generator currently hides a completely missing CBM (`- none`, no `CBM`, no `EVIDENCE_ABSENT`); marked `KNOWN_FAIL_SILENT` | `test_known_fail_silent.py::test_known_fail_silent_cbs_body_omits_missing_cbm` |
 
 G-01 is green while the defect exists; it is a canary, not an acceptance.
-**84 passed = 83 normal tests + 1 canary; 84 passed does not mean all functions
+**91 passed = 90 normal tests + 1 canary; 91 passed does not mean all functions
 are correct.** When CBS implements `docs/CBS_BODY_REQUIREMENT.md`, the CLI
 prints `B5_MAYBE_FIXED` and the pytest canary fails; flip G-01 to assert
 `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT` and remove the marker. Missing CBS
