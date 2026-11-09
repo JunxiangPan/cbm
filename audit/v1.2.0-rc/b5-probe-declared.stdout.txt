@@ -1,5 +1,5 @@
 STATUS=B5_MAYBE_FIXED
-SOURCE=D:\qqËÕèªÑÔ´ó·ÊÓã\public-release\tools\release_body_v17.py
+SOURCE=D:\qqè‹ç‘¾è¨€å¤§è‚¥é±¼\public-release\tools\release_body_v17.py
 B5_MAYBE_FIXED
 CBS no longer hides a missing CBM.
 Fixed behavior present: CBM: NOT_UPLOADED + EVIDENCE_ABSENT. The canary is flipped to assert this state.
