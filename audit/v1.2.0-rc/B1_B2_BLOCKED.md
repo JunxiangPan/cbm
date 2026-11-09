@@ -1,4 +1,4 @@
-# B1 active / B2 & B4 gate-verified / upload pending
+# B1 active / B2 & B4 uploaded and verified
 
 CBM v0.1.0 consumer status after CONTRACT v1.7.1 froze §5.1.
 
@@ -38,7 +38,8 @@ cbm_gate_status=NOT_UPLOADED
 decision=UPLOAD
 ```
 
-`NOT_UPLOADED` is not an upload PASS; no upload/tag/release was performed.
+CBM upload report: `cbm_gate_status=PASS`, `upload_status=UPLOADED_VERIFIED`.
+Release https://github.com/JunxiangPan/cbm/releases/tag/v0.1.0.
 
 ## B4 — GATE_VERIFIED
 
@@ -49,10 +50,11 @@ pass; cross/missing exit 2, same continues. CBE/CBS unification is not claimed.
 
 CBS `fa1740f` emits `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT`; canary flipped.
 
-## RC
+## Release
 
 `release/0.1.0/` contains the exact wheel/sdist, manifest, gate report, claims,
-F3 configs, BUILD_ONCE and CBE report. Upload pending; no tag/release/PyPI.
+F3 configs, BUILD_ONCE and CBE report. GitHub Release v0.1.0 is published;
+assets verified. No PyPI; CBS v1.7.0 tag unchanged.
 
 ## No fake PASS
 

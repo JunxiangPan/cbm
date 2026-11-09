@@ -1,0 +1,50 @@
+{
+  "schema_version": "1",
+  "package_id": "cbm",
+  "version": "v0.1.0",
+  "tag": "v0.1.0",
+  "release_tag": "v0.1.0",
+  "cbm_gate_status": "PASS",
+  "exit_code": 0,
+  "cbe_report_hash": "6b4dc1efd8433535efe70d4de9337910aa537fbcc982ebba3a014284f27fc76e",
+  "cbp_report_hash": "0e0d37bd083afc0a5e868d654d4b8808f9f91c91f45dd20d4dbad029945e7a9b",
+  "cbp_release_body_hash": "97784c54872b32f89ac1f0ecb2300b51c1c625d31fd6ebb322940e8bb44963c2",
+  "cbp_body_hash_scope": "base",
+  "cbp_artifact_repository": {
+    "artifact_name": "cbm-build-once",
+    "repository": "JunxiangPan/cbm",
+    "run_id": "local-cbm-build-once"
+  },
+  "upload_status": "UPLOADED_VERIFIED",
+  "reason": "UPLOADED_VERIFIED",
+  "reason_detail": "uploaded asset digest verified",
+  "declared_attached": true,
+  "upstream_gate_status": {
+    "cbe": {
+      "gate_status": "PASS",
+      "exit_code": 0,
+      "skip_ratio": 0.0,
+      "blocking_skip": false,
+      "producer_id": "cbe",
+      "producer_version": null
+    },
+    "cbp": {
+      "gate_status": "PASS",
+      "exit_code": 0,
+      "skip_ratio": 0.0,
+      "blocking_skip": false,
+      "producer_id": "cbp",
+      "producer_version": null
+    }
+  },
+  "artifact_name": "cbm_attach-0.1.0-py3-none-any.whl",
+  "artifact_sha256": "72254704f5dc88688056fd3e4dac481edfa45f13e4bf5ae1aa8810cdaa48f45b",
+  "cbp_artifact_sha256": "72254704f5dc88688056fd3e4dac481edfa45f13e4bf5ae1aa8810cdaa48f45b",
+  "build_once_run_id": null,
+  "ci_commit_sha": null,
+  "upload_target": "github-release",
+  "uploaded_asset_url": "https://github.com/JunxiangPan/cbm/releases/download/v0.1.0/cbm_attach-0.1.0-py3-none-any.whl",
+  "uploaded_asset_digest": "72254704f5dc88688056fd3e4dac481edfa45f13e4bf5ae1aa8810cdaa48f45b",
+  "verified_at": "2026-11-09T23:50:00Z",
+  "evidence_sha256": "8ffc60d718d2988303cc451ffd442fa15394a5f59a2a2ac762a8cbb42867b65e"
+}

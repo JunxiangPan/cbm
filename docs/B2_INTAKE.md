@@ -1,9 +1,10 @@
 # B2 intake — real CBM-scoped CBE report
 
-Status: **GATE_VERIFIED.** Real CBE report accepted with `identity_errors=[]`;
-claims PASS 3/5; real F3 configs binary/docs/custom PASS. Fresh f605808 build
-wheel `72254704…` is permanently retained and bound to CBP manifest
-`0e0d37bd…`; CBM verify exit 0 / decision UPLOAD, upload pending. No tag/release.
+Status: **UPLOADED_VERIFIED.** Real CBE report accepted with `identity_errors=[]`;
+claims PASS 3/5; F3 configs binary/docs/custom PASS. Exact wheel
+`72254704…` is retained and bound to CBP manifest `0e0d37bd…`; CBM upload
+report `cbm_gate_status=PASS`, `upload_status=UPLOADED_VERIFIED`.
+GitHub Release v0.1.0 published; no PyPI; CBS v1.7.0 tag unchanged.
 
 ## Required inputs
 
@@ -60,7 +61,7 @@ CBP claims    PASS 3/5
 CBP F3        binary/docs/custom PASS via .cbp/config.json
 artifact     72254704… retained (fresh f605808 build)
 manifest     0e0d37bd… exact binding
-decision      UPLOAD (upload pending)
+decision      UPLOAD_APPROVED; upload_status UPLOADED_VERIFIED
 ```
 
 Evidence: `audit/v1.2.0-rc/cbe-report.json`,

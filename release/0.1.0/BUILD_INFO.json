@@ -6,10 +6,15 @@
   "wheel_sha256": "72254704f5dc88688056fd3e4dac481edfa45f13e4bf5ae1aa8810cdaa48f45b",
   "sdist_sha256": "6a7b6fe360b86e75a4c7bba0a2765f50e2195263735825e251ec91404927dd81",
   "cbm_gate_exit": 0,
-  "cbm_gate_status": "NOT_UPLOADED",
-  "decision": "UPLOAD",
-  "uploaded": false,
-  "tag_created": false,
-  "release_created": false,
-  "build_once": "BUILD_ONCE.json"
+  "cbm_gate_status": "PASS",
+  "decision": "UPLOAD_APPROVED",
+  "uploaded": true,
+  "tag_created": true,
+  "release_created": true,
+  "build_once": "BUILD_ONCE.json",
+  "upload_status": "UPLOADED_VERIFIED",
+  "release_tag": "v0.1.0",
+  "release_repository": "JunxiangPan/cbm",
+  "release_url": "https://github.com/JunxiangPan/cbm/releases/tag/v0.1.0",
+  "uploaded_asset_url": "https://github.com/JunxiangPan/cbm/releases/download/v0.1.0/cbm_attach-0.1.0-py3-none-any.whl"
 }

@@ -1,0 +1,15 @@
+{
+  "approved": true,
+  "scope": "sidecar attachment only",
+  "decision": "UPLOAD_APPROVED",
+  "wheel": "cbm_attach-0.1.0-py3-none-any.whl",
+  "wheel_sha256": "72254704f5dc88688056fd3e4dac481edfa45f13e4bf5ae1aa8810cdaa48f45b",
+  "sdist": "cbm_attach-0.1.0.tar.gz",
+  "sdist_sha256": "6a7b6fe360b86e75a4c7bba0a2765f50e2195263735825e251ec91404927dd81",
+  "cbp_manifest_sha256": "0e0d37bd083afc0a5e868d654d4b8808f9f91c91f45dd20d4dbad029945e7a9b",
+  "cbe_report_sha256": "6b4dc1efd8433535efe70d4de9337910aa537fbcc982ebba3a014284f27fc76e",
+  "no_rebuild": true,
+  "no_repack": true,
+  "no_pypi": true,
+  "no_cbs_tag_move": true
+}

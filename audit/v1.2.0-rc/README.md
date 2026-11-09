@@ -138,13 +138,13 @@ ci_commit_sha f605808a89d334b5458c38f92201583004b6fff0
 **superseded** and retained as history. B2 gate uses the exact artifact; no
 mixed hash.
 
-## B4 — GATE_VERIFIED
+## B4 — UPLOADED_VERIFIED
 
 Object `artifact_repository` matched `JunxiangPan/cbm`; 12 boundary tests pass
 (cross/missing exit 2, same continues). CBE/CBS repository unification is not
 claimed. Upload remains pending.
 
-## B1 CONTRACT_ACTIVE / B2 blocked
+## B1 CONTRACT_ACTIVE / B2 UPLOADED_VERIFIED
 
 See [`B1_B2_BLOCKED.md`](B1_B2_BLOCKED.md). No fake PASS:
 
@@ -153,16 +153,14 @@ See [`B1_B2_BLOCKED.md`](B1_B2_BLOCKED.md). No fake PASS:
   `producer_id: "cbe"/"cbp"`; old-field mixing exits 3
   `REPORT_IDENTITY_MISMATCH`. This is consumer-side active, not a full train
   PASS.
-- **B2 GATE_VERIFIED** — real CBE report `6b4dc1ef…` with
-  `identity_errors=[]`; claims PASS 3/5; real F3 configs make
-  binary/docs/custom PASS; exact artifact `72254704…` matches the CBP manifest
-  `0e0d37bd…`; CBM verify exit 0, `decision=UPLOAD`,
-  `cbm_gate_status=NOT_UPLOADED`. Upload pending; not an upload PASS.
-- `release/0.1.0/` contains exact wheel/sdist, manifest, gate report, claims,
-  F3 configs, BUILD_ONCE and CBE report. No tag/release/PyPI.
+- **B2 UPLOADED_VERIFIED** — real CBE report `6b4dc1ef…`, identity [];
+  claims PASS 3/5; binary/docs/custom PASS; exact wheel `72254704…` matches
+  manifest `0e0d37bd…`; CBM upload `cbm_gate_status=PASS`,
+  `upload_status=UPLOADED_VERIFIED`. Release:
+  https://github.com/JunxiangPan/cbm/releases/tag/v0.1.0
 - The synthetic fixture remains `not_upstream_evidence`; 4 readiness tests do
   not make B2 PASS.
-- B4 remains fail-closed only because the overall gate failed.
+- B4 is UPLOADED_VERIFIED for the exact artifact; CBE/CBS unification is not claimed.
 
 ## Reproduce
 

@@ -18,7 +18,7 @@ verifier accepts §11's basename `RELEASE_ASSETS.sha256` inventory and skips a
 self-listed manifest. The contract identity proposal in
 `docs/CONTRACT_PROPOSAL_5.1.md` is still an unapplied change-control input.
 
-## Current status: B1 contract active; B2/B4 gate-verified; B3 field-level; B5 fixed; upload pending
+## Current status: CBM 0.1.0 sidecar released; B2/B4 gate-verified; upload verified
 
 CBM v0.1.0 is a **skeleton**. It has **110 offline/static tests passing**. A-F
 live E2E is still not executed (private test repo + scoped tokens).
@@ -28,20 +28,19 @@ live E2E is still not executed (private test repo + scoped tokens).
 - **B1 CONTRACT_ACTIVE** — `contract-v1.7.1` / `209d75b4` freezes §5.1.
   Consumer tests cover `package_id: "cbm"` + `producer_id: "cbe"/"cbp"` and
   retain exit 3 `REPORT_IDENTITY_MISMATCH` for old-field mixing.
-- **B2 GATE_VERIFIED** — real CBE report `6b4dc1ef…`, `identity_errors=[]`;
-  claims PASS 3/5; real F3 configs binary/docs/custom PASS; exact wheel
-  `72254704…` matches CBP manifest `0e0d37bd…`; CBM verify exit 0,
-  `decision=UPLOAD`, `cbm_gate_status=NOT_UPLOADED`. Upload pending, not an
-  upload PASS. RC evidence: `release/0.1.0/`.
+- **B2 UPLOADED_VERIFIED** — real CBE report `6b4dc1ef…`, identity [];
+  claims PASS 3/5; exact wheel `72254704…` matches CBP manifest
+  `0e0d37bd…`; CBM upload `cbm_gate_status=PASS`,
+  `upload_status=UPLOADED_VERIFIED`. Release:
+  https://github.com/JunxiangPan/cbm/releases/tag/v0.1.0
 - **B3 FIELD_LEVEL_COMPLETE** — CBP 1.2.2 produced exact-artifact manifest
   `0e0d37bd…` (`schema_version: "1"`, object repo, base, PASS).
   `body_hash_scope`, `release_body_hash`, `artifact_hashes` and
   `evidence_sha256` are accepted; missing/full scope exits 2. This is
   field-level B3, not B2.
-- **B4 FAIL_CLOSED_ONLY** — CBP 1.2.2 `artifact_repository` object is parsed;
-  cross-repository and missing object exit 2 `ARTIFACT_REPOSITORY_MISMATCH`;
-  same repository (case-insensitive) continues. 8 boundary tests; CBE/CBS are
-  still not unified.
+- **B4 UPLOADED_VERIFIED** — CBP 1.2.2 object `artifact_repository` matches;
+  12 boundary tests; CBM gate/upload verified. CBE/CBS unification is not
+  claimed.
 - **B5 FIXED** — CBS v1.7.0-integration `fa1740f` (regression `tests/test_known_fail_silent.py`) renders
   `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT`; the canary is flipped to assert the
   fixed behavior.
@@ -247,5 +246,5 @@ The proposals are in
 [`docs/CONTRACT_PROPOSAL_5.1.md`](docs/CONTRACT_PROPOSAL_5.1.md); the full
 blocker list is [`docs/V17_BLOCKERS.md`](docs/V17_BLOCKERS.md). They are
 change-control inputs for the CBS/CBP owners; this repository does not edit the
-frozen contract. **Full CBM consumption still waits for B1/B2 (and B4 for the
-unified repository); B3 field-level and B5 are complete.**
+frozen contract. **CBM 0.1.0 sidecar upload is verified; B3 field-level and B5
+are complete; full product/A-F live E2E is not claimed.**

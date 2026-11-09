@@ -1,0 +1,2 @@
+CBM_UPLOAD cbm_gate_status=PASS upload_status=UPLOADED_VERIFIED asset=cbm_attach-0.1.0-py3-none-any.whl sha256=72254704f5dc88688056fd3e4dac481edfa45f13e4bf5ae1aa8810cdaa48f45b
+EXIT 0

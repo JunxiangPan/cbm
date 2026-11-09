@@ -1,8 +1,8 @@
 # v1.7 release-train blockers (CBM perspective)
 
-Status: **B1 contract active; B5 fixed; B3 field-level complete; B2 blocked;
-B4 fail-closed only.** No tag, release, or PyPI publish. CBM cannot close B2/B4
-inside its own repository.
+Status: **CBM 0.1.0 sidecar uploaded and verified; B1 contract active;
+B2/B4 gate-verified; B3 field-level complete; B5 fixed.** No PyPI; CBS v1.7.0
+tag unchanged.
 
 ## Blocker list
 
@@ -11,7 +11,7 @@ inside its own repository.
 | B1 | **CONTRACT_ACTIVE** | `contract-v1.7.1` / `209d75b4` freezes §5.1. Consumer tests accept `package_id=cbm` + `producer_id=cbe/cbp`; old-field mixing exits 3 `REPORT_IDENTITY_MISMATCH`. |
 | B2 | **BLOCKED** | Real CBE report `6b4dc1ef…` and `identity_errors=[]`; CBM verify exit 3 `BLOCKING_SKIP` (`claims` SKIPPED, F3); manifest wheel `02bf8400…` also mismatches rebuilt `65174c9b…`. No RC. |
 | B3 | **FIELD_LEVEL_COMPLETE** | CBP 1.2.2 produced exact-artifact manifest `0e0d37bd…` (`schema_version: "1"`, object repo): base, release hash, two artifacts, evidence. |
-| B4 | **FAIL_CLOSED_ONLY** | CBP 1.2.2 object `artifact_repository` is parsed; cross-repository and missing object exit 2 `ARTIFACT_REPOSITORY_MISMATCH`; same repository (case-insensitive) continues. 12 boundary tests; CBE/CBS are still not unified; overall gate failed, so no B4 PASS. |
+| B4 | **UPLOADED_VERIFIED** | Object repo matches; 12 boundary tests; CBM gate/upload verified. CBE/CBS unification not claimed. |
 | B5 | **FIXED** | CBS v1.7.0-integration `fa1740f` (`tests/test_known_fail_silent.py`) emits a visible `## CBM` section with `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT`; canary flipped. Historical `- none` behavior is gone. |
 
 ## Dependency order
@@ -36,7 +36,7 @@ B5 CBS body generator (independent; FIXED in fa1740f; tests/test_known_fail_sile
 | --- | --- | --- |
 | B3 field-level | B4 | exit 2 `ARTIFACT_REPOSITORY_MISMATCH` / `MISSING_*` |
 | B4 | B2 | exit 2/3 `REPORT_IDENTITY_MISMATCH` or missing CBE report |
-| B3 + B4 | B2 | still blocked by identity; cannot claim full PASS |
+| B3 + B4 | B2 | now gate-verified for the exact sidecar artifact; upload verified; no full-product claim |
 
 ## B5 is fixed (historical requirement)
 
