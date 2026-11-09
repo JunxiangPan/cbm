@@ -76,5 +76,11 @@
     "commit": "a974011",
     "status": "success",
     "tests": "110 passed on ubuntu-latest and windows-latest (claims handoff/artifact blocker)"
+  },
+  {
+    "run": 42665717371,
+    "commit": "f414b78",
+    "status": "success",
+    "tests": "110 passed on ubuntu-latest and windows-latest (real F3 config; artifact still blocked)"
   }
 ]
