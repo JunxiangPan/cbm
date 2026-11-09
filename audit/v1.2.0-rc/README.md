@@ -11,7 +11,7 @@ CBM PASS claim was made. No CBS/CBE/CBP/CBC repository was modified.
 | CBM branch | `main` |
 | CBM manifest target commit | `f71d3b5` (b41798 manifest) |
 | CBE-validated CBM source | `f605808` (rebuilt wheel 65174c9b…) |
-| CBM audit commit | `1bbe892` |
+| CBM audit commit | `a974011` |
 | CBM tag / release | none |
 | CBP 1.2.2 release | `v1.2.2` / `d4bfefb` |
 | CBP 1.2.2 publish state | released (tag, GitHub Release, PyPI) |
@@ -35,6 +35,7 @@ CBM PASS claim was made. No CBS/CBE/CBP/CBC repository was modified.
 | [42647681396](https://github.com/JunxiangPan/cbm/actions/runs/42647681396) | `8b5c52b` | success: **109/109 on ubuntu-latest and windows-latest** (B4 fail-closed + B2 object readiness) |
 | [42656004220](https://github.com/JunxiangPan/cbm/actions/runs/42656004220) | `304d4e7` | success: **110/110 on ubuntu-latest and windows-latest** (different-owner object cross) |
 | [42660486530](https://github.com/JunxiangPan/cbm/actions/runs/42660486530) | `1bbe892` | success: **110/110 on ubuntu-latest and windows-latest** (B2 real-report gate failure evidence) |
+| [42663439528](https://github.com/JunxiangPan/cbm/actions/runs/42663439528) | `a974011` | success: **110/110 on ubuntu-latest and windows-latest** (claims handoff/artifact blocker) |
 
 **110 passed = 110 normal tests. No `KNOWN_FAIL_SILENT` canary remains.** The B5
 canary was flipped to assert the fixed behavior.
