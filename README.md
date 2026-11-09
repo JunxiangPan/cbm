@@ -18,9 +18,9 @@ verifier accepts §11's basename `RELEASE_ASSETS.sha256` inventory and skips a
 self-listed manifest. The contract identity proposal in
 `docs/CONTRACT_PROPOSAL_5.1.md` is still an unapplied change-control input.
 
-## Current status: B5 fixed; B3 field-level complete; B1/B2/B4 open
+## Current status: B1 contract active; B5 fixed; B3 field-level; B2/B4 open
 
-CBM v0.1.0 is a **skeleton**. It has **105 offline/static tests passing**. A-F
+CBM v0.1.0 is a **skeleton**. It has **108 offline/static tests passing**. A-F
 live E2E is still not executed (private test repo + scoped tokens).
 
 2026-11-09 status:
@@ -203,7 +203,7 @@ the SHA-256 of the canonical JSON of the report without that field.
 python -m pytest
 ```
 
-**105 tests pass**: exit-code mapping, gate-before-upload (including a mock
+**108 tests pass**: exit-code mapping, gate-before-upload (including a mock
 uploader that records calls), NOT_UPLOADED body rendering, hashes, workflow
 static audit, schema/report lockstep, and a mock end-to-end
 verify/upload/finalize flow. These are offline/static tests, not real E2E.
@@ -215,7 +215,7 @@ probe's missing/import/unexpected modes; a missing CBS checkout skips with
 `SKIP_REASON=CBS_BODY_GENERATOR_NOT_FOUND`, and an unimportable file fails with
 `FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE`.
 
-**105 passed = 105 normal tests; no `KNOWN_FAIL_SILENT` canary remains.** Do not
+**108 passed = 108 normal tests; no `KNOWN_FAIL_SILENT` canary remains.** Do not
 reintroduce the old `- none` assertion as an accepted state.
 
 Probe CLI:

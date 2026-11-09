@@ -6,7 +6,7 @@ Run everything with:
 python -m pytest
 ```
 
-**Status: 105 offline/static tests pass; A-F live E2E has not been executed.**
+**Status: 108 offline/static tests pass; A-F live E2E has not been executed.**
 B5 is fixed (CBS `fa1740f`, canary flipped); B3 is field-level complete (CBP
 1.2.0 RC `855fed7`, manifest `bc5461e6…`); B1/B2 remain blocked; B4 is
 fail-closed only. Full CBM consumption still waits for B1/B2 (and B4).
@@ -132,7 +132,7 @@ fail-closed behavior.
 
 G-01 asserts the fixed behavior and must stay green. `tools/check_b5.py
 --check-upstream` should print `STATUS=B5_MAYBE_FIXED`; a `KNOWN_FAIL_SILENT`
-result is a regression and fails the test. **105 passed = 105 normal tests; no
+result is a regression and fails the test. **108 passed = 108 normal tests; no
 KNOWN_FAIL_SILENT canary remains.** Missing CBS checkout skips with
 `SKIP_REASON=CBS_BODY_GENERATOR_NOT_FOUND`; an unimportable CBS file fails with
 `FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE`.

@@ -30,4 +30,4 @@ flipped and no `KNOWN_FAIL_SILENT` marker remains.
 
 - No tag, GitHub Release, or PyPI upload.
 - B2 remains blocked; B4 remains fail-closed only.
-- `105 passed = 105 normal tests` (with the pinned CBS fixture).
+- `108 passed = 108 normal tests` (with the pinned CBS fixture).

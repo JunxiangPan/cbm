@@ -3,8 +3,8 @@
   "cbp_rc_code_commit": "d4bfefb",
   "manifest_target_cbm_head": "45c49bc",
   "test_suite": {
-    "passed": 105,
-    "normal": 105,
+    "passed": 108,
+    "normal": 108,
     "known_fail_silent_canary": 0
   },
   "b3": {
@@ -67,7 +67,10 @@
       "tests/test_exit_codes.py::test_same_repository_case_insensitive_continues",
       "tests/test_exit_codes.py::test_object_artifact_repository_same_continues",
       "tests/test_exit_codes.py::test_object_artifact_repository_cross_exits_2",
-      "tests/test_exit_codes.py::test_object_artifact_repository_missing_repository_exits_2"
+      "tests/test_exit_codes.py::test_object_artifact_repository_missing_repository_exits_2",
+      "tests/test_exit_codes.py::test_object_artifact_repository_same_exact_continues",
+      "tests/test_exit_codes.py::test_object_artifact_repository_missing_field_exits_2",
+      "tests/test_exit_codes.py::test_object_artifact_repository_empty_repository_exits_2"
     ],
     "limit": "CBE/CBS artifact repositories are not unified; B4 remains fail-closed only."
   },

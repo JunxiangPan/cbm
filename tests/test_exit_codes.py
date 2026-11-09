@@ -552,3 +552,43 @@ def test_object_artifact_repository_missing_repository_exits_2(tmp_path: Path) -
     )
     assert code == 2
     assert report["reason"] == "ARTIFACT_REPOSITORY_MISMATCH"
+
+
+def test_object_artifact_repository_same_exact_continues(tmp_path: Path) -> None:
+    root, _, digest = make_artifact(tmp_path)
+    code, report, _, decision = _run(
+        tmp_path,
+        cbe=make_cbe(),
+        cbp=make_cbp(digest, artifact_repository=_repo_object("owner/repo")),
+        artifact_root=root,
+    )
+    assert code == 0
+    assert decision["decision"] == "UPLOAD"
+    assert report["reason"] == "UPLOAD_PENDING"
+    assert report["cbp_artifact_repository"] == _repo_object("owner/repo")
+
+
+def test_object_artifact_repository_missing_field_exits_2(tmp_path: Path) -> None:
+    root, _, digest = make_artifact(tmp_path)
+    cbp = make_cbp(digest)
+    cbp.pop("artifact_repository")
+    code, report, _, _ = _run(
+        tmp_path,
+        cbe=make_cbe(),
+        cbp=cbp,
+        artifact_root=root,
+    )
+    assert code == 2
+    assert report["reason"] == "ARTIFACT_REPOSITORY_MISMATCH"
+
+
+def test_object_artifact_repository_empty_repository_exits_2(tmp_path: Path) -> None:
+    root, _, digest = make_artifact(tmp_path)
+    code, report, _, _ = _run(
+        tmp_path,
+        cbe=make_cbe(),
+        cbp=make_cbp(digest, artifact_repository=_repo_object("")),
+        artifact_root=root,
+    )
+    assert code == 2
+    assert report["reason"] == "ARTIFACT_REPOSITORY_MISMATCH"

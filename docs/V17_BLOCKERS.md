@@ -1,17 +1,17 @@
 # v1.7 release-train blockers (CBM perspective)
 
-Status: **B5 fixed; B3 field-level complete; B1/B2 blocked; B4 fail-closed only.**
-No tag, release, or PyPI publish. CBM cannot close B1/B2/B4 inside its own
-repository.
+Status: **B1 contract active; B5 fixed; B3 field-level complete; B2 blocked;
+B4 fail-closed only.** No tag, release, or PyPI publish. CBM cannot close B2/B4
+inside its own repository.
 
 ## Blocker list
 
 | ID | Status | Blocker / evidence |
 | --- | --- | --- |
 | B1 | **CONTRACT_ACTIVE** | `contract-v1.7.1` / `209d75b4` freezes §5.1. Consumer tests accept `package_id=cbm` + `producer_id=cbe/cbp`; old-field mixing exits 3 `REPORT_IDENTITY_MISMATCH`. |
-| B2 | **BLOCKED** | No real CBE report with `package_id: "cbm"`. The CBP side now exists (`bc5461e6…`); a synthetic CBE fixture/schema readiness test exists but is marked `not_upstream_evidence`. Full identity needs both real sides. |
-| B3 | **FIELD_LEVEL_COMPLETE** | CBP 1.2.0 RC `855fed7` produced a CBM-scoped manifest: `body_hash_scope: "base"`, `release_body_hash`, two `artifact_hashes`, `evidence_sha256`. Missing/full scope exits 2. This is not B2. |
-| B4 | **FAIL_CLOSED_ONLY** | CBP 1.2.2 object `artifact_repository` is parsed; cross-repository and missing object exit 2 `ARTIFACT_REPOSITORY_MISMATCH`; same repository (case-insensitive) continues. 8 boundary tests; CBE/CBS are still not unified. |
+| B2 | **BLOCKED** | No real CBE report with `package_id: "cbm"`. The CBP side now exists (`b41798f0…`, CBP 1.2.2 object manifest); a synthetic CBE fixture/schema readiness test exists but is marked `not_upstream_evidence`. Full identity needs both real sides. |
+| B3 | **FIELD_LEVEL_COMPLETE** | CBP 1.2.2 `d4bfefb` produced CBM manifest `b41798f0…` (`schema_version: "1"`, object `artifact_repository`): `body_hash_scope: "base"`, `release_body_hash`, two `artifact_hashes`, `evidence_sha256`. Missing/full scope exits 2. This is not B2. |
+| B4 | **FAIL_CLOSED_ONLY** | CBP 1.2.2 object `artifact_repository` is parsed; cross-repository and missing object exit 2 `ARTIFACT_REPOSITORY_MISMATCH`; same repository (case-insensitive) continues. 11 boundary tests; CBE/CBS are still not unified. |
 | B5 | **FIXED** | CBS v1.7.0-integration `fa1740f` (`tests/test_known_fail_silent.py`) emits a visible `## CBM` section with `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT`; canary flipped. Historical `- none` behavior is gone. |
 
 ## Dependency order
@@ -77,5 +77,5 @@ Probe maintenance:
 [x] B5  CBS body generator: missing CBM -> CBM: NOT_UPLOADED + EVIDENCE_ABSENT
 ```
 
-**105 tests pass (105 normal; no KNOWN_FAIL_SILENT canary).** A-F live E2E is
+**108 tests pass (108 normal; no KNOWN_FAIL_SILENT canary).** A-F live E2E is
 still not executed. The audit package is `audit/v1.2.0-rc/`.
