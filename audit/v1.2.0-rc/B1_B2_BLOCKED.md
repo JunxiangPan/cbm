@@ -20,6 +20,8 @@ CBM v0.1.0 consumer status after CONTRACT v1.7.1 froze §5.1.
   `cbe-cbm-scoped.synthetic.json`, explicitly marked
   `not_upstream_evidence`. It proves schema/identity readiness only.
 - Do not claim B2 PASS; no synthetic CBE report is presented as real evidence.
+- Intake checklist: `docs/B2_INTAKE.md` (real CBE report + CBP 1.2.2 manifest,
+  then human-approved CBM 0.1.0 RC).
 
 ## B5 — fixed
 

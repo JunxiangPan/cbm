@@ -31,6 +31,7 @@ live E2E is still not executed (private test repo + scoped tokens).
 - **B2 BLOCKED** — there is no real CBE report with `package_id: "cbm"`; the
   CBP side now exists, but full identity needs both. A synthetic fixture/schema
   readiness test exists (`not_upstream_evidence`); it is not B2 evidence.
+  Intake: `docs/B2_INTAKE.md`.
 - **B3 FIELD_LEVEL_COMPLETE** — CBP 1.2.0 RC `855fed7` produced a CBM-scoped
   manifest `bc5461e6…` (`package_id: "cbm"`, `producer_id: "cbp"`, `base`).
   `body_hash_scope`, `release_body_hash`, `artifact_hashes` and

@@ -171,7 +171,8 @@ See [`B1_B2_BLOCKED.md`](B1_B2_BLOCKED.md). No fake PASS:
   fixture (`tests/fixtures/cbe-cbm-scoped.synthetic.json`) is explicitly marked
   `not_upstream_evidence`; it validates the schema/identity path together with
   the real CBP 1.2.2 CBM manifest. There is still no real CBE report with
-  `package_id: "cbm"`, so B2 remains blocked.
+  `package_id: "cbm"`, so B2 remains blocked. Intake checklist:
+  `docs/B2_INTAKE.md`.
 - B4 remains fail-closed only.
 
 ## Reproduce
