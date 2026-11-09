@@ -46,5 +46,11 @@
     "commit": "22831d6",
     "status": "success",
     "tests": "105 passed on ubuntu-latest and windows-latest (CBP 1.2.2 object manifest)"
+  },
+  {
+    "run": 42645029320,
+    "commit": "0f84aae",
+    "status": "success",
+    "tests": "108 passed on ubuntu-latest and windows-latest (object B4 boundaries)"
   }
 ]
