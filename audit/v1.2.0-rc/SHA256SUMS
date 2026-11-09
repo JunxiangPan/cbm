@@ -1,6 +1,9 @@
-467e151ae1846a2e4c2eb4beb483bf549b4d2ea69f30ed6b58feb02559e60745 *./B1_B2_BLOCKED.md
-68b913ee7360adef178bc2eaf81d19e62ec3ce47934e2fedee0605581aff7155 *./README.md
-7587a5a992e4788da4335a2772c89614dc90339107b0cffa9d9e05c0022d9d5f *./b3-b4-results.json
+ad8515e06039b63f9696931055e39de25da83b08de0242d06669018f0d941370 *./B1_B2_BLOCKED.md
+e10a02d7136e861805b92edf7def2a14398fe9a98febfaa93a8b85a884ba163e *./README.md
+5a722156f0fcc83acab91b50755b838da48f0fa7c88ca889cf212c3d1ecfa4fb *./b2-gate-failure-decision.json
+43455e7a7af587b062e01ee6ee7146b8080d493814c888ac3ed8becaca0518d8 *./b2-gate-failure.json
+74815990c8d74eabee0b41deca5fc6b1cd9e797f20c51eef28e2f55f84130449 *./b2-gate-failure.stdout.txt
+77352f2a34de15f97a8b9667cc3f65f1d6c3b513ece11d3dcf246d148801046b *./b3-b4-results.json
 5ba2d9629f3a413dd125c9b4444b15b4e6343386c2b9d7c9fef55300eb541f8e *./b3-tests.stdout.txt
 5b581b8146eb94de21ac38ae754c4decbb7c1318ce5c8295dbbc36c62bd0ed63 *./b4-tests.stdout.txt
 7ab50d5c63e185572d81dda0d6f2867e99246815b427c4cf18c823adf4091a70 *./b5-fixed-body-declared.md
@@ -8,6 +11,7 @@ e89962cf15f21160297bb48d2a54e02599a25c2e7fade7b2f31d81e197797b0d *./b5-fixed-bod
 b0a68cfa1d07e672cc8dce2fe45dbbfa6c61683d28870acf528938768b9d1155 *./b5-probe-declared.stdout.txt
 b0a68cfa1d07e672cc8dce2fe45dbbfa6c61683d28870acf528938768b9d1155 *./b5-probe.stdout.txt
 1522ee6acc841f68d4e2de11068e29ffb90f52c410ef5dd8697890b792af9d46 *./b5-tests.stdout.txt
+6b4dc1efd8433535efe70d4de9337910aa537fbcc982ebba3a014284f27fc76e *./cbe-report.json
 97784c54872b32f89ac1f0ecb2300b51c1c625d31fd6ebb322940e8bb44963c2 *./cbm-base-body.md
 6da7e848fa7214af49ceb9f1a165f048cd1c8c168be7eea4d2d4022addfe8400 *./cbm-quality-manifest-1.2.0.json
 ff48e4b70374629e6b49f7fb96ae4ae9590c32ed76795afe84cf44d07beab129 *./cbm-quality-manifest-1.2.0.meta.json

@@ -18,7 +18,7 @@ verifier accepts §11's basename `RELEASE_ASSETS.sha256` inventory and skips a
 self-listed manifest. The contract identity proposal in
 `docs/CONTRACT_PROPOSAL_5.1.md` is still an unapplied change-control input.
 
-## Current status: B1 contract active; B5 fixed; B3 field-level; B2/B4 open
+## Current status: B1 contract active; B5 fixed; B3 field-level; B2/B4 blocked
 
 CBM v0.1.0 is a **skeleton**. It has **110 offline/static tests passing**. A-F
 live E2E is still not executed (private test repo + scoped tokens).
@@ -28,10 +28,11 @@ live E2E is still not executed (private test repo + scoped tokens).
 - **B1 CONTRACT_ACTIVE** — `contract-v1.7.1` / `209d75b4` freezes §5.1.
   Consumer tests cover `package_id: "cbm"` + `producer_id: "cbe"/"cbp"` and
   retain exit 3 `REPORT_IDENTITY_MISMATCH` for old-field mixing.
-- **B2 BLOCKED** — there is no real CBE report with `package_id: "cbm"`; the
-  CBP side now exists, but full identity needs both. A synthetic fixture/schema
-  readiness test exists (`not_upstream_evidence`); it is not B2 evidence.
-  Intake: `docs/B2_INTAKE.md`.
+- **B2 BLOCKED** — the real CBE report `6b4dc1ef…` (`package_id=cbm`,
+  `producer_id=cbe`, v0.1.0 PASS) was received and `identity_errors=[]`, but CBM
+  verify failed `BLOCKING_SKIP` (`claims` SKIPPED, F3); the manifest wheel
+  `02bf8400…` also does not match the rebuilt wheel `65174c9b…`. No B2 PASS / RC.
+  Evidence: `audit/v1.2.0-rc/`; intake: `docs/B2_INTAKE.md`.
 - **B3 FIELD_LEVEL_COMPLETE** — CBP 1.2.0 RC `855fed7` produced a CBM-scoped
   manifest `bc5461e6…` (`package_id: "cbm"`, `producer_id: "cbp"`, `base`).
   `body_hash_scope`, `release_body_hash`, `artifact_hashes` and

@@ -8,8 +8,8 @@ python -m pytest
 
 **Status: 110 offline/static tests pass; A-F live E2E has not been executed.**
 B5 is fixed (CBS `fa1740f`, canary flipped); B3 is field-level complete (CBP
-1.2.0 RC `855fed7`, manifest `bc5461e6…`); B1/B2 remain blocked; B4 is
-fail-closed only. Full CBM consumption still waits for B1/B2 (and B4).
+1.2.2, manifest `b41798f0…`); B2 received a real CBE report but CBM gate fails
+(F3 claims + artifact mismatch); B4 is fail-closed only. No upload/RC.
 
 The GitHub Actions workflow is statically audited, not executed; the live path
 (real `gh` artifact download, release upload, digest re-read) is the next
@@ -51,7 +51,7 @@ never a production tag.
 | B-12 | CBP blocking gate SKIPPED | `test_exit_codes.py::test_cbp_blocking_gate_skipped_exits_3` |
 | B-13 | CBS report is not reused (`package_id: "cbs"`) | `test_exit_codes.py::test_cbs_report_is_not_reused` |
 | B-14 | B1 consumer readiness: package_id=cbm + producer_id=cbe/cbp; old-field mixing exits 3 | `test_b1_identity.py` (6 tests) |
-| B-15 | B2 synthetic CBM-scoped CBE schema/identity readiness; marked not_upstream_evidence | `test_b2_readiness.py` (3 tests) |
+| B-15 | B2 real CBE report accepted but CBM gate failed (claims F3/artifact mismatch); synthetic readiness marked not_upstream_evidence | `test_b2_readiness.py` (4 tests) |
 | B-16 | B4 cross-repository different repo exits 2 | `test_exit_codes.py::test_cross_repository_different_repo_exits_2` |
 | B-17 | B4 same repository case-insensitive continues | `test_exit_codes.py::test_same_repository_case_insensitive_continues` |
 

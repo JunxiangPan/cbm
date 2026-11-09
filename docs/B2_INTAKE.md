@@ -1,11 +1,14 @@
 # B2 intake — real CBM-scoped CBE report
 
-Status: **BLOCKED until CBE produces a real report with `package_id: "cbm"`.**
-No CBM 0.1.0 RC is created from the synthetic fixture.
+Status: **BLOCKED at the CBM gate.** The real CBE report with
+`package_id: "cbm"` was received; `identity_errors == []`, but CBM verify failed
+with `BLOCKING_SKIP` (`claims` is `SKIPPED (not configured)`, F3) and the
+manifest wheel also does not match the rebuilt wheel. No CBM 0.1.0 RC is
+created; no tag/release.
 
 ## Required inputs
 
-1. A real CBE report produced by CBE, with:
+1. A real CBE report produced by CBE (received: `6b4dc1ef…`), with:
    - `package_id: "cbm"`
    - `producer_id: "cbe"`
    - `version: "v0.1.0"`
@@ -49,6 +52,26 @@ identity_errors []
 
 If `identity_errors` is non-empty, or the CBE report is synthetic/missing, B2
 stays **BLOCKED**; do not rewrite the result to PASS.
+
+## Current gate result
+
+```text
+CBE report   6b4dc1ef…  package_id=cbm producer_id=cbe v0.1.0 PASS
+identity_errors []
+CBM_VERIFY   exit 3
+reason       BLOCKING_SKIP
+detail       CBP blocking gate 'claims' is SKIPPED (F3)
+artifact     65174c9b… (rebuilt from CBM f605808)
+manifest     02bf8400… (CBP 1.2.2 b41798, old artifact)
+decision     NO_UPLOAD
+```
+
+Evidence: `audit/v1.2.0-rc/cbe-report.json`,
+`audit/v1.2.0-rc/b2-gate-failure.json`,
+`audit/v1.2.0-rc/b2-gate-failure.stdout.txt`.
+
+B2 stays BLOCKED until the CBP target manifest/gates and artifact binding are
+consistent and CBM's own gate exits 0 with a valid upload decision.
 
 ## CBM 0.1.0 RC gate
 

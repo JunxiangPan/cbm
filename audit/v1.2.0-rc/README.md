@@ -9,12 +9,14 @@ CBM PASS claim was made. No CBS/CBE/CBP/CBC repository was modified.
 | --- | --- |
 | CBM repository | https://github.com/JunxiangPan/cbm (public) |
 | CBM branch | `main` |
-| CBM manifest target commit | `f71d3b5` (object repository support) |
-| CBM audit commit | `304d4e7` |
+| CBM manifest target commit | `f71d3b5` (b41798 manifest) |
+| CBE-validated CBM source | `f605808` (rebuilt wheel 65174c9b…) |
+| CBM audit commit | `pending` |
 | CBM tag / release | none |
 | CBP 1.2.2 release | `v1.2.2` / `d4bfefb` |
 | CBP 1.2.2 publish state | released (tag, GitHub Release, PyPI) |
 | CBS B5 fix | `fa1740fe03590ec9adfc9ab57cf1485bdc3bea87` (`v1.7.0-integration`) |
+| CBE real report | `6b4dc1efd8433535efe70d4de9337910aa537fbcc982ebba3a014284f27fc76e` |
 
 ## CI
 
@@ -167,13 +169,17 @@ See [`B1_B2_BLOCKED.md`](B1_B2_BLOCKED.md). No fake PASS:
   `producer_id: "cbe"/"cbp"`; old-field mixing exits 3
   `REPORT_IDENTITY_MISMATCH`. This is consumer-side active, not a full train
   PASS.
-- **B2 readiness** — `tests/test_b2_readiness.py` (4 tests): the synthetic CBE
-  fixture (`tests/fixtures/cbe-cbm-scoped.synthetic.json`) is explicitly marked
-  `not_upstream_evidence`; it validates the schema/identity path together with
-  the real CBP 1.2.2 CBM manifest. There is still no real CBE report with
-  `package_id: "cbm"`, so B2 remains blocked. Intake checklist:
-  `docs/B2_INTAKE.md`.
-- B4 remains fail-closed only.
+- **B2 BLOCKED** — the real CBE report (`cbe-report.json`, sha
+  `6b4dc1ef…`, `package_id=cbm`, `producer_id=cbe`, v0.1.0 PASS) loaded and
+  `identity_errors=[]`. CBM verify then failed:
+  `BLOCKING_SKIP: CBP blocking gate 'claims' is SKIPPED (F3)`; the manifest
+  wheel `02bf8400…` also does not match the rebuilt wheel `65174c9b…`.
+  Evidence: `cbe-report.json`, `b2-gate-failure.json`,
+  `b2-gate-failure.stdout.txt`, `b2-gate-failure-decision.json`.
+  No B2 PASS, no CBM 0.1.0 RC.
+- The synthetic fixture remains `not_upstream_evidence`; 4 readiness tests do
+  not make B2 PASS.
+- B4 remains fail-closed only because the overall gate failed.
 
 ## Reproduce
 
