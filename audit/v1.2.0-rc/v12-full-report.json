@@ -75,12 +75,12 @@
         "docs/INTEGRATION_REQUIREMENTS.md:64: referenced path missing: tests/v17/mock/cbe_cli.py",
         "docs/INTEGRATION_REQUIREMENTS.md:64: referenced path missing: tests/v17/mock/cbp_cli.py",
         "docs/V17_BLOCKERS.md:43: referenced path missing: tools/release_body_v17.py",
-        "README.md:154: referenced path missing: cbm-evidence/cbm-report.json",
-        "README.md:154: referenced path missing: cbm-evidence/cbm-body.md",
-        "README.md:157: referenced path missing: cbm-evidence/cbm-report.final.json",
-        "README.md:158: referenced path missing: cbm-evidence/cbm-body.final.md",
-        "README.md:162: referenced path missing: cbm-evidence-out/cbm-report.json",
-        "README.md:163: referenced path missing: cbm-evidence-out/cbm-body.md"
+        "README.md:157: referenced path missing: cbm-evidence/cbm-report.json",
+        "README.md:157: referenced path missing: cbm-evidence/cbm-body.md",
+        "README.md:160: referenced path missing: cbm-evidence/cbm-report.final.json",
+        "README.md:161: referenced path missing: cbm-evidence/cbm-body.final.md",
+        "README.md:165: referenced path missing: cbm-evidence-out/cbm-report.json",
+        "README.md:166: referenced path missing: cbm-evidence-out/cbm-body.md"
       ],
       "waived": [],
       "baselined": []

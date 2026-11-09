@@ -9,7 +9,7 @@ CBM PASS claim was made. No CBS/CBE/CBP/CBC repository was modified.
 | --- | --- |
 | CBM repository | https://github.com/JunxiangPan/cbm (public) |
 | CBM branch | `main` |
-| CBM code commit | `3458cb81ffb30a71d6606830e8d8276e993d6ae4` |
+| CBM code commit | `ae0ad13d47a71ab10dc8c1cd06601be5f3b0a66c` |
 | CBM tag / release | none |
 | CBP RC code | `855fed7` (`1.2.0-dev`) |
 | CBP 1.2.0 publish state | not tagged, not released, PyPI 404 |
@@ -25,6 +25,7 @@ CBM PASS claim was made. No CBS/CBE/CBP/CBC repository was modified.
 | [42544797487](https://github.com/JunxiangPan/cbm/actions/runs/42544797487) | `65ae31f` | success: 91/91 (audit docs) |
 | [42544980840](https://github.com/JunxiangPan/cbm/actions/runs/42544980840) | `45c49bc` | success: 91/91 (final old audit) |
 | [42593726644](https://github.com/JunxiangPan/cbm/actions/runs/42593726644) | `3458cb8` | success: **91/91 on ubuntu-latest and windows-latest** (B5 flip + CBM manifest) |
+| [42595276523](https://github.com/JunxiangPan/cbm/actions/runs/42595276523) | `ae0ad13` | success: **102/102 on ubuntu-latest and windows-latest** (B1/B2 readiness + B4 boundary) |
 
 **102 passed = 102 normal tests. No `KNOWN_FAIL_SILENT` canary remains.** The B5
 canary was flipped to assert the fixed behavior.
@@ -108,18 +109,27 @@ report with `package_id: "cbm"`; CBM does not synthesize it.
 
 | Case | Result |
 | --- | --- |
-| cross-repository `artifact_repository` | exit 2 `ARTIFACT_REPOSITORY_MISMATCH` |
+| cross-repository (different owner or repo) | exit 2 `ARTIFACT_REPOSITORY_MISMATCH` |
 | missing `artifact_repository` | exit 2 `ARTIFACT_REPOSITORY_MISMATCH` |
-| same repository | continues to `UPLOAD_PENDING` |
+| same repository (exact) | continues to `UPLOAD_PENDING` |
+| same repository (case-insensitive) | continues to `UPLOAD_PENDING` |
 
-Tests: 3 passed. CBE/CBS repositories are not unified; B4 is not complete.
+Tests: 5 passed. CBE/CBS repositories are not unified; B4 is not complete.
 
-## B1 / B2 — blocked
+## B1 / B2 — blocked (readiness only)
 
 See [`B1_B2_BLOCKED.md`](B1_B2_BLOCKED.md). No fake PASS:
 
-- B1 §5.1 is not in CONTRACT.md; producer `package_id` exits 3.
-- B2 no real CBE report with `package_id: "cbm"`; the CBP side exists.
+- **B1 readiness** — `tests/test_b1_identity.py` (6 tests): accepts
+  `package_id: "cbm"` with `producer_id: "cbe"/"cbp"`; rejects old
+  `package_id: "cbe"/"cbp"` and producer mismatches; mixed reports exit 3
+  `REPORT_IDENTITY_MISMATCH`. B1 remains blocked because §5.1 is not in
+  CONTRACT.md.
+- **B2 readiness** — `tests/test_b2_readiness.py` (3 tests): the synthetic CBE
+  fixture (`tests/fixtures/cbe-cbm-scoped.synthetic.json`) is explicitly marked
+  `not_upstream_evidence`; it validates the schema/identity path together with
+  the real CBP CBM manifest. There is still no real CBE report with
+  `package_id: "cbm"`, so B2 remains blocked.
 - B4 remains fail-closed only.
 
 ## Reproduce
@@ -130,10 +140,9 @@ python -m pytest                                  # 102 passed (CBS present)
 python tools/check_b5.py --check-upstream         # STATUS=B5_MAYBE_FIXED; exit 0
 python tools/check_b5.py --check-upstream --declared-cbm
 python -m pytest tests/test_b3_cbp_rc.py          # 4 passed
-python -m pytest \
-  tests/test_exit_codes.py::test_cross_repository_artifact_exits_2 \
-  tests/test_exit_codes.py::test_missing_artifact_repository_exits_2 \
-  tests/test_exit_codes.py::test_same_artifact_repository_continues  # 3 passed
+python -m pytest tests/test_b1_identity.py        # 6 passed
+python -m pytest tests/test_b2_readiness.py       # 3 passed (synthetic)
+python -m pytest   tests/test_exit_codes.py::test_cross_repository_artifact_exits_2   tests/test_exit_codes.py::test_cross_repository_different_repo_exits_2   tests/test_exit_codes.py::test_missing_artifact_repository_exits_2   tests/test_exit_codes.py::test_same_artifact_repository_continues   tests/test_exit_codes.py::test_same_repository_case_insensitive_continues  # 5 passed
 ```
 
 The CBP runs used a read-only `git archive` of `855fed7`; no CBP working tree

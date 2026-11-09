@@ -28,5 +28,11 @@
     "commit": "3458cb8",
     "status": "success",
     "tests": "91 passed on ubuntu-latest and windows-latest (B5 flip + CBM manifest)"
+  },
+  {
+    "run": 42595276523,
+    "commit": "ae0ad13",
+    "status": "success",
+    "tests": "102 passed on ubuntu-latest and windows-latest (B1/B2 readiness + B4 boundary)"
   }
 ]
