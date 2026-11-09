@@ -597,3 +597,18 @@ def test_object_artifact_repository_empty_repository_exits_2(tmp_path: Path) -> 
     assert code == 2
     assert report["reason"] == "ARTIFACT_REPOSITORY_MISMATCH"
     assert decision["decision"] == "NO_UPLOAD"
+
+
+def test_object_artifact_repository_different_owner_same_repo_exits_2(
+    tmp_path: Path,
+) -> None:
+    root, _, digest = make_artifact(tmp_path)
+    code, report, _, decision = _run(
+        tmp_path,
+        cbe=make_cbe(),
+        cbp=make_cbp(digest, artifact_repository=_repo_object("other/repo")),
+        artifact_root=root,
+    )
+    assert code == 2
+    assert report["reason"] == "ARTIFACT_REPOSITORY_MISMATCH"
+    assert decision["decision"] == "NO_UPLOAD"

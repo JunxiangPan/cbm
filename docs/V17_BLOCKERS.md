@@ -77,5 +77,5 @@ Probe maintenance:
 [x] B5  CBS body generator: missing CBM -> CBM: NOT_UPLOADED + EVIDENCE_ABSENT
 ```
 
-**109 tests pass (109 normal; no KNOWN_FAIL_SILENT canary).** A-F live E2E is
+**110 tests pass (110 normal; no KNOWN_FAIL_SILENT canary).** A-F live E2E is
 still not executed. The audit package is `audit/v1.2.0-rc/`.

@@ -32,7 +32,7 @@ CBM PASS claim was made. No CBS/CBE/CBP/CBC repository was modified.
 | [42645029320](https://github.com/JunxiangPan/cbm/actions/runs/42645029320) | `0f84aae` | success: **108/108 on ubuntu-latest and windows-latest** (object B4 boundaries) |
 | [42647681396](https://github.com/JunxiangPan/cbm/actions/runs/42647681396) | `8b5c52b` | success: **109/109 on ubuntu-latest and windows-latest** (B4 fail-closed + B2 object readiness) |
 
-**109 passed = 109 normal tests. No `KNOWN_FAIL_SILENT` canary remains.** The B5
+**110 passed = 110 normal tests. No `KNOWN_FAIL_SILENT` canary remains.** The B5
 canary was flipped to assert the fixed behavior.
 
 ## CBP-CI-001 — PASS
@@ -155,7 +155,7 @@ report with `package_id: "cbm"`; CBM does not synthesize it.
 | object same repository (exact) | continues to `UPLOAD_PENDING` |
 | object same repository (case-insensitive) | continues to `UPLOAD_PENDING` |
 
-Tests: 11 passed (5 legacy/string + 6 object). CBE/CBS repositories are not unified; B4 is not complete.
+Tests: 12 passed (5 legacy/string + 7 object). CBE/CBS repositories are not unified; B4 is not complete.
 
 ## B1 CONTRACT_ACTIVE / B2 blocked
 
@@ -177,7 +177,7 @@ See [`B1_B2_BLOCKED.md`](B1_B2_BLOCKED.md). No fake PASS:
 
 ```bash
 cd D:\qq苏瑾言大肥鱼\cbm
-python -m pytest                                  # 109 passed (CBS present)
+python -m pytest                                  # 110 passed (CBS present)
 python tools/check_b5.py --check-upstream         # STATUS=B5_MAYBE_FIXED; exit 0
 python tools/check_b5.py --check-upstream --declared-cbm
 python -m pytest tests/test_b3_cbp_rc.py          # 4 passed
@@ -194,7 +194,7 @@ python -m pytest \
   tests/test_exit_codes.py::test_object_artifact_repository_missing_repository_exits_2 \
   tests/test_exit_codes.py::test_object_artifact_repository_same_exact_continues \
   tests/test_exit_codes.py::test_object_artifact_repository_missing_field_exits_2 \
-  tests/test_exit_codes.py::test_object_artifact_repository_empty_repository_exits_2  # 11 passed
+  tests/test_exit_codes.py::test_object_artifact_repository_empty_repository_exits_2 \n  tests/test_exit_codes.py::test_object_artifact_repository_different_owner_same_repo_exits_2  # 12 passed
 ```
 
 The CBP runs used a read-only `git archive` of the official `v1.2.2`
