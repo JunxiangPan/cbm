@@ -10,6 +10,7 @@ CBM PASS claim was made. No CBS/CBE/CBP/CBC repository was modified.
 | CBM repository | https://github.com/JunxiangPan/cbm (public) |
 | CBM branch | `main` |
 | CBM code commit | `6c77bc764edd79f31cb3baa80d0e4bd2fe7d63f1` |
+| CBM audit package commit | `65ae31f` |
 | CBM tag / release | none |
 | CBP RC code used for gate evidence | `5da8b87` (`1.2.0-dev`) |
 | CBP 1.2.0 publish state | not tagged, not released, PyPI 404 |
@@ -26,6 +27,7 @@ does **not** claim that `5da8b87` is the final CBP 1.2.0 build.
 | [42543756142](https://github.com/JunxiangPan/cbm/actions/runs/42543756142) | `beffaef` | failure: PyYAML missing; fixed by `d03c439` |
 | [42543902925](https://github.com/JunxiangPan/cbm/actions/runs/42543902925) | `d03c439` | success: 84 passed on ubuntu-latest and windows-latest |
 | [42544444367](https://github.com/JunxiangPan/cbm/actions/runs/42544444367) | `6c77bc7` | success: **91 passed** on ubuntu-latest and windows-latest |
+| [42544797487](https://github.com/JunxiangPan/cbm/actions/runs/42544797487) | `65ae31f` | success: 91 passed on ubuntu-latest and windows-latest (audit docs) |
 
 `91 passed = 90 normal tests + 1 KNOWN_FAIL_SILENT canary`. The canary asserts
 that the B5 defect exists; it is not a PASS for B5.
