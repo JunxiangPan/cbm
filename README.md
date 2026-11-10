@@ -60,7 +60,7 @@ trusted publisher/credentials; use the exact wheel above until then.
 
 PyPI: **BLOCKED_NO_PYPI_CREDENTIALS** (no trusted publisher/credentials).
 
-**128 offline/static tests pass.** The source is Apache-2.0. No A-F live E2E
+**131 offline/static tests pass.** The source is Apache-2.0. No A-F live E2E
 or full-product certification is claimed. Evidence lives in
 `audit/v1.2.0-rc/`.
 
@@ -223,7 +223,7 @@ the SHA-256 of the canonical JSON of the report without that field.
 python -m pytest
 ```
 
-**128 tests pass**: exit-code mapping, gate-before-upload (including a mock
+**131 tests pass**: exit-code mapping, gate-before-upload (including a mock
 uploader that records calls), NOT_UPLOADED body rendering, hashes, workflow
 static audit, schema/report lockstep, and a mock end-to-end
 verify/upload/finalize flow. These are offline/static tests, not real E2E.
@@ -235,7 +235,7 @@ probe's missing/import/unexpected modes; a missing CBS checkout skips with
 `SKIP_REASON=CBS_BODY_GENERATOR_NOT_FOUND`, and an unimportable file fails with
 `FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE`.
 
-**128 passed = 128 normal tests; no `KNOWN_FAIL_SILENT` canary remains.** Do not
+**131 passed = 131 normal tests; no `KNOWN_FAIL_SILENT` canary remains.** Do not
 reintroduce the old `- none` assertion as an accepted state.
 
 Probe CLI:

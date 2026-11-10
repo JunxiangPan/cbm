@@ -43,7 +43,7 @@ modified.
 | [42725782667](https://github.com/JunxiangPan/cbm/actions/runs/42725782667) | `4c4505d` | success: **110/110 on ubuntu-latest and windows-latest** (final upload decision) |
 | [42739137253](https://github.com/JunxiangPan/cbm/actions/runs/42739137253) | `457129c` | success: **128/128 on ubuntu-latest and windows-latest** (license/trust-root/packaging/in-toto) |
 
-**128 passed = 128 normal tests. No `KNOWN_FAIL_SILENT` canary remains.** The B5
+**131 passed = 131 normal tests. No `KNOWN_FAIL_SILENT` canary remains.** The B5
 canary was flipped to assert the fixed behavior.
 
 ## CBP-CI-001 — PASS
@@ -173,7 +173,7 @@ See [`B1_B2_BLOCKED.md`](B1_B2_BLOCKED.md). No fake PASS:
 
 ```bash
 cd D:\qq苏瑾言大肥鱼\cbm
-python -m pytest                                  # 128 passed (CBS present)
+python -m pytest                                  # 131 passed (CBS present)
 python tools/check_b5.py --check-upstream         # STATUS=B5_MAYBE_FIXED; exit 0
 python tools/check_b5.py --check-upstream --declared-cbm
 python -m pytest tests/test_b3_cbp_rc.py          # 4 passed
