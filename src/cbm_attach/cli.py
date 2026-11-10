@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from . import body
+from . import __version__, body
 from .artifacts import (
     Artifact,
     fetch_artifact,
@@ -806,6 +806,7 @@ def _write_statement_for(report: dict[str, Any], args: argparse.Namespace) -> Pa
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="cbm_attach")
+    parser.add_argument("--version", action="version", version=f"cbm-attach {__version__}")
     sub = parser.add_subparsers(dest="command")
 
     verify = sub.add_parser("verify", help="consume CBE/CBP and decide upload")

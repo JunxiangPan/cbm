@@ -1,0 +1,65 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "cbm_attach-0.1.1-py3-none-any.whl",
+      "digest": {
+        "sha256": "91c4eebfa53957119ad6d9a365d7838ebad05db300fd6e939fc8de2804cd8b54"
+      }
+    }
+  ],
+  "predicateType": "https://cbm.dev/attachment/v1",
+  "predicate": {
+    "scope": "sidecar attachment",
+    "cbm_gate_status": "NOT_UPLOADED",
+    "upload_status": "NOT_UPLOADED",
+    "reason": "UPLOAD_PENDING",
+    "reason_detail": "CBE/CBP PASS; upload authorised, not yet uploaded",
+    "report": {
+      "schema_version": "1",
+      "package_id": "cbm",
+      "version": "v0.1.1",
+      "tag": "v0.1.1",
+      "release_tag": "v0.1.1",
+      "cbm_gate_status": "NOT_UPLOADED",
+      "exit_code": 0,
+      "cbe_report_hash": "03984a99992acc79437d09d0c14012eaff72e0cbbf76efc31b584febc9f8360c",
+      "cbp_report_hash": "9d84f6a71dea4e3fd8aa1560b18476c7fd245150ff86a5a23a468846bc99b23c",
+      "cbp_release_body_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "cbp_body_hash_scope": "base",
+      "cbp_artifact_repository": "owner/repo",
+      "upload_status": "NOT_UPLOADED",
+      "reason": "UPLOAD_PENDING",
+      "reason_detail": "CBE/CBP PASS; upload authorised, not yet uploaded",
+      "declared_attached": true,
+      "upstream_gate_status": {
+        "cbe": {
+          "gate_status": "PASS",
+          "exit_code": 0,
+          "skip_ratio": 0.0,
+          "blocking_skip": false,
+          "producer_id": "cbe",
+          "producer_version": "1.7.0"
+        },
+        "cbp": {
+          "gate_status": "PASS",
+          "exit_code": 0,
+          "skip_ratio": 0.0,
+          "blocking_skip": false,
+          "producer_id": "cbp",
+          "producer_version": "1.0.8"
+        }
+      },
+      "artifact_name": "cbm_attach-0.1.1-py3-none-any.whl",
+      "artifact_sha256": "91c4eebfa53957119ad6d9a365d7838ebad05db300fd6e939fc8de2804cd8b54",
+      "cbp_artifact_sha256": "91c4eebfa53957119ad6d9a365d7838ebad05db300fd6e939fc8de2804cd8b54",
+      "build_once_run_id": null,
+      "ci_commit_sha": null,
+      "upload_target": "github-release",
+      "uploaded_asset_url": null,
+      "uploaded_asset_digest": null,
+      "verified_at": "2026-11-10T02:04:22Z",
+      "evidence_sha256": "03fc302acf2be7c1e49d7a065fae3a697d6a7bc2fcc96f958bb7956dd165fd24"
+    }
+  }
+}

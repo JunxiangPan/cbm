@@ -1,0 +1,11 @@
+{
+  "decision": "UPLOAD",
+  "reason": "UPLOAD_PENDING",
+  "cbm_gate_status": "NOT_UPLOADED",
+  "upload_status": "NOT_UPLOADED",
+  "report_sha256": "03fc302acf2be7c1e49d7a065fae3a697d6a7bc2fcc96f958bb7956dd165fd24",
+  "artifact": {
+    "name": "cbm_attach-0.1.1-py3-none-any.whl",
+    "sha256": "91c4eebfa53957119ad6d9a365d7838ebad05db300fd6e939fc8de2804cd8b54"
+  }
+}

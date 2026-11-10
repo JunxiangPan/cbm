@@ -1,0 +1,1 @@
+CBM_VERIFY decision=UPLOAD cbm_gate_status=NOT_UPLOADED upload_status=NOT_UPLOADED reason=UPLOAD_PENDING

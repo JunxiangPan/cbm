@@ -23,7 +23,7 @@ cbm-attach --help
 Until the PyPI release is available, install the exact released wheel:
 
 ```bash
-pip install https://github.com/JunxiangPan/cbm/releases/download/v0.1.0/cbm_attach-0.1.0-py3-none-any.whl
+pip install https://github.com/JunxiangPan/cbm/releases/download/v0.1.1/cbm_attach-0.1.1-py3-none-any.whl
 cbm-attach --help
 ```
 
@@ -37,23 +37,28 @@ cbm-attach --help
 The import package remains `cbm_attach`; the distribution and CLI are
 `cbm-attach`.
 
-## Current status: v0.1.0 sidecar released
+## Current status: v0.1.1 GitHub Release
 
-CBM v0.1.0 is a **sidecar attachment** tool, not a complete product
-certification and not an A-F live E2E proof. Its GitHub Release is published:
+CBM v0.1.1 is a **sidecar attachment** tool, not a complete product
+certification and not an A-F live E2E proof. GitHub Release:
 
-https://github.com/JunxiangPan/cbm/releases/tag/v0.1.0
+https://github.com/JunxiangPan/cbm/releases/tag/v0.1.1
+
+v0.1.0 remains published and unchanged. PyPI upload is blocked pending a
+trusted publisher/credentials; use the exact wheel above until then.
 
 - **B1 CONTRACT_ACTIVE** — contract-v1.7.1 §5.1 active; identity tests retained.
-- **B2 UPLOADED_VERIFIED** — real CBE report accepted; claims and F3 configs
-  PASS; exact artifact `72254704…` matches CBP manifest `0e0d37bd…`; CBM gate
-  `PASS`, upload `UPLOADED_VERIFIED`.
+- **0.1.1 changes** — Apache-2.0 license, canonical evidence-hash trust root,
+  `cbm-attach` distribution/console script, uploader failure tests, in-toto
+  Statement, generic evidence adapters.
 - **B3 FIELD_LEVEL_COMPLETE** — CBP 1.2.2 object manifest, base scope,
   artifact/evidence hashes.
 - **B4 UPLOADED_VERIFIED** — object artifact repository matched; fail-closed
   boundaries retained.
 - **B5 FIXED** — CBS body generator emits `CBM: NOT_UPLOADED` +
   `EVIDENCE_ABSENT`.
+
+PyPI: **BLOCKED_NO_PYPI_CREDENTIALS** (no trusted publisher/credentials).
 
 **128 offline/static tests pass.** The source is Apache-2.0. No A-F live E2E
 or full-product certification is claimed. Evidence lives in

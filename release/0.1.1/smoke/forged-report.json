@@ -1,0 +1,46 @@
+{
+  "schema_version": "1",
+  "package_id": "cbm",
+  "version": "v0.1.1",
+  "tag": "v0.1.1",
+  "release_tag": "v0.1.1",
+  "cbm_gate_status": "FAIL",
+  "exit_code": 3,
+  "cbe_report_hash": "41ff4a6a59ca39ca4f1d5e781c83c0a3244611797fb234cf4cb1f5a165d10a8a",
+  "cbp_report_hash": "9d84f6a71dea4e3fd8aa1560b18476c7fd245150ff86a5a23a468846bc99b23c",
+  "cbp_release_body_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "cbp_body_hash_scope": "base",
+  "cbp_artifact_repository": "owner/repo",
+  "upload_status": "NOT_UPLOADED",
+  "reason": "EVIDENCE_HASH_MISMATCH",
+  "reason_detail": "CBE evidence_sha256 does not match canonical JSON",
+  "declared_attached": true,
+  "upstream_gate_status": {
+    "cbe": {
+      "gate_status": "PASS",
+      "exit_code": 0,
+      "skip_ratio": 0.0,
+      "blocking_skip": false,
+      "producer_id": "cbe",
+      "producer_version": "1.7.0"
+    },
+    "cbp": {
+      "gate_status": "PASS",
+      "exit_code": 0,
+      "skip_ratio": 0.0,
+      "blocking_skip": false,
+      "producer_id": "cbp",
+      "producer_version": "1.0.8"
+    }
+  },
+  "artifact_name": "cbm_attach-0.1.1-py3-none-any.whl",
+  "artifact_sha256": "91c4eebfa53957119ad6d9a365d7838ebad05db300fd6e939fc8de2804cd8b54",
+  "cbp_artifact_sha256": "91c4eebfa53957119ad6d9a365d7838ebad05db300fd6e939fc8de2804cd8b54",
+  "build_once_run_id": null,
+  "ci_commit_sha": null,
+  "upload_target": "github-release",
+  "uploaded_asset_url": null,
+  "uploaded_asset_digest": null,
+  "verified_at": "2026-11-10T02:04:22Z",
+  "evidence_sha256": "7b98c09aaf8dae8c2b9616315b741252e6cc92c94b6c65b8bf5ca400aeefd7ef"
+}

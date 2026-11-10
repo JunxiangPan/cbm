@@ -1,0 +1,10 @@
+{
+  "approved": true,
+  "scope": "GitHub Release 0.1.1; PyPI only if trusted publisher/credentials are available",
+  "version": "0.1.1",
+  "wheel_sha256": "eadb94e95e7ca4cbe6fc7ffb27b0c05143379e5062ef51e8c69ee516a1efe7b3",
+  "sdist_sha256": "de87f6215e40e95b6ccf5570dba2ac0de70ea7228235795108e64631896f1a88",
+  "pypi_status": "BLOCKED_NO_PYPI_CREDENTIALS",
+  "no_af_live_e2e": true,
+  "no_full_product_certification": true
+}
