@@ -100,5 +100,11 @@
     "commit": "4c4505d",
     "status": "success",
     "tests": "110 passed on ubuntu-latest and windows-latest (final upload decision)"
+  },
+  {
+    "run": 42739137253,
+    "commit": "457129c",
+    "status": "success",
+    "tests": "128 passed on ubuntu-latest and windows-latest (license/trust-root/packaging/in-toto)"
   }
 ]

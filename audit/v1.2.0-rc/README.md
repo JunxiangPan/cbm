@@ -12,7 +12,7 @@ modified.
 | CBM branch | `main` |
 | CBM manifest target commit | `f71d3b5` (b41798 manifest) |
 | CBE-validated CBM source | `f605808` (rebuilt wheel 65174c9b…) |
-| CBM audit commit | `4c4505d` |
+| CBM audit commit | `457129c` |
 | CBM tag / release | none |
 | CBP 1.2.2 release | `v1.2.2` / `d4bfefb` |
 | CBP 1.2.2 publish state | released (tag, GitHub Release, PyPI) |
@@ -41,6 +41,7 @@ modified.
 | [42720843255](https://github.com/JunxiangPan/cbm/actions/runs/42720843255) | `2d87412` | success: **110/110 on ubuntu-latest and windows-latest** (exact artifact B2 gate verified) |
 | [42723720005](https://github.com/JunxiangPan/cbm/actions/runs/42723720005) | `c593251` | success: **110/110 on ubuntu-latest and windows-latest** (sidecar upload verified) |
 | [42725782667](https://github.com/JunxiangPan/cbm/actions/runs/42725782667) | `4c4505d` | success: **110/110 on ubuntu-latest and windows-latest** (final upload decision) |
+| [42739137253](https://github.com/JunxiangPan/cbm/actions/runs/42739137253) | `457129c` | success: **128/128 on ubuntu-latest and windows-latest** (license/trust-root/packaging/in-toto) |
 
 **128 passed = 128 normal tests. No `KNOWN_FAIL_SILENT` canary remains.** The B5
 canary was flipped to assert the fixed behavior.
