@@ -6,6 +6,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from cbm_attach.reports import canonical_evidence_sha256
+
 
 WHEEL_NAME = "cbm-0.1.0-py3-none-any.whl"
 
@@ -30,6 +32,8 @@ def make_cbe(**overrides: Any) -> dict[str, Any]:
         "evidence_sha256": "b" * 64,
     }
     data.update(overrides)
+    if "evidence_sha256" not in overrides:
+        data["evidence_sha256"] = canonical_evidence_sha256(data)
     return data
 
 
@@ -66,6 +70,8 @@ def make_cbp(artifact_sha: str, **overrides: Any) -> dict[str, Any]:
         "evidence_sha256": "d" * 64,
     }
     data.update(overrides)
+    if "evidence_sha256" not in overrides:
+        data["evidence_sha256"] = canonical_evidence_sha256(data)
     return data
 
 
@@ -212,3 +218,9 @@ class MockUploader:
     def get_url(self, name: str) -> str | None:
         self.calls.append(("get_url", name))
         return f"https://example.invalid/{name}"
+
+
+def sign_evidence(data: dict[str, Any]) -> dict[str, Any]:
+    """Recompute evidence_sha256 after a test mutates a report."""
+    data["evidence_sha256"] = canonical_evidence_sha256(data)
+    return data

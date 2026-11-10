@@ -1,7 +1,8 @@
 # CBM v0.1.0 — CBP 1.2.2 audit package
 
-Status: **STOPPED FOR HUMAN AUDIT**. No tag, GitHub Release, PyPI upload, or
-CBM PASS claim was made. No CBS/CBE/CBP/CBC repository was modified.
+Status: **CBM 0.1.0 sidecar released and upload-verified.** CBM GitHub Release
+`v0.1.0` is published; no PyPI upload; no CBS/CBE/CBP/CBC repository was
+modified.
 
 ## Identity
 
@@ -41,7 +42,7 @@ CBM PASS claim was made. No CBS/CBE/CBP/CBC repository was modified.
 | [42723720005](https://github.com/JunxiangPan/cbm/actions/runs/42723720005) | `c593251` | success: **110/110 on ubuntu-latest and windows-latest** (sidecar upload verified) |
 | [42725782667](https://github.com/JunxiangPan/cbm/actions/runs/42725782667) | `4c4505d` | success: **110/110 on ubuntu-latest and windows-latest** (final upload decision) |
 
-**110 passed = 110 normal tests. No `KNOWN_FAIL_SILENT` canary remains.** The B5
+**128 passed = 128 normal tests. No `KNOWN_FAIL_SILENT` canary remains.** The B5
 canary was flipped to assert the fixed behavior.
 
 ## CBP-CI-001 — PASS
@@ -171,7 +172,7 @@ See [`B1_B2_BLOCKED.md`](B1_B2_BLOCKED.md). No fake PASS:
 
 ```bash
 cd D:\qq苏瑾言大肥鱼\cbm
-python -m pytest                                  # 110 passed (CBS present)
+python -m pytest                                  # 128 passed (CBS present)
 python tools/check_b5.py --check-upstream         # STATUS=B5_MAYBE_FIXED; exit 0
 python tools/check_b5.py --check-upstream --declared-cbm
 python -m pytest tests/test_b3_cbp_rc.py          # 4 passed
@@ -194,7 +195,8 @@ python -m pytest \
 The CBP runs used a read-only `git archive` of the official `v1.2.2`
 commit `d4bfefb`; no CBP working tree was modified.
 
-## No publish
+## Release / upload
 
-No tag, no GitHub Release, no PyPI upload, no release asset. Human audit is
-required before any of those actions.
+CBM GitHub Release `v0.1.0` is published; wheel/sdist assets verified
+`UPLOADED_VERIFIED`. No PyPI upload. Final decision `UPLOAD_APPROVED` /
+`UPLOADED_VERIFIED`; pre-upload decision retained as history.

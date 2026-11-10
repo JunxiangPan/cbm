@@ -16,7 +16,7 @@ from .reasons import (
     InputError,
     Reason,
 )
-from .reports import Report, artifact_hash_from_cbp, identity_errors
+from .reports import Report, artifact_hash_from_cbp, evidence_hash_matches, identity_errors
 
 
 @dataclass(frozen=True)
@@ -94,6 +94,14 @@ def _check_cbp_gates(cbp: Report) -> None:
             )
 
 
+def _check_evidence_hash(report: Report) -> None:
+    if not evidence_hash_matches(report.data):
+        raise GateError(
+            f"{report.kind.upper()} evidence_sha256 does not match canonical JSON",
+            reason=Reason.EVIDENCE_HASH_MISMATCH,
+        )
+
+
 def evaluate(
     cbe: Report | None,
     cbp: Report | None,
@@ -106,6 +114,12 @@ def evaluate(
     expected_artifact_repository: str | None = None,
 ) -> Evaluation:
     """Return the CBM gate decision or raise a typed :class:`CbmError`."""
+    # Trust root: both upstream reports must carry a canonical evidence hash.
+    # A format-only hash is not accepted.
+    for report in (cbe, cbp):
+        if report is not None:
+            _check_evidence_hash(report)
+
     # Identity is checked whenever both reports are supplied, even when the
     # train does not claim CBM.  A producer name in package_id is never a
     # subject identity, and CBM must not silently consume the wrong report.

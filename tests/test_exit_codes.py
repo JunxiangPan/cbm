@@ -6,6 +6,7 @@ from pathlib import Path
 from cbm_attach import cli
 
 from tests.helpers import (
+    sign_evidence,
     WHEEL_NAME,
     make_artifact,
     make_cbe,
@@ -190,6 +191,7 @@ def test_cbp_artifact_hash_missing_exits_3(tmp_path: Path) -> None:
     root, _, digest = make_artifact(tmp_path)
     cbp = make_cbp(digest)
     cbp["artifact_hashes"] = {}
+    sign_evidence(cbp)
     code, report, _, _ = _run(
         tmp_path,
         cbe=make_cbe(),
@@ -236,6 +238,7 @@ def test_cbp_top_level_pass_with_failed_gate_exits_3(tmp_path: Path) -> None:
     root, _, digest = make_artifact(tmp_path)
     cbp = make_cbp(digest)
     cbp["gates"][0]["status"] = "FAIL"
+    sign_evidence(cbp)
     code, report, _, _ = _run(
         tmp_path,
         cbe=make_cbe(),
@@ -250,6 +253,7 @@ def test_cbp_blocking_gate_skipped_exits_3(tmp_path: Path) -> None:
     root, _, digest = make_artifact(tmp_path)
     cbp = make_cbp(digest)
     cbp["gates"][0] = {"name": "claims", "status": "SKIPPED", "reason": "n/a"}
+    sign_evidence(cbp)
     code, report, _, _ = _run(
         tmp_path,
         cbe=make_cbe(),
@@ -314,9 +318,11 @@ def test_missing_producer_id_is_allowed(tmp_path: Path) -> None:
     cbe = make_cbe()
     cbe.pop("producer_id")
     cbe.pop("producer_version")
+    sign_evidence(cbe)
     cbp = make_cbp(digest)
     cbp.pop("producer_id")
     cbp.pop("producer_version")
+    sign_evidence(cbp)
     code, report, _, _ = _run(
         tmp_path,
         cbe=cbe,
@@ -332,6 +338,7 @@ def test_cbp_artifact_hash_with_dist_prefix_is_accepted(tmp_path: Path) -> None:
     root, _, digest = make_artifact(tmp_path)
     cbp = make_cbp(digest)
     cbp["artifact_hashes"] = {f"dist/{WHEEL_NAME}": digest}
+    sign_evidence(cbp)
     code, report, _, _ = _run(
         tmp_path,
         cbe=make_cbe(),
@@ -458,6 +465,7 @@ def test_missing_artifact_repository_exits_2(tmp_path: Path) -> None:
     root, _, digest = make_artifact(tmp_path)
     cbp = make_cbp(digest)
     cbp.pop("artifact_repository")
+    sign_evidence(cbp)
     code, report, _, decision = _run(
         tmp_path,
         cbe=make_cbe(),
@@ -575,6 +583,7 @@ def test_object_artifact_repository_missing_field_exits_2(tmp_path: Path) -> Non
     root, _, digest = make_artifact(tmp_path)
     cbp = make_cbp(digest)
     cbp.pop("artifact_repository")
+    sign_evidence(cbp)
     code, report, _, decision = _run(
         tmp_path,
         cbe=make_cbe(),
@@ -612,3 +621,33 @@ def test_object_artifact_repository_different_owner_same_repo_exits_2(
     assert code == 2
     assert report["reason"] == "ARTIFACT_REPOSITORY_MISMATCH"
     assert decision["decision"] == "NO_UPLOAD"
+
+
+def test_forged_cbe_evidence_hash_exits_3(tmp_path: Path) -> None:
+    root, _, digest = make_artifact(tmp_path)
+    cbe = make_cbe()
+    cbe["evidence_sha256"] = "b" * 64
+    code, report, _, _ = _run(
+        tmp_path,
+        cbe=cbe,
+        cbp=make_cbp(digest),
+        artifact_root=root,
+    )
+    assert code == 3
+    assert report["reason"] == "EVIDENCE_HASH_MISMATCH"
+    assert report["cbm_gate_status"] == "FAIL"
+
+
+def test_forged_cbp_evidence_hash_exits_3(tmp_path: Path) -> None:
+    root, _, digest = make_artifact(tmp_path)
+    cbp = make_cbp(digest)
+    cbp["evidence_sha256"] = "b" * 64
+    code, report, _, _ = _run(
+        tmp_path,
+        cbe=make_cbe(),
+        cbp=cbp,
+        artifact_root=root,
+    )
+    assert code == 3
+    assert report["reason"] == "EVIDENCE_HASH_MISMATCH"
+    assert report["cbm_gate_status"] == "FAIL"

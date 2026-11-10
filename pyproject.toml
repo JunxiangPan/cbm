@@ -5,9 +5,32 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "cbm-attach"
 version = "0.1.0"
-description = "CBM sidecar attachment evidence for the v1.7 release train"
+description = "Sidecar attachment attestation for release evidence"
+readme = "README.md"
 requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Junxiang Pan" }]
+keywords = ["attestation", "supply-chain", "release-evidence", "in-toto"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Security",
+  "Topic :: Software Development :: Build Tools",
+]
 dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/JunxiangPan/cbm"
+Repository = "https://github.com/JunxiangPan/cbm"
+Issues = "https://github.com/JunxiangPan/cbm/issues"
+
+[project.scripts]
+cbm-attach = "cbm_attach.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

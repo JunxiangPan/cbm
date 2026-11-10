@@ -327,6 +327,23 @@ def validate_cbp(data: Any) -> list[str]:
     return errors
 
 
+
+
+def canonical_evidence_sha256(data: dict[str, Any]) -> str:
+    """Canonical JSON hash of a report, excluding its own evidence_sha256."""
+    payload = {key: value for key, value in data.items() if key != "evidence_sha256"}
+    raw = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
+def evidence_hash_matches(data: dict[str, Any]) -> bool:
+    """Return True only when evidence_sha256 matches the canonical report."""
+    stored = data.get("evidence_sha256")
+    if not isinstance(stored, str) or not HEX64_RE.fullmatch(stored):
+        return False
+    return stored.lower() == canonical_evidence_sha256(data)
+
+
 def parse_report_bytes(raw: bytes, *, kind: str, source: Path | str) -> Report:
     """Parse and validate already-downloaded report bytes."""
     try:

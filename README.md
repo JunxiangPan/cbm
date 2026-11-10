@@ -1,69 +1,81 @@
-# CBM attach evidence (v0.1.0)
+# cbm-attach
 
 [![cbm-ci](https://github.com/JunxiangPan/cbm/actions/workflows/ci.yml/badge.svg)](https://github.com/JunxiangPan/cbm/actions/workflows/ci.yml)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
-CBM is a **sidecar attachment attestation** for the v1.7 release train. It is
-not the 10th traditional gate, it is not a CBP gate, and it is not in the CBS
-`publish` `needs` graph. It consumes CBE/CBP reports that already exist and
-decides whether the optional CBM build-once artifact may be attached.
+**For** release engineers who already run CBE/CBP gates and need a defensible
+sidecar attachment decision.
 
-The frozen F1-F6 source is `docs/v1.7/CONTRACT.md` in the CBS repository,
-commit `4a437df`, SHA-256
-`a561f19e0a8e4dba92af82400b5696da18e000ba5362571cb0b40243b9a3afca`.
-CBM does not define a private variant of F1-F6.
+**Problem:** a release can be "green" while the optional CBM artifact was never
+built, was built from a different hash, or was attached with a stale manifest.
+`cbm-attach` consumes the existing evidence, verifies the canonical hashes and
+the build-once wheel, and emits a machine-readable report plus a human-readable
+body fragment. It never re-runs CBE/CBP and is not a gate in their `needs`
+graph.
 
-During CBM v0.1.0 the CBS repository advanced past `eeb3645` and added an
-additive §11 (build-once profiles); F1-F6 and §5 are unchanged. CBM's artifact
-verifier accepts §11's basename `RELEASE_ASSETS.sha256` inventory and skips a
-self-listed manifest. The contract identity proposal in
-`docs/CONTRACT_PROPOSAL_5.1.md` is still an unapplied change-control input.
+**Start:**
 
-## Current status: CBM 0.1.0 sidecar released; B2/B4 gate-verified; upload verified
+```bash
+pip install cbm-attach
+cbm-attach --help
+```
 
-CBM v0.1.0 is a **skeleton**. It has **110 offline/static tests passing**. A-F
-live E2E is still not executed (private test repo + scoped tokens).
+Until the PyPI release is available, install the exact released wheel:
 
-2026-11-09 status:
+```bash
+pip install https://github.com/JunxiangPan/cbm/releases/download/v0.1.0/cbm_attach-0.1.0-py3-none-any.whl
+cbm-attach --help
+```
 
-- **B1 CONTRACT_ACTIVE** — `contract-v1.7.1` / `209d75b4` freezes §5.1.
-  Consumer tests cover `package_id: "cbm"` + `producer_id: "cbe"/"cbp"` and
-  retain exit 3 `REPORT_IDENTITY_MISMATCH` for old-field mixing.
-- **B2 UPLOADED_VERIFIED** — real CBE report `6b4dc1ef…`, identity [];
-  claims PASS 3/5; exact wheel `72254704…` matches CBP manifest
-  `0e0d37bd…`; CBM upload `cbm_gate_status=PASS`,
-  `upload_status=UPLOADED_VERIFIED`. Release:
-  https://github.com/JunxiangPan/cbm/releases/tag/v0.1.0
-  Final decision `UPLOAD_APPROVED` / `UPLOADED_VERIFIED`; pre-upload decision
-  retained as historical. No A-F/full-product claim.
-- **B3 FIELD_LEVEL_COMPLETE** — CBP 1.2.2 produced exact-artifact manifest
-  `0e0d37bd…` (`schema_version: "1"`, object repo, base, PASS).
-  `body_hash_scope`, `release_body_hash`, `artifact_hashes` and
-  `evidence_sha256` are accepted; missing/full scope exits 2. This is
-  field-level B3, not B2.
-- **B4 UPLOADED_VERIFIED** — CBP 1.2.2 object `artifact_repository` matches;
-  12 boundary tests; CBM gate/upload verified. CBE/CBS unification is not
-  claimed.
-- **B5 FIXED** — CBS v1.7.0-integration `fa1740f` (regression `tests/test_known_fail_silent.py`) renders
-  `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT`; the canary is flipped to assert the
-  fixed behavior.
+From a checkout:
 
-No tag, GitHub Release, or PyPI upload. Evidence:
-`audit/v1.2.0-rc/`. Dependency order: B1 -> B2 -> B3+B4; B5 was independent and
-is now fixed.
+```bash
+python -m pip install -e .
+cbm-attach --help
+```
 
-### CBS body generator (B5 fixed)
+The import package remains `cbm_attach`; the distribution and CLI are
+`cbm-attach`.
 
-CBS v1.7.0-integration `fa1740f` adds explicit CBM/CBC records: a missing CBM
-renders a dedicated `## CBM` section with `CBM: NOT_UPLOADED`, `reason:
-EVIDENCE_ABSENT`, `upload_status: NOT_UPLOADED`, and the exact
-`declared as attached but not uploaded` phrase when declared. The old
-`- none`-only behavior is historical.
+## Current status: v0.1.0 sidecar released
 
-`tools/check_b5.py --check-upstream` now prints `STATUS=B5_MAYBE_FIXED`, which
-means the fixed behavior is present. `tests/test_known_fail_silent.py` was
-flipped to assert `CBM: NOT_UPLOADED` + `EVIDENCE_ABSENT` and is no longer a
-KNOWN_FAIL_SILENT canary. The historical requirement is retained in
-`docs/CBS_BODY_REQUIREMENT.md`.
+CBM v0.1.0 is a **sidecar attachment** tool, not a complete product
+certification and not an A-F live E2E proof. Its GitHub Release is published:
+
+https://github.com/JunxiangPan/cbm/releases/tag/v0.1.0
+
+- **B1 CONTRACT_ACTIVE** — contract-v1.7.1 §5.1 active; identity tests retained.
+- **B2 UPLOADED_VERIFIED** — real CBE report accepted; claims and F3 configs
+  PASS; exact artifact `72254704…` matches CBP manifest `0e0d37bd…`; CBM gate
+  `PASS`, upload `UPLOADED_VERIFIED`.
+- **B3 FIELD_LEVEL_COMPLETE** — CBP 1.2.2 object manifest, base scope,
+  artifact/evidence hashes.
+- **B4 UPLOADED_VERIFIED** — object artifact repository matched; fail-closed
+  boundaries retained.
+- **B5 FIXED** — CBS body generator emits `CBM: NOT_UPLOADED` +
+  `EVIDENCE_ABSENT`.
+
+**128 offline/static tests pass.** The source is Apache-2.0. No A-F live E2E
+or full-product certification is claimed. Evidence lives in
+`audit/v1.2.0-rc/`.
+
+## Trust root
+
+CBE and CBP `evidence_sha256` values are recomputed from canonical JSON before
+the gate decides; a format-valid but wrong hash exits 3
+`EVIDENCE_HASH_MISMATCH`. CBM's own report is sealed the same way. Raw-byte
+report hashes remain separate from canonical evidence hashes.
+
+## in-toto and generic evidence
+
+`verify` and `upload` write an in-toto v1 Statement next to the CBM report
+(`cbm-report.statement.json` by default, or `--statement PATH`). Its
+`predicateType` is `https://cbm.dev/attachment/v1`; the existing
+`cbm-report.json` is preserved inside the predicate.
+
+For non-CBM subjects, `cbm_attach.evidence` exposes `EvidenceInput`,
+`load_evidence()` and `identity_errors_for(subject_package_id=..., producers=...)`.
+This is an adapter layer; the four-piece CBE/CBP/CBM path is unchanged.
 
 ## Non-goals
 
@@ -206,7 +218,7 @@ the SHA-256 of the canonical JSON of the report without that field.
 python -m pytest
 ```
 
-**110 tests pass**: exit-code mapping, gate-before-upload (including a mock
+**128 tests pass**: exit-code mapping, gate-before-upload (including a mock
 uploader that records calls), NOT_UPLOADED body rendering, hashes, workflow
 static audit, schema/report lockstep, and a mock end-to-end
 verify/upload/finalize flow. These are offline/static tests, not real E2E.
@@ -218,7 +230,7 @@ probe's missing/import/unexpected modes; a missing CBS checkout skips with
 `SKIP_REASON=CBS_BODY_GENERATOR_NOT_FOUND`, and an unimportable file fails with
 `FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE`.
 
-**110 passed = 110 normal tests; no `KNOWN_FAIL_SILENT` canary remains.** Do not
+**128 passed = 128 normal tests; no `KNOWN_FAIL_SILENT` canary remains.** Do not
 reintroduce the old `- none` assertion as an accepted state.
 
 Probe CLI:

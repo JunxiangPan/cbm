@@ -9,3 +9,7 @@ cbm-evidence-out/
 dist/
 build/
 .venv/
+.coverage
+.build-tmp/
+.venv*/
+pip-unpack-*/

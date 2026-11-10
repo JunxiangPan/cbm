@@ -27,6 +27,7 @@ from .artifacts import (
     verify_build_once,
 )
 from .gates import Evaluation, evaluate, upstream_summary
+from .intoto import build_statement
 from .reasons import (
     CbmError,
     GateError,
@@ -392,6 +393,7 @@ def _verify(args: argparse.Namespace) -> int:
             report,
             decision,
         )
+        _write_statement_for(report, args)
         print(
             "CBM_VERIFY "
             f"decision={decision['decision']} "
@@ -411,6 +413,7 @@ def _verify(args: argparse.Namespace) -> int:
             report,
             decision,
         )
+        _write_statement_for(report, args)
         print(f"{error.reason_value}: {error.detail}", file=sys.stderr)
         return error.exit_code
     except Exception as error:  # noqa: BLE001 - evidence must survive unknown failures
@@ -588,6 +591,7 @@ def _upload(args: argparse.Namespace) -> int:
         sealed = _seal(report)
         _write_json(Path(args.output), sealed)
         _write_text(Path(args.body), body.render_marked(sealed))
+        _write_statement_for(sealed, args)
         print(
             "CBM_UPLOAD "
             f"cbm_gate_status=PASS upload_status=UPLOADED_VERIFIED "
@@ -606,6 +610,7 @@ def _upload(args: argparse.Namespace) -> int:
         sealed = _seal(report)
         _write_json(Path(args.output), sealed)
         _write_text(Path(args.body), body.render_marked(sealed))
+        _write_statement_for(sealed, args)
         print(f"{error.reason_value}: {error.detail}", file=sys.stderr)
         return error.exit_code
     except Exception as error:  # noqa: BLE001
@@ -791,6 +796,14 @@ def _export_outputs(report: dict[str, Any]) -> None:
             handle.write(f"{key}={value}\n")
 
 
+def _write_statement_for(report: dict[str, Any], args: argparse.Namespace) -> Path:
+    """Write the in-toto Statement next to the report unless overridden."""
+    output = Path(args.output)
+    path = Path(args.statement) if getattr(args, "statement", "") else output.with_name(output.stem + ".statement.json")
+    _write_json(path, build_statement(report))
+    return path
+
+
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="cbm_attach")
     sub = parser.add_subparsers(dest="command")
@@ -820,6 +833,7 @@ def _build_parser() -> argparse.ArgumentParser:
     verify.add_argument("--output", default=DEFAULT_REPORT)
     verify.add_argument("--body", default=DEFAULT_BODY)
     verify.add_argument("--decision", default=DEFAULT_DECISION)
+    verify.add_argument("--statement", default="")
     verify.add_argument("--now")
 
     upload = sub.add_parser("upload", help="upload the approved build-once asset")
@@ -838,6 +852,7 @@ def _build_parser() -> argparse.ArgumentParser:
     upload.add_argument("--twine-bin", default="twine")
     upload.add_argument("--output", default=DEFAULT_FINAL_REPORT)
     upload.add_argument("--body", default=DEFAULT_FINAL_BODY)
+    upload.add_argument("--statement", default="")
     upload.add_argument("--now")
 
     finalize = sub.add_parser("finalize", help="emit the final report and body fragment")
@@ -850,6 +865,10 @@ def _build_parser() -> argparse.ArgumentParser:
     finalize.add_argument("--release-tag")
     finalize.add_argument("--upload-result")
     finalize.add_argument("--now")
+
+    statement = sub.add_parser("statement", help="write an in-toto Statement from a CBM report")
+    statement.add_argument("--report", default=DEFAULT_REPORT)
+    statement.add_argument("--output", default="")
 
     return parser
 
@@ -867,8 +886,18 @@ def main(argv: list[str] | None = None) -> int:
             return _upload(args)
         if args.command == "finalize":
             return _finalize(args)
+        if args.command == "statement":
+            report = json.loads(Path(args.report).read_text(encoding="utf-8"))
+            output = Path(args.output) if args.output else Path(args.report).with_name(Path(args.report).stem + ".statement.json")
+            _write_json(output, build_statement(report))
+            print(f"CBM_STATEMENT {output}")
+            return 0
         parser.print_help(sys.stderr)
         return 2
     except OSError as error:
         print(f"CBM_EVIDENCE_WRITE_FAILED: {error}", file=sys.stderr)
         return 3
+
+
+if __name__ == "__main__":  # pragma: no cover
+    raise SystemExit(main())
