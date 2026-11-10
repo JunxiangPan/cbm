@@ -94,5 +94,11 @@
     "commit": "c593251",
     "status": "success",
     "tests": "110 passed on ubuntu-latest and windows-latest (sidecar upload verified)"
+  },
+  {
+    "run": 42725782667,
+    "commit": "4c4505d",
+    "status": "success",
+    "tests": "110 passed on ubuntu-latest and windows-latest (final upload decision)"
   }
 ]
