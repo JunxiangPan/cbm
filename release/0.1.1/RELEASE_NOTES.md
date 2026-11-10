@@ -1,6 +1,6 @@
 # cbm-attach 0.1.1
 
-Status: **GitHub Release v0.1.1; PyPI pending environment approval.**
+Status: **GitHub Release + PyPI published; uploads verified.**
 
 - Distribution: `cbm-attach`
 - Version: `0.1.1`
@@ -21,6 +21,11 @@ Status: **GitHub Release v0.1.1; PyPI pending environment approval.**
 - `cbm-attach` distribution/console script and README quickstart.
 - Uploader failure/digest/timeout tests; uploader coverage 94%.
 - in-toto Statement output (`https://cbm.dev/attachment/v1`) and generic evidence adapters.
+
+## PyPI
+
+- https://pypi.org/project/cbm-attach/0.1.1/
+- Wheel/sdist digests match the GitHub Release and `release/0.1.1`.
 
 ## Smoke
 

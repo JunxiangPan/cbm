@@ -16,7 +16,7 @@ graph.
 **Start:**
 
 ```bash
-pip install cbm-attach
+pip install cbm-attach==0.1.1
 cbm-attach --help
 ```
 
@@ -37,7 +37,7 @@ cbm-attach --help
 The import package remains `cbm_attach`; the distribution and CLI are
 `cbm-attach`.
 
-## Current status: v0.1.1 GitHub Release
+## Current status: v0.1.1 GitHub Release + PyPI
 
 CBM v0.1.1 is a **sidecar attachment** tool, not a complete product
 certification and not an A-F live E2E proof. GitHub Release:
@@ -58,7 +58,7 @@ trusted publisher/credentials; use the exact wheel above until then.
 - **B5 FIXED** — CBS body generator emits `CBM: NOT_UPLOADED` +
   `EVIDENCE_ABSENT`.
 
-PyPI: **PENDING_ENVIRONMENT_APPROVAL** (trusted publisher configured; workflow waiting for JunxiangPan).
+PyPI: **PUBLISHED** — https://pypi.org/project/cbm-attach/0.1.1/
 
 **131 offline/static tests pass.** The source is Apache-2.0. No A-F live E2E
 or full-product certification is claimed. Evidence lives in
