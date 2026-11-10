@@ -30,6 +30,10 @@ Status: **GitHub Release v0.1.1; PyPI blocked (no credentials).**
 - in-toto Statement: `_type=https://in-toto.io/Statement/v1`,
   `predicateType=https://cbm.dev/attachment/v1`.
 
+## Release
+
+https://github.com/JunxiangPan/cbm/releases/tag/v0.1.1
+
 ## Boundaries
 
 - No A-F live E2E claim; no full-product certification.
