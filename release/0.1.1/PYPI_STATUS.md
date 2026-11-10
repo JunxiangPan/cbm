@@ -8,4 +8,4 @@ Status: **PUBLISHED**
 - wheel sha256 `eadb94e95e7ca4cbe6fc7ffb27b0c05143379e5062ef51e8c69ee516a1efe7b3` — matches GitHub Release and release/0.1.1
 - sdist sha256 `de87f6215e40e95b6ccf5570dba2ac0de70ea7228235795108e64631896f1a88` — matches GitHub Release and release/0.1.1
 - `pip install cbm-attach==0.1.1` verified in a clean venv.
-- No re-upload, no asset replacement, no tag move.
+- No re-upload, no asset replacement; tags are unchanged.

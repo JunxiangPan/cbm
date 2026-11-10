@@ -20,7 +20,7 @@ pip install cbm-attach==0.1.1
 cbm-attach --help
 ```
 
-Until the PyPI release is available, install the exact released wheel:
+If you need the exact build-once artifact, install the released wheel:
 
 ```bash
 pip install https://github.com/JunxiangPan/cbm/releases/download/v0.1.1/cbm_attach-0.1.1-py3-none-any.whl
