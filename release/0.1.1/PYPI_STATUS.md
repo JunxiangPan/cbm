@@ -1,10 +1,9 @@
 # PyPI status — cbm-attach 0.1.1
 
-Status: **BLOCKED_NO_PYPI_CREDENTIALS**
+Status: **PENDING_ENVIRONMENT_APPROVAL**
 
-- No `TWINE_USERNAME` / PyPI token / trusted-publisher workflow is configured.
-- `https://pypi.org/pypi/cbm-attach/json` returns HTTP 404.
-- No `twine upload` was attempted and no PyPI PASS is claimed.
-- Distribution and console script are available via the exact GitHub Release
-  wheel; `pip install cbm-attach==0.1.1` cannot succeed until publication.
-- GitHub Release: https://github.com/JunxiangPan/cbm/releases/tag/v0.1.1
+- Trusted-publisher workflow: `.github/workflows/pypi-publish.yml`
+- Workflow run: https://github.com/JunxiangPan/cbm/actions/runs/42741008466
+- `environment: pypi` is waiting for required reviewer **JunxiangPan**.
+- No PyPI upload has happened; `https://pypi.org/pypi/cbm-attach/0.1.1/json` is 404.
+- Do not claim PyPI PASS until the workflow completes and digests are verified.

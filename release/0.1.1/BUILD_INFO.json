@@ -9,10 +9,12 @@
   "sdist_sha256": "de87f6215e40e95b6ccf5570dba2ac0de70ea7228235795108e64631896f1a88",
   "python": "3.10.8",
   "entry_point": "cbm-attach = cbm_attach.cli:main",
-  "pypi_status": "BLOCKED_NO_PYPI_CREDENTIALS",
+  "pypi_status": "PENDING_ENVIRONMENT_APPROVAL",
   "github_release": "https://github.com/JunxiangPan/cbm/releases/tag/v0.1.1",
   "tag": "v0.1.1",
   "tag_created": true,
   "release_created": true,
-  "smoke": "smoke/"
+  "smoke": "smoke/",
+  "pypi_workflow_run": "42741008466",
+  "pypi_workflow_url": "https://github.com/JunxiangPan/cbm/actions/runs/42741008466"
 }

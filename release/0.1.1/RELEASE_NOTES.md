@@ -1,6 +1,6 @@
 # cbm-attach 0.1.1
 
-Status: **GitHub Release v0.1.1; PyPI blocked (no credentials).**
+Status: **GitHub Release v0.1.1; PyPI pending environment approval.**
 
 - Distribution: `cbm-attach`
 - Version: `0.1.1`

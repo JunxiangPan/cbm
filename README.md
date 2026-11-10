@@ -58,7 +58,7 @@ trusted publisher/credentials; use the exact wheel above until then.
 - **B5 FIXED** — CBS body generator emits `CBM: NOT_UPLOADED` +
   `EVIDENCE_ABSENT`.
 
-PyPI: **BLOCKED_NO_PYPI_CREDENTIALS** (no trusted publisher/credentials).
+PyPI: **PENDING_ENVIRONMENT_APPROVAL** (trusted publisher configured; workflow waiting for JunxiangPan).
 
 **131 offline/static tests pass.** The source is Apache-2.0. No A-F live E2E
 or full-product certification is claimed. Evidence lives in
