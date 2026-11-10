@@ -16,5 +16,9 @@
   "release_tag": "v0.1.0",
   "release_repository": "JunxiangPan/cbm",
   "release_url": "https://github.com/JunxiangPan/cbm/releases/tag/v0.1.0",
-  "uploaded_asset_url": "https://github.com/JunxiangPan/cbm/releases/download/v0.1.0/cbm_attach-0.1.0-py3-none-any.whl"
+  "uploaded_asset_url": "https://github.com/JunxiangPan/cbm/releases/download/v0.1.0/cbm_attach-0.1.0-py3-none-any.whl",
+  "upload_decision_file": "upload-decision.json",
+  "upload_final_file": "upload-final.json",
+  "pre_upload_decision": "upload-decision.pre-upload.json",
+  "tag_commit": "89f94440787da29aa63f9a6a275f34559199a54e"
 }

@@ -159,6 +159,9 @@ See [`B1_B2_BLOCKED.md`](B1_B2_BLOCKED.md). No fake PASS:
   manifest `0e0d37bd…`; CBM upload `cbm_gate_status=PASS`,
   `upload_status=UPLOADED_VERIFIED`. Release:
   https://github.com/JunxiangPan/cbm/releases/tag/v0.1.0
+  Final decision: `upload-decision.json` (`UPLOAD_APPROVED`,
+  `UPLOADED_VERIFIED`); `upload-final.json` points to the final report/body.
+  `upload-decision.pre-upload.json` is historical.
 - The synthetic fixture remains `not_upstream_evidence`; 4 readiness tests do
   not make B2 PASS.
 - B4 is UPLOADED_VERIFIED for the exact artifact; CBE/CBS unification is not claimed.

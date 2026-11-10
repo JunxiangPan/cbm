@@ -1,0 +1,9 @@
+{
+  "final": true,
+  "decision_file": "upload-decision.json",
+  "final_report": "cbm-report.final.json",
+  "final_body": "cbm-body.final.md",
+  "release_url": "https://github.com/JunxiangPan/cbm/releases/tag/v0.1.0",
+  "upload_status": "UPLOADED_VERIFIED",
+  "cbm_gate_status": "PASS"
+}

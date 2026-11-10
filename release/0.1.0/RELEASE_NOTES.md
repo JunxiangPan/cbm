@@ -21,6 +21,11 @@ Status: **UPLOADED_VERIFIED**. Scope: CBM sidecar attachment only.
 - https://github.com/JunxiangPan/cbm/releases/tag/v0.1.0
 - assets verified against the local exact wheel/sdist.
 
+## Upload decision
+
+- `UPLOAD_APPROVED` / `UPLOADED_VERIFIED` / `cbm_gate_status=PASS`
+- `upload-decision.json` is final; `upload-decision.pre-upload.json` is historical.
+
 ## Boundaries
 
 - No rebuild, no repack, no PyPI upload.

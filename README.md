@@ -33,6 +33,8 @@ live E2E is still not executed (private test repo + scoped tokens).
   `0e0d37bd…`; CBM upload `cbm_gate_status=PASS`,
   `upload_status=UPLOADED_VERIFIED`. Release:
   https://github.com/JunxiangPan/cbm/releases/tag/v0.1.0
+  Final decision `UPLOAD_APPROVED` / `UPLOADED_VERIFIED`; pre-upload decision
+  retained as historical. No A-F/full-product claim.
 - **B3 FIELD_LEVEL_COMPLETE** — CBP 1.2.2 produced exact-artifact manifest
   `0e0d37bd…` (`schema_version: "1"`, object repo, base, PASS).
   `body_hash_scope`, `release_body_hash`, `artifact_hashes` and

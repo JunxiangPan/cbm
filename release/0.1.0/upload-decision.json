@@ -1,11 +1,26 @@
 {
-  "decision": "UPLOAD",
-  "reason": "UPLOAD_PENDING",
-  "cbm_gate_status": "NOT_UPLOADED",
-  "upload_status": "NOT_UPLOADED",
-  "report_sha256": "bf2ae48b5f954ecaa6ce77a2ede065170cda9c78e513392ae34732b1f1943a01",
-  "artifact": {
-    "name": "cbm_attach-0.1.0-py3-none-any.whl",
-    "sha256": "72254704f5dc88688056fd3e4dac481edfa45f13e4bf5ae1aa8810cdaa48f45b"
-  }
+  "schema_version": "1",
+  "decision": "UPLOAD_APPROVED",
+  "reason": "UPLOADED_VERIFIED",
+  "cbm_gate_status": "PASS",
+  "upload_status": "UPLOADED_VERIFIED",
+  "release_url": "https://github.com/JunxiangPan/cbm/releases/tag/v0.1.0",
+  "release_tag": "v0.1.0",
+  "repository": "JunxiangPan/cbm",
+  "wheel": "cbm_attach-0.1.0-py3-none-any.whl",
+  "wheel_sha256": "72254704f5dc88688056fd3e4dac481edfa45f13e4bf5ae1aa8810cdaa48f45b",
+  "sdist": "cbm_attach-0.1.0.tar.gz",
+  "sdist_sha256": "6a7b6fe360b86e75a4c7bba0a2765f50e2195263735825e251ec91404927dd81",
+  "cbp_manifest_sha256": "0e0d37bd083afc0a5e868d654d4b8808f9f91c91f45dd20d4dbad029945e7a9b",
+  "cbe_report_sha256": "6b4dc1efd8433535efe70d4de9337910aa537fbcc982ebba3a014284f27fc76e",
+  "scope": "sidecar attachment only",
+  "historical_pre_upload": "upload-decision.pre-upload.json",
+  "final_report": "cbm-report.final.json",
+  "final_body": "cbm-body.final.md",
+  "no_rebuild": true,
+  "no_repack": true,
+  "no_pypi": true,
+  "no_cbs_tag_move": true,
+  "a_f_live_e2e_claimed": false,
+  "full_product_certification_claimed": false
 }
