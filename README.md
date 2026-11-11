@@ -278,7 +278,8 @@ are complete; full product/A-F live E2E is not claimed.**
 
 **CBF is not integrated yet.** Status: `PENDING_CBF_0.1.0`; there is **no CBF
 PASS** for this project or its releases. The `cbf-privacy-gate` CI job name is
-reserved as a name only; no workflow file is added in Phase 0. No
+reserved by a manual-only, fail-closed workflow; it is not wired to push/PR and
+never reports PASS. No
 `continue-on-error` / `if: false` bypass exists. See [`docs/CBF_ADOPTION.md`](docs/CBF_ADOPTION.md).
 
 CBF evidence is an **optional attachment**; it does not change the CBM
@@ -286,3 +287,7 @@ CBF evidence is an **optional attachment**; it does not change the CBM
 adoption, GitHub push / Release / PyPI / cloud-AI / local-AI use requires CBF
 PASS. CBF 0.1.0 is not released yet, so no CBF PASS exists. Until then, do not
 describe the project as CBF-compatible or CBF-passed.
+
+## CBF status
+
+CBF 0.1.0 has not been released. This project is **not CBF-integrated** and has **no CBF PASS**. Phase 0 preparation is recorded in [`docs/CBF_ADOPTION.md`](docs/CBF_ADOPTION.md); no runtime dependency, no import, and no CBF-certified release exists yet.
