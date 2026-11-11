@@ -7,10 +7,17 @@
   "sdist": "cbm_attach-0.2.0.tar.gz",
   "sdist_sha256": "dd2c2af9be6da7096b52cf09f248f7529201aa4bbacd2ed61cb47307f7a6eccb",
   "branch": "0.2.0-dev",
-  "tag_created": false,
-  "pypi_uploaded": false,
+  "tag_created": true,
+  "pypi_uploaded": true,
   "stable_candidate": true,
   "owner_review_required": true,
-  "ci_run": "43101599975",
-  "ci_conclusion": "success"
+  "ci_run": "43103259730",
+  "ci_conclusion": "success",
+  "release_created": true,
+  "pypi_status": "PUBLISHED",
+  "pypi_url": "https://pypi.org/project/cbm-attach/0.2.0/",
+  "release_url": "https://github.com/JunxiangPan/cbm/releases/tag/v0.2.0",
+  "tag": "v0.2.0",
+  "tag_commit": "261635e42806dc4569e8f3d7bfa4796bdd4de19f",
+  "pypi_workflow_run": "43103291928"
 }

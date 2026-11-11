@@ -1,11 +1,17 @@
 # cbm-attach 0.2.0
 
-Status: **stable release (owner accepted); sidecar attachment only.**
+Status: **stable release; GitHub Release + PyPI published and verified; sidecar attachment only.**
 
 - wheel `cbm_attach-0.2.0-py3-none-any.whl` sha256 `bc3d68ae0c3db5cb2dce4ae4d68d1b8c771b90707fca46212be88b1bf14a50bc`
 - sdist `cbm_attach-0.2.0.tar.gz` sha256 `dd2c2af9be6da7096b52cf09f248f7529201aa4bbacd2ed61cb47307f7a6eccb`
 - Distribution `cbm-attach`, import `cbm_attach`, console `cbm-attach`.
 - Scope: generic evidence adapters; wheel + zip-bundle; schema v2; unsigned in-toto Statement v1.
+
+## PyPI
+
+- https://pypi.org/project/cbm-attach/0.2.0/
+- trusted-publisher workflow run 43103291928 success
+- wheel/sdist digests match the GitHub Release and `release/0.2.0`.
 
 ## Compatibility
 

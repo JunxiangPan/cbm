@@ -1,6 +1,6 @@
 # 0.2.0 stable candidate self-audit
 
-Status: **candidate only; no tag, no PyPI stable upload.**
+Status: **stable release published; GitHub Release and PyPI verified.**
 
 | Item | Value |
 | --- | --- |
@@ -16,4 +16,4 @@ Status: **candidate only; no tag, no PyPI stable upload.**
 | 0.1.1 compatibility | v1 schema test + clean-venv `statement`/`verify-statement` on 0.1.1 report |
 | CBE/CBP install | not required; clean venv had neither |
 
-No functional blocker found. Owner review is required before tag/PyPI.
+Owner review completed; tag/release/PyPI published. No A-F or signed-attestation claim.
