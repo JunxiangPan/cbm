@@ -38,3 +38,27 @@ def write_statement(report: dict[str, Any], output: str | Path) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(build_statement(report), indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return path
+
+
+def verify_statement(statement: dict[str, Any], report: dict[str, Any] | None = None) -> list[str]:
+    """Validate the unsigned in-toto Statement structure and report binding."""
+    errors: list[str] = []
+    if statement.get("_type") != STATEMENT_TYPE:
+        errors.append("_type must be the in-toto Statement v1 URI")
+    if statement.get("predicateType") != PREDICATE_TYPE:
+        errors.append("predicateType must be https://cbm.dev/attachment/v1")
+    subject = statement.get("subject")
+    if not isinstance(subject, list) or not subject:
+        errors.append("subject must be a non-empty array")
+    else:
+        for item in subject:
+            if not isinstance(item, dict) or not isinstance(item.get("digest", {}).get("sha256"), str):
+                errors.append("subject digest.sha256 is required")
+    predicate = statement.get("predicate")
+    if not isinstance(predicate, dict) or not isinstance(predicate.get("report"), dict):
+        errors.append("predicate.report must be an object")
+    elif report is not None and predicate["report"] != report:
+        errors.append("predicate.report does not match the supplied report")
+    if "signatures" in statement:
+        errors.append("unsigned CBM Statement must not carry signatures")
+    return errors
