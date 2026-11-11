@@ -16,7 +16,7 @@ graph.
 **Start:**
 
 ```bash
-pip install cbm-attach==0.2.0
+pip install cbm-attach==0.2.0  # stable; 0.2.1 is the current candidate
 cbm-attach --help
 ```
 
@@ -37,7 +37,7 @@ cbm-attach --help
 The import package remains `cbm_attach`; the distribution and CLI are
 `cbm-attach`.
 
-## Current status: 0.2.0 stable released; 0.1.1 remains available
+## Current status: 0.2.1 stable release candidate; 0.2.0 and 0.1.1 remain available
 
 CBM v0.1.1 is a **sidecar attachment** tool, not a complete product
 certification and not an A-F live E2E proof. GitHub Release:
@@ -87,6 +87,17 @@ This is an adapter layer; the four-piece CBE/CBP/CBM path is unchanged.
 0.2.0 accepts CBS-style `.zip` bundles in addition to wheels. The bundle must
 be listed in `RELEASE_ASSETS.sha256`; the report records `artifact_type` and
 the bundle manifest SHA256. This does not replace CBS/CBP signing.
+
+## Optional semantic-verdict/v1 (0.2.1 candidate)
+
+CBM can verify and copy an external `semantic-verdict/v1` as a standalone
+attachment. It does not run a semantic model, does not import CBF/CBP/CBE, and
+does not change the 0.1.1/0.2.0 sidecar report contract.
+
+```bash
+cbm-attach verify-semantic --verdict semantic-verdict.json
+cbm-attach attach-semantic --verdict semantic-verdict.json --output-dir semantic-out
+```
 
 ## Non-goals
 

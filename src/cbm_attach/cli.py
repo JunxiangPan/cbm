@@ -28,6 +28,7 @@ from .artifacts import (
 )
 from .gates import Evaluation, evaluate, upstream_summary
 from .intoto import build_statement, verify_statement
+from .semantic import SemanticVerdictError, attach_semantic, load_semantic
 from .reasons import (
     CbmError,
     GateError,
@@ -881,6 +882,13 @@ def _build_parser() -> argparse.ArgumentParser:
     verify_statement_parser.add_argument("--statement", required=True)
     verify_statement_parser.add_argument("--report", default="")
 
+    attach_semantic_parser = sub.add_parser("attach-semantic", help="verify and attach an optional semantic-verdict/v1")
+    attach_semantic_parser.add_argument("--verdict", required=True)
+    attach_semantic_parser.add_argument("--output-dir", required=True)
+
+    verify_semantic_parser = sub.add_parser("verify-semantic", help="validate an optional semantic-verdict/v1")
+    verify_semantic_parser.add_argument("--verdict", required=True)
+
     return parser
 
 
@@ -911,6 +919,22 @@ def main(argv: list[str] | None = None) -> int:
                 print("STATEMENT_INVALID: " + "; ".join(errors), file=sys.stderr)
                 return 3
             print("STATEMENT_VALID")
+            return 0
+        if args.command == "verify-semantic":
+            try:
+                verdict = load_semantic(args.verdict)
+            except SemanticVerdictError as error:
+                print(f"SEMANTIC_INVALID: {error}", file=sys.stderr)
+                return 3
+            print(f"SEMANTIC_VALID verdict={verdict.verdict} sha256={verdict.sha256}")
+            return 0
+        if args.command == "attach-semantic":
+            try:
+                verdict_copy, manifest = attach_semantic(args.verdict, args.output_dir)
+            except SemanticVerdictError as error:
+                print(f"SEMANTIC_INVALID: {error}", file=sys.stderr)
+                return 3
+            print(f"SEMANTIC_ATTACHED {verdict_copy} {manifest}")
             return 0
         parser.print_help(sys.stderr)
         return 2
