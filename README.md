@@ -23,7 +23,7 @@ cbm-attach --help
 If you need the exact build-once artifact, install the released wheel:
 
 ```bash
-pip install https://github.com/JunxiangPan/cbm/releases/download/v0.1.1/cbm_attach-0.1.1-py3-none-any.whl
+pip install https://github.com/JunxiangPan/cbm/releases/download/v0.2.0/cbm_attach-0.2.0-py3-none-any.whl
 cbm-attach --help
 ```
 
@@ -273,3 +273,14 @@ blocker list is [`docs/V17_BLOCKERS.md`](docs/V17_BLOCKERS.md). They are
 change-control inputs for the CBS/CBP owners; this repository does not edit the
 frozen contract. **CBM 0.1.0 sidecar upload is verified; B3 field-level and B5
 are complete; full product/A-F live E2E is not claimed.**
+
+## CBF privacy gate (Phase 0)
+
+**CBF is not integrated yet.** Status: `PENDING_CBF_0.1.0`; there is **no CBF
+PASS** for this project or its releases. The `cbf-privacy-gate` CI job name is
+reserved but not active; no `continue-on-error` / `if: false` placeholder is
+used. See [`docs/CBF_ADOPTION.md`](docs/CBF_ADOPTION.md).
+
+Once CBF 0.1.0rc1 is available, this project must pin a CBF policy and run
+`cbf gate --surface git` before upload/release. Until then, do not describe the
+project as CBF-compatible or CBF-passed.
