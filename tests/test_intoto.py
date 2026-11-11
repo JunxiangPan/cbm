@@ -63,3 +63,24 @@ def test_generic_evidence_identity_is_not_hardcoded_to_cbm(tmp_path: Path) -> No
     )
     assert len(errors) == 2
     assert cbe.sha256 and cbp.sha256
+
+
+def test_verify_statement_accepts_bound_report_and_rejects_tamper(tmp_path: Path) -> None:
+    report = {
+        "artifact_name": "x.whl",
+        "artifact_sha256": "a" * 64,
+        "cbm_gate_status": "PASS",
+        "upload_status": "NOT_UPLOADED",
+        "evidence_sha256": "c" * 64,
+    }
+    statement = build_statement(report)
+    report_path = write_json(tmp_path / "report.json", report)
+    statement_path = write_json(tmp_path / "statement.json", statement)
+    assert cli.main(["verify-statement", "--statement", str(statement_path), "--report", str(report_path)]) == 0
+    statement["predicate"]["report"]["artifact_sha256"] = "d" * 64
+    bad_path = write_json(tmp_path / "bad.json", statement)
+    assert cli.main(["verify-statement", "--statement", str(bad_path), "--report", str(report_path)]) == 3
+    signed = dict(statement)
+    signed["signatures"] = []
+    signed_path = write_json(tmp_path / "signed.json", signed)
+    assert cli.main(["verify-statement", "--statement", str(signed_path)]) == 3

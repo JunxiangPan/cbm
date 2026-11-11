@@ -27,7 +27,7 @@ from .artifacts import (
     verify_build_once,
 )
 from .gates import Evaluation, evaluate, upstream_summary
-from .intoto import build_statement
+from .intoto import build_statement, verify_statement
 from .reasons import (
     CbmError,
     GateError,
@@ -233,7 +233,7 @@ def _report_dict(ctx: ReportContext) -> dict[str, Any]:
     if ctx.cbp is not None and ctx.artifact is not None:
         cbp_artifact_sha = artifact_hash_from_cbp(ctx.cbp, ctx.artifact.name)
     return {
-        "schema_version": "1",
+        "schema_version": "2",
         "package_id": "cbm",
         "version": ctx.version,
         "tag": ctx.tag,
@@ -258,6 +258,10 @@ def _report_dict(ctx: ReportContext) -> dict[str, Any]:
         "upstream_gate_status": upstream_summary(ctx.cbe, ctx.cbp),
         "artifact_name": ctx.artifact.name if ctx.artifact is not None else None,
         "artifact_sha256": ctx.artifact.sha256 if ctx.artifact is not None else None,
+        "artifact_type": ctx.artifact.artifact_type if ctx.artifact is not None else None,
+        "bundle_manifest_sha256": (
+            ctx.artifact.bundle_manifest_sha256 if ctx.artifact is not None else None
+        ),
         "cbp_artifact_sha256": cbp_artifact_sha,
         "build_once_run_id": ctx.build_once_run_id,
         "ci_commit_sha": ctx.ci_commit_sha,
@@ -298,7 +302,7 @@ def _load_inputs(
                 missing_reason=Reason.MISSING_BUILD_ONCE_ARTIFACT,
                 gh_bin=args.gh_bin,
             )
-            artifact = verify_build_once(locate_build_once_root(fetched))
+            artifact = verify_build_once(locate_build_once_root(fetched), artifact_type=args.artifact_type)
         if args.cbe_run_id and args.cbe_report_artifact:
             cbe = fetch_report(
                 repository=artifact_repository,
@@ -319,7 +323,7 @@ def _load_inputs(
             )
     else:
         if args.build_once_dir:
-            artifact = verify_build_once(args.build_once_dir)
+            artifact = verify_build_once(args.build_once_dir, artifact_type=args.artifact_type)
         if args.cbe_report:
             cbe = load_report(args.cbe_report, "cbe")
         if args.cbp_report:
@@ -530,14 +534,14 @@ def _upload(args: argparse.Namespace) -> int:
                 missing_reason=Reason.MISSING_BUILD_ONCE_ARTIFACT,
                 gh_bin=args.gh_bin,
             )
-            artifact = verify_build_once(locate_build_once_root(fetched))
+            artifact = verify_build_once(locate_build_once_root(fetched), artifact_type=args.artifact_type)
         else:
             if not args.build_once_dir:
                 raise InputError(
                     "build_once_dir is required to re-verify the artifact",
                     reason=Reason.MISSING_BUILD_ONCE_ARTIFACT,
                 )
-            artifact = verify_build_once(args.build_once_dir)
+            artifact = verify_build_once(args.build_once_dir, artifact_type=args.artifact_type)
 
         _verify_artifact_against_report(report, artifact)
 
@@ -822,6 +826,7 @@ def _build_parser() -> argparse.ArgumentParser:
     verify.add_argument("--cbe-report")
     verify.add_argument("--cbp-report")
     verify.add_argument("--build-once-dir")
+    verify.add_argument("--artifact-type", choices=("wheel", "zip-bundle"), default="")
     verify.add_argument("--cbe-run-id")
     verify.add_argument("--cbe-report-artifact")
     verify.add_argument("--cbp-run-id")
@@ -841,6 +846,7 @@ def _build_parser() -> argparse.ArgumentParser:
     upload.add_argument("--report", default=DEFAULT_REPORT)
     upload.add_argument("--decision", default=DEFAULT_DECISION)
     upload.add_argument("--build-once-dir")
+    upload.add_argument("--artifact-type", choices=("wheel", "zip-bundle"), default="")
     upload.add_argument("--build-once-run-id")
     upload.add_argument("--build-once-artifact", default="cbm-build-once")
     upload.add_argument("--fetch", action="store_true")
@@ -871,6 +877,10 @@ def _build_parser() -> argparse.ArgumentParser:
     statement.add_argument("--report", default=DEFAULT_REPORT)
     statement.add_argument("--output", default="")
 
+    verify_statement_parser = sub.add_parser("verify-statement", help="verify an in-toto Statement structure")
+    verify_statement_parser.add_argument("--statement", required=True)
+    verify_statement_parser.add_argument("--report", default="")
+
     return parser
 
 
@@ -892,6 +902,15 @@ def main(argv: list[str] | None = None) -> int:
             output = Path(args.output) if args.output else Path(args.report).with_name(Path(args.report).stem + ".statement.json")
             _write_json(output, build_statement(report))
             print(f"CBM_STATEMENT {output}")
+            return 0
+        if args.command == "verify-statement":
+            statement = json.loads(Path(args.statement).read_text(encoding="utf-8"))
+            report = json.loads(Path(args.report).read_text(encoding="utf-8")) if args.report else None
+            errors = verify_statement(statement, report)
+            if errors:
+                print("STATEMENT_INVALID: " + "; ".join(errors), file=sys.stderr)
+                return 3
+            print("STATEMENT_VALID")
             return 0
         parser.print_help(sys.stderr)
         return 2

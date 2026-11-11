@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cbm-attach"
-version = "0.1.1"
+version = "0.2.0rc1"
 description = "Sidecar attachment attestation for release evidence"
 readme = "README.md"
 requires-python = ">=3.10"

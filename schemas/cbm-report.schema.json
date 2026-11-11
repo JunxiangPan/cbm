@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cyber-butler.local/schemas/v1.7/cbm-report.schema.json",
-  "title": "CBM attach evidence report v0.1",
+  "$id": "https://cyber-butler.local/schemas/v0.2/cbm-report.schema.json",
+  "title": "CBM attach evidence report v0.2",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -31,11 +31,13 @@
     "uploaded_asset_url",
     "uploaded_asset_digest",
     "verified_at",
-    "evidence_sha256"
+    "evidence_sha256",
+    "artifact_type",
+    "bundle_manifest_sha256"
   ],
   "properties": {
     "schema_version": {
-      "const": "1"
+      "const": "2"
     },
     "package_id": {
       "const": "cbm"
@@ -275,6 +277,16 @@
           "type": "null"
         }
       ]
+    },
+    "artifact_type": {
+      "enum": [
+        "wheel",
+        "zip-bundle",
+        null
+      ]
+    },
+    "bundle_manifest_sha256": {
+      "$ref": "#/$defs/hashOrNull"
     }
   },
   "$defs": {

@@ -31,6 +31,9 @@ class Artifact:
     path: Path
     sha256: str
     assets: dict[str, str]
+    artifact_type: str = "wheel"
+    bundle_manifest: dict[str, Any] | None = None
+    bundle_manifest_sha256: str | None = None
 
 
 def _normalise_hash(value: str) -> str:
@@ -117,86 +120,44 @@ def _lookup(mapping: dict[str, str], wheel: Path, root: Path) -> str | None:
 
 
 def locate_build_once_root(root: str | Path) -> Path:
-    """Find the directory containing ``WHEEL_SHA256`` inside an artifact zip."""
+    """Find the directory containing a build-once hash manifest."""
     base = Path(root)
-    direct = base / "WHEEL_SHA256"
-    if direct.is_file():
-        return base
-    matches = sorted(base.rglob("WHEEL_SHA256"))
+    for marker in ("WHEEL_SHA256", "BUNDLE_SHA256", "RELEASE_ASSETS.sha256"):
+        if (base / marker).is_file():
+            return base
+    matches = sorted({path.parent for marker in ("WHEEL_SHA256", "BUNDLE_SHA256") for path in base.rglob(marker)})
     if len(matches) == 1:
-        return matches[0].parent
+        return matches[0]
     raise InputError(
-        f"{base}: expected exactly one WHEEL_SHA256, found {len(matches)}",
+        f"{base}: expected exactly one build-once hash manifest, found {len(matches)}",
         reason=Reason.MISSING_BUILD_ONCE_ARTIFACT,
     )
 
 
-def verify_build_once(directory: str | Path) -> Artifact:
-    """Verify the build-once directory and return the single wheel."""
-    root = Path(directory)
-    if not root.is_dir():
-        raise InputError(
-            f"{root}: build-once artifact directory not found",
-            reason=Reason.MISSING_BUILD_ONCE_ARTIFACT,
-        )
+def _lookup_asset(mapping: dict[str, str], asset: Path, root: Path) -> str | None:
+    candidates = []
+    try:
+        candidates.append(str(asset.resolve().relative_to(root.resolve())).replace("\\", "/"))
+    except ValueError:
+        pass
+    candidates.extend([asset.name, f"dist/{asset.name}", f"./{asset.name}"])
+    for key in candidates:
+        if key in mapping:
+            return mapping[key]
+    return mapping.get("")
 
-    wheel_hashes = _parse_hash_manifest(root / "WHEEL_SHA256")
-    asset_hashes = _parse_hash_manifest(root / "RELEASE_ASSETS.sha256")
 
-    search_root = root / "dist" if (root / "dist").is_dir() else root
-    wheels = sorted(search_root.glob("*.whl"))
-    if len(wheels) != 1:
-        raise InputError(
-            f"{root}: expected exactly one .whl, found {len(wheels)}",
-            reason=Reason.MISSING_BUILD_ONCE_ARTIFACT,
-        )
-    wheel = wheels[0]
-    if wheel.is_symlink():
-        raise InputError(f"{wheel}: symlink is not allowed", reason=Reason.SCHEMA_VIOLATION)
-
-    actual = _hash_file(wheel)
-    expected = _lookup(wheel_hashes, wheel, root)
-    if expected is None:
-        raise InputError(
-            f"{wheel.name}: not listed in WHEEL_SHA256",
-            reason=Reason.MISSING_BUILD_ONCE_ARTIFACT,
-        )
-    if actual != expected:
-        raise GateError(
-            f"{wheel.name}: sha256 {actual} != WHEEL_SHA256 {expected}",
-            reason=Reason.ARTIFACT_HASH_MISMATCH,
-        )
-
-    release_expected = _lookup(asset_hashes, wheel, root)
-    if release_expected is None:
-        raise GateError(
-            f"{wheel.name}: not listed in RELEASE_ASSETS.sha256",
-            reason=Reason.ARTIFACT_HASH_MISMATCH,
-        )
-    if release_expected != actual:
-        raise GateError(
-            f"{wheel.name}: sha256 {actual} != RELEASE_ASSETS.sha256 {release_expected}",
-            reason=Reason.ARTIFACT_HASH_MISMATCH,
-        )
-
+def _verify_release_inventory(root: Path, asset_hashes: dict[str, str]) -> None:
     for relative, expected_hash in asset_hashes.items():
-        if not relative:
-            continue
-        # §11: the inventory lists published assets except itself.  A manifest
-        # that still self-lists must not be self-hashed.
-        if relative == "RELEASE_ASSETS.sha256":
+        if not relative or relative == "RELEASE_ASSETS.sha256":
             continue
         parts = _safe_relative(relative).parts
         candidate = root.joinpath(*parts)
         if not candidate.is_file() and len(parts) == 1 and (root / "dist").is_dir():
-            # §11 uses bare basenames; the wheel may live under dist/.
             candidate = root / "dist" / parts[0]
         resolved_root = root.resolve()
         resolved_candidate = candidate.resolve()
-        if (
-            resolved_root != resolved_candidate
-            and resolved_root not in resolved_candidate.parents
-        ):
+        if resolved_root != resolved_candidate and resolved_root not in resolved_candidate.parents:
             raise InputError(
                 f"{candidate}: listed path escapes the build-once directory",
                 reason=Reason.SCHEMA_VIOLATION,
@@ -207,21 +168,119 @@ def verify_build_once(directory: str | Path) -> Artifact:
                 reason=Reason.MISSING_BUILD_ONCE_ARTIFACT,
             )
         if candidate.is_symlink():
-            raise InputError(
-                f"{candidate}: symlink is not allowed",
-                reason=Reason.SCHEMA_VIOLATION,
-            )
+            raise InputError(f"{candidate}: symlink is not allowed", reason=Reason.SCHEMA_VIOLATION)
         if _hash_file(candidate) != expected_hash:
             raise GateError(
                 f"{candidate}: sha256 mismatch against RELEASE_ASSETS.sha256",
                 reason=Reason.ARTIFACT_HASH_MISMATCH,
             )
 
+
+def _read_bundle_manifest(root: Path, archive: Path) -> tuple[dict[str, Any] | None, str | None]:
+    """Read a bundle manifest from the build-once root or inside the zip."""
+    for name in ("bundle-manifest.json", "update-manifest.json"):
+        candidate = root / name
+        if candidate.is_file():
+            raw = candidate.read_bytes()
+            return json.loads(raw.decode("utf-8")), hashlib.sha256(raw).hexdigest()
+    with zipfile.ZipFile(archive) as handle:
+        for name in ("bundle-manifest.json", "update-manifest.json"):
+            member = _safe_relative(name)
+            try:
+                raw = handle.read(str(member))
+            except KeyError:
+                continue
+            return json.loads(raw.decode("utf-8")), hashlib.sha256(raw).hexdigest()
+    return None, None
+
+
+def verify_build_once(directory: str | Path, *, artifact_type: str = "") -> Artifact:
+    """Verify a build-once directory and return one wheel or zip-bundle."""
+    root = Path(directory)
+    if not root.is_dir():
+        raise InputError(
+            f"{root}: build-once artifact directory not found",
+            reason=Reason.MISSING_BUILD_ONCE_ARTIFACT,
+        )
+
+    search_root = root / "dist" if (root / "dist").is_dir() else root
+    wheels = sorted(search_root.glob("*.whl"))
+    bundles = sorted(search_root.glob("*.zip"))
+    selected_type = artifact_type
+    if not selected_type:
+        selected_type = "wheel" if wheels else "zip-bundle" if bundles else "wheel"
+    if selected_type not in {"wheel", "zip-bundle"}:
+        raise InputError(f"unsupported artifact type {selected_type!r}", reason=Reason.SCHEMA_VIOLATION)
+
+    asset_hashes = _parse_hash_manifest(root / "RELEASE_ASSETS.sha256")
+
+    if selected_type == "wheel":
+        wheel_hashes = _parse_hash_manifest(root / "WHEEL_SHA256")
+        if len(wheels) != 1:
+            raise InputError(
+                f"{root}: expected exactly one .whl, found {len(wheels)}",
+                reason=Reason.MISSING_BUILD_ONCE_ARTIFACT,
+            )
+        wheel = wheels[0]
+        if wheel.is_symlink():
+            raise InputError(f"{wheel}: symlink is not allowed", reason=Reason.SCHEMA_VIOLATION)
+        actual = _hash_file(wheel)
+        expected = _lookup_asset(wheel_hashes, wheel, root)
+        if expected is None:
+            raise InputError(f"{wheel.name}: not listed in WHEEL_SHA256", reason=Reason.MISSING_BUILD_ONCE_ARTIFACT)
+        if actual != expected:
+            raise GateError(
+                f"{wheel.name}: sha256 {actual} != WHEEL_SHA256 {expected}",
+                reason=Reason.ARTIFACT_HASH_MISMATCH,
+            )
+        release_expected = _lookup_asset(asset_hashes, wheel, root)
+        if release_expected is None:
+            raise GateError(f"{wheel.name}: not listed in RELEASE_ASSETS.sha256", reason=Reason.ARTIFACT_HASH_MISMATCH)
+        if release_expected != actual:
+            raise GateError(
+                f"{wheel.name}: sha256 {actual} != RELEASE_ASSETS.sha256 {release_expected}",
+                reason=Reason.ARTIFACT_HASH_MISMATCH,
+            )
+        _verify_release_inventory(root, asset_hashes)
+        return Artifact(name=wheel.name, path=wheel, sha256=actual, assets=asset_hashes)
+
+    if len(bundles) != 1:
+        raise InputError(
+            f"{root}: expected exactly one .zip bundle, found {len(bundles)}",
+            reason=Reason.MISSING_BUILD_ONCE_ARTIFACT,
+        )
+    bundle = bundles[0]
+    if bundle.is_symlink():
+        raise InputError(f"{bundle}: symlink is not allowed", reason=Reason.SCHEMA_VIOLATION)
+    actual = _hash_file(bundle)
+    if (root / "BUNDLE_SHA256").is_file():
+        bundle_hashes = _parse_hash_manifest(root / "BUNDLE_SHA256")
+        expected = _lookup_asset(bundle_hashes, bundle, root)
+        if expected is None:
+            raise InputError(f"{bundle.name}: not listed in BUNDLE_SHA256", reason=Reason.MISSING_BUILD_ONCE_ARTIFACT)
+        if actual != expected:
+            raise GateError(
+                f"{bundle.name}: sha256 {actual} != BUNDLE_SHA256 {expected}",
+                reason=Reason.ARTIFACT_HASH_MISMATCH,
+            )
+    release_expected = _lookup_asset(asset_hashes, bundle, root)
+    if release_expected is None:
+        raise GateError(f"{bundle.name}: not listed in RELEASE_ASSETS.sha256", reason=Reason.ARTIFACT_HASH_MISMATCH)
+    if release_expected != actual:
+        raise GateError(
+            f"{bundle.name}: sha256 {actual} != RELEASE_ASSETS.sha256 {release_expected}",
+            reason=Reason.ARTIFACT_HASH_MISMATCH,
+        )
+    _verify_release_inventory(root, asset_hashes)
+    manifest, manifest_sha = _read_bundle_manifest(root, bundle)
     return Artifact(
-        name=wheel.name,
-        path=wheel,
+        name=bundle.name,
+        path=bundle,
         sha256=actual,
         assets=asset_hashes,
+        artifact_type="zip-bundle",
+        bundle_manifest=manifest,
+        bundle_manifest_sha256=manifest_sha,
     )
 
 

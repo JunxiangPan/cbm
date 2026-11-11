@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable
+from typing import Callable, Iterable, Protocol
 
 from .reports import Report, load_report
 
@@ -38,8 +38,31 @@ class EvidenceInput:
         )
 
 
+class EvidenceAdapter(Protocol):
+    kind: str
+
+    def load(self, path: str | Path) -> EvidenceInput: ...
+
+
+_ADAPTERS: dict[str, Callable[[str | Path], EvidenceInput]] = {}
+
+
+def register_adapter(kind: str, loader: Callable[[str | Path], EvidenceInput]) -> None:
+    """Register a pluggable evidence adapter by kind."""
+    if not kind or not callable(loader):
+        raise ValueError("adapter kind and callable loader are required")
+    _ADAPTERS[kind] = loader
+
+
 def load_evidence(path: str | Path, kind: str) -> EvidenceInput:
+    if kind in _ADAPTERS:
+        return _ADAPTERS[kind](path)
     return EvidenceInput.from_report(load_report(path, kind))
+
+
+def load_generic(path: str | Path, kind: str) -> EvidenceInput:
+    """Alias for pluggable adapters; no CBE/CBP import is required."""
+    return load_evidence(path, kind)
 
 
 def identity_errors_for(

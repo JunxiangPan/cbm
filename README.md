@@ -16,7 +16,7 @@ graph.
 **Start:**
 
 ```bash
-pip install cbm-attach==0.1.1
+pip install cbm-attach==0.1.1  # stable; 0.2.0rc1 is a branch candidate
 cbm-attach --help
 ```
 
@@ -37,7 +37,7 @@ cbm-attach --help
 The import package remains `cbm_attach`; the distribution and CLI are
 `cbm-attach`.
 
-## Current status: v0.1.1 GitHub Release + PyPI
+## Current status: 0.2.0rc1 development on 0.2.0-dev; 0.1.1 remains stable
 
 CBM v0.1.1 is a **sidecar attachment** tool, not a complete product
 certification and not an A-F live E2E proof. GitHub Release:
@@ -60,7 +60,7 @@ trusted publisher/credentials; use the exact wheel above until then.
 
 PyPI: **PUBLISHED** — https://pypi.org/project/cbm-attach/0.1.1/
 
-**131 offline/static tests pass.** The source is Apache-2.0. No A-F live E2E
+**139 offline/static tests pass.** The source is Apache-2.0. No A-F live E2E
 or full-product certification is claimed. Evidence lives in
 `audit/v1.2.0-rc/`.
 
@@ -81,6 +81,12 @@ report hashes remain separate from canonical evidence hashes.
 For non-CBM subjects, `cbm_attach.evidence` exposes `EvidenceInput`,
 `load_evidence()` and `identity_errors_for(subject_package_id=..., producers=...)`.
 This is an adapter layer; the four-piece CBE/CBP/CBM path is unchanged.
+
+## Zip-bundle
+
+0.2.0 accepts CBS-style `.zip` bundles in addition to wheels. The bundle must
+be listed in `RELEASE_ASSETS.sha256`; the report records `artifact_type` and
+the bundle manifest SHA256. This does not replace CBS/CBP signing.
 
 ## Non-goals
 
@@ -223,7 +229,7 @@ the SHA-256 of the canonical JSON of the report without that field.
 python -m pytest
 ```
 
-**131 tests pass**: exit-code mapping, gate-before-upload (including a mock
+**139 tests pass**: exit-code mapping, gate-before-upload (including a mock
 uploader that records calls), NOT_UPLOADED body rendering, hashes, workflow
 static audit, schema/report lockstep, and a mock end-to-end
 verify/upload/finalize flow. These are offline/static tests, not real E2E.
@@ -235,7 +241,7 @@ probe's missing/import/unexpected modes; a missing CBS checkout skips with
 `SKIP_REASON=CBS_BODY_GENERATOR_NOT_FOUND`, and an unimportable file fails with
 `FAIL_REASON=CBS_BODY_GENERATOR_UNIMPORTABLE`.
 
-**131 passed = 131 normal tests; no `KNOWN_FAIL_SILENT` canary remains.** Do not
+**139 passed = 139 normal tests; no `KNOWN_FAIL_SILENT` canary remains.** Do not
 reintroduce the old `- none` assertion as an accepted state.
 
 Probe CLI:
