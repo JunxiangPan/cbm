@@ -27,6 +27,12 @@ it and does not require it to be installed.
   pre-push `cbf gate --surface git`.
 - Block upload/release on CBF failure; record `cbf-evidence/v1`.
 
-## Boundary
+## CBM contract boundary
 
-CBF evidence may be attached as an optional artifact; this does not change the CBM sidecar contract.
+- CBF evidence may be attached as an **optional artifact**. It is not a required
+  field and does not change the CBM 0.1.1 or 0.2.0 sidecar contract, schema,
+  report, or upload decision.
+- CBM does not import CBF and does not require CBF to be installed.
+- After CBF adoption, GitHub push / Release / PyPI / cloud-AI / local-AI use
+  must have CBF PASS. CBF 0.1.0 is not released yet, so there is no CBF PASS and
+  this repository remains Phase 0 documentation-only.

@@ -281,6 +281,8 @@ PASS** for this project or its releases. The `cbf-privacy-gate` CI job name is
 reserved as a name only; no workflow file is added in Phase 0. No
 `continue-on-error` / `if: false` bypass exists. See [`docs/CBF_ADOPTION.md`](docs/CBF_ADOPTION.md).
 
-Once CBF 0.1.0rc1 is available, this project must pin a CBF policy and run
-`cbf gate --surface git` before upload/release. Until then, do not describe the
-project as CBF-compatible or CBF-passed.
+CBF evidence is an **optional attachment**; it does not change the CBM
+0.1.1/0.2.0 sidecar contract and CBM does not import or require CBF. After
+adoption, GitHub push / Release / PyPI / cloud-AI / local-AI use requires CBF
+PASS. CBF 0.1.0 is not released yet, so no CBF PASS exists. Until then, do not
+describe the project as CBF-compatible or CBF-passed.
