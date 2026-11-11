@@ -1,0 +1,14 @@
+{
+  "name": "cbm-attach",
+  "version": "0.2.0",
+  "license": "Apache-2.0",
+  "wheel": "cbm_attach-0.2.0-py3-none-any.whl",
+  "wheel_sha256": "bc3d68ae0c3db5cb2dce4ae4d68d1b8c771b90707fca46212be88b1bf14a50bc",
+  "sdist": "cbm_attach-0.2.0.tar.gz",
+  "sdist_sha256": "dd2c2af9be6da7096b52cf09f248f7529201aa4bbacd2ed61cb47307f7a6eccb",
+  "branch": "0.2.0-dev",
+  "tag_created": false,
+  "pypi_uploaded": false,
+  "stable_candidate": true,
+  "owner_review_required": true
+}
