@@ -16,7 +16,7 @@ graph.
 **Start:**
 
 ```bash
-pip install cbm-attach==0.2.0  # stable; 0.2.1 is the current candidate
+pip install cbm-attach==0.2.1
 cbm-attach --help
 ```
 
@@ -37,7 +37,7 @@ cbm-attach --help
 The import package remains `cbm_attach`; the distribution and CLI are
 `cbm-attach`.
 
-## Current status: 0.2.1 stable release candidate; 0.2.0 and 0.1.1 remain available
+## Current status: 0.2.1 stable released; 0.2.0 and 0.1.1 remain available
 
 CBM v0.1.1 is a **sidecar attachment** tool, not a complete product
 certification and not an A-F live E2E proof. GitHub Release:

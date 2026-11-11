@@ -12,4 +12,7 @@
 | CBF/CBP/CBE import | none |
 | 0.1.1/0.2.0 sidecar contract | unchanged |
 | CBF evidence external check | attachment read PASS; CBF gate NOT_RUN; semantic model NOT_RUN |
-| tag/PyPI | release in progress |
+| GitHub Release | https://github.com/JunxiangPan/cbm/releases/tag/v0.2.1 |
+| PyPI | https://pypi.org/project/cbm-attach/0.2.1/ (JSON 200) |
+| pypi-publish | 43123043868 success |
+| CI | 43123015675 (145 passed, 1 skipped) |

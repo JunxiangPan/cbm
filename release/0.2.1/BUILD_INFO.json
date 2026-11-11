@@ -7,8 +7,14 @@
   "wheel_sha256": "b84b90a8c884e3ed8495dc5ca4c9061545e36752c3a20d26bbd5fac89551847f",
   "sdist": "cbm_attach-0.2.1.tar.gz",
   "sdist_sha256": "b4ba27e7b864989c07775bc354efda6c3c57687b59993a2c9e8c682c42476b1a",
-  "tag_created": false,
-  "pypi_uploaded": false,
+  "tag_created": true,
+  "pypi_uploaded": true,
   "semantic_model_run": false,
-  "imports_cbe_cbp_cbf": false
+  "imports_cbe_cbp_cbf": false,
+  "tag": "v0.2.1",
+  "tag_commit": "7eaee9522121e9b21db94bb7180c1da05767731d",
+  "release_url": "https://github.com/JunxiangPan/cbm/releases/tag/v0.2.1",
+  "pypi_url": "https://pypi.org/project/cbm-attach/0.2.1/",
+  "pypi_workflow_run": "43123043868",
+  "ci_run": "43123015675"
 }

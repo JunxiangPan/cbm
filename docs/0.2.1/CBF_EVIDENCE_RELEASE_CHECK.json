@@ -1,0 +1,28 @@
+{
+  "tool": "cbm-attach",
+  "version": "0.2.1",
+  "evidence": "..\\cbc-event\\tests\\fixtures\\cbf-evidence-pass.json",
+  "evidence_schema": "cbf-evidence/v1",
+  "source_result": "PASS",
+  "evidence_sha256": "bc0b31bc2243f5de5dcdbe67d79a9305f0b41859354ffe66c0dc2685e5ed2825",
+  "raw_sha256": "41f08607688f344b53eb9e1feceeb1e7b9f4938e87a79263147ccaeec7dbc0dc",
+  "subject": {
+    "package_id": "tmp-cbf-evidence",
+    "producer_id": "cbf",
+    "version": "0.1.0"
+  },
+  "checks": {
+    "schema_read": "PASS",
+    "generic_attachment_read": "PASS",
+    "identity": "PASS",
+    "cbf_gate": "NOT_RUN",
+    "semantic_model": "NOT_RUN",
+    "hash_verification": "NOT_RUN"
+  },
+  "notes": [
+    "CBF gate was not run; CBF 0.1.0 is not released.",
+    "No semantic model was run.",
+    "This is an external generic attachment read, not a semantic-verdict/v1 attachment and not a CBM CBF PASS.",
+    "The cbf-evidence/v1 source_result is reported separately."
+  ]
+}
