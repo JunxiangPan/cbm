@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyber-butler.local/schemas/v0.2.1/semantic-verdict-v1.schema.json",
+  "title": "CBM semantic-verdict/v1 sidecar",
+  "type": "object",
+  "required": ["schema", "verdict", "subject", "generated_at", "evidence_sha256"],
+  "properties": {
+    "schema": {"const": "semantic-verdict/v1"},
+    "verdict": {"enum": ["PASS", "FAIL", "NOT_RUN"]},
+    "subject": {
+      "type": "object",
+      "required": ["package_id", "artifact_sha256"],
+      "properties": {
+        "package_id": {"type": "string", "minLength": 1},
+        "version": {"type": "string"},
+        "artifact_sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"}
+      },
+      "additionalProperties": true
+    },
+    "generated_at": {"type": "string", "minLength": 1},
+    "findings": {"type": "array"},
+    "policy": {"type": "object"},
+    "evidence_sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"}
+  },
+  "additionalProperties": true
+}

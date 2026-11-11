@@ -88,6 +88,17 @@ This is an adapter layer; the four-piece CBE/CBP/CBM path is unchanged.
 be listed in `RELEASE_ASSETS.sha256`; the report records `artifact_type` and
 the bundle manifest SHA256. This does not replace CBS/CBP signing.
 
+## Optional semantic-verdict/v1 (0.2.1 candidate)
+
+CBM can verify and copy an external `semantic-verdict/v1` as a standalone
+attachment. It does not run a semantic model, does not import CBF/CBP/CBE, and
+does not change the 0.1.1/0.2.0 sidecar report contract.
+
+```bash
+cbm-attach verify-semantic --verdict semantic-verdict.json
+cbm-attach attach-semantic --verdict semantic-verdict.json --output-dir semantic-out
+```
+
 ## Non-goals
 
 - CBM does not run CBE or CBP, and does not re-compute their gates.
