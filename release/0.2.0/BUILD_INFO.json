@@ -10,5 +10,7 @@
   "tag_created": false,
   "pypi_uploaded": false,
   "stable_candidate": true,
-  "owner_review_required": true
+  "owner_review_required": true,
+  "ci_run": "43101599975",
+  "ci_conclusion": "success"
 }
